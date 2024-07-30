@@ -1,0 +1,6 @@
+@IMS.Services.ShoppingCartAPI_HostAddress = http://localhost:5156
+
+GET {{IMS.Services.ShoppingCartAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
