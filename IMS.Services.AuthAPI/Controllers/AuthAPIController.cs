@@ -24,12 +24,12 @@ namespace IMS.Services.AuthAPI.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto requestDto)
         {
-            var message = await authRepository.RegisterAsync(requestDto);
+            var registerMessage = await authRepository.RegisterAsync(requestDto);
 
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(registerMessage))
             {
                 responseDto.IsSuccess = false;
-                responseDto.Message = message;
+                responseDto.Message = registerMessage;
                 return BadRequest(responseDto);
             }
             else
@@ -42,9 +42,28 @@ namespace IMS.Services.AuthAPI.Controllers
 
         [HttpPost("Login")]
 
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody]UserLoginRequestDto requestDto)
         {
-            return Ok();
+            
+            var loginResponse = await authRepository.LoginAsync(requestDto);
+            if (loginResponse.User == null)
+            {
+
+                responseDto.IsSuccess = false;
+                responseDto.Message = "Username or Password is Incorrect";
+
+                return BadRequest(responseDto);
+
+            }
+            else
+            {
+                responseDto.IsSuccess = true;
+                responseDto.Message = "Login Success";
+                responseDto.Result = loginResponse;
+                return Ok(responseDto);
+            }
+
+            
         }
 
 

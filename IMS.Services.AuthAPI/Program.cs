@@ -2,6 +2,7 @@ using IMS.Services.AuthAPI.Data;
 using IMS.Services.AuthAPI.Models.Domain;
 using IMS.Services.AuthAPI.Repository;
 using IMS.Services.AuthAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
+//builder.Services.Configure<JwtBearerOptions>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()

@@ -13,18 +13,62 @@ namespace IMS.Services.AuthAPI.Repository
         private readonly AppDbContext dbContext;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ITokenRepository tokenRepository;
 
-        public AuthRepository(AppDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthRepository(AppDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
+            ITokenRepository tokenRepository)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
             this.roleManager = roleManager;
-        }
-        public Task<LoginResponseDto> LoginAsync(UserLoginRequestDto requestDto)
-        {
-            throw new NotImplementedException();
+            this.tokenRepository = tokenRepository;
         }
 
+        //Login
+        public async Task<LoginResponseDto> LoginAsync(UserLoginRequestDto requestDto)
+        {
+
+            var user = await userManager.FindByEmailAsync(requestDto.UserName);
+
+
+            var isValidUser = await userManager.CheckPasswordAsync(user, requestDto.Password);
+
+            if (isValidUser)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                // generate JWT
+
+                
+                var token = tokenRepository.CreateJWTToken(user, roles.ToList());
+
+                var userDto = new UserDto()
+                 {
+                     Email = user.Email,
+                     Id = Guid.Parse(user.Id),
+                     Name = user.Name,
+                     PhoneNumber = user.PhoneNumber
+                 };
+
+                var loginResponseDto = new LoginResponseDto()
+                {
+                    User = userDto,
+                    JwtToken = token
+                };
+
+                return loginResponseDto;
+
+            }
+
+            else
+            {
+                return new LoginResponseDto() { User = null, JwtToken = "" };
+            }
+
+        }
+    
+
+
+        //Register
         public async Task<String> RegisterAsync(UserRegistrationRequestDto requestDto)
         {
 
