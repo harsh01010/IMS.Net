@@ -27,6 +27,29 @@ namespace IMS.Services.AuthAPI.Repository
 
         public async Task<String> RegisterAsync(UserRegistrationRequestDto requestDto)
         {
+
+
+            if (requestDto == null)
+            {
+                return "Request data cannot be null.";
+            }
+
+            if (string.IsNullOrEmpty(requestDto.Email) || string.IsNullOrEmpty(requestDto.Password) || string.IsNullOrEmpty(requestDto.Role))
+            {
+                return "Email, password, and role cannot be null or empty.";
+            }
+
+           
+            //checking if role entered by user is valid
+            var roles = await roleManager.Roles.ToListAsync();
+            var roleExists = roles.Any(r => r.Name.ToUpperInvariant() == requestDto.Role.ToUpperInvariant());
+
+            if (!roleExists)
+            {
+                return "Invalid Role(Allowed:Admin or Customer)";
+
+            }
+
             var applicationUser = new ApplicationUser
             {
                 Name = requestDto.Name,
@@ -41,19 +64,11 @@ namespace IMS.Services.AuthAPI.Repository
                 var identityResult = await userManager.CreateAsync(applicationUser, requestDto.Password);
                 if (identityResult.Succeeded)
                 {
-                    //Add Role to this user
-
-                    if (!string.IsNullOrEmpty(requestDto.Role))
-                    {
-                        var roles = await roleManager.Roles.ToListAsync();
-
-                        var roleExists = roles.Any(r => r.Name.ToUpperInvariant() == requestDto.Role.ToUpperInvariant());
-
-                        if (roleExists)
-                        {
-                            identityResult = await userManager.AddToRoleAsync(applicationUser, requestDto.Role);
+                             //Add Role to this user
+                             identityResult = await userManager.AddToRoleAsync(applicationUser, requestDto.Role);
                             if (identityResult.Succeeded)
                             {
+                                /*
                                 var userToReturn = await dbContext.ApplicationUsers.FirstAsync(u => u.UserName == requestDto.Email);
 
                                 UserDto userDto = new UserDto()
@@ -62,18 +77,19 @@ namespace IMS.Services.AuthAPI.Repository
                                     Id = Guid.Parse(userToReturn.Id),
                                     Name = userToReturn.Name,
                                     PhoneNumber = userToReturn.PhoneNumber
-
                                 };
+                                */
                                 return "";
                             }
                             else
                             {
                                 return identityResult.Errors.FirstOrDefault().Description;
                             }
-
-
-                        }
-                    }
+                    
+                }
+                else
+                {
+                    return identityResult.Errors.FirstOrDefault().Description;
                 }
 
             }

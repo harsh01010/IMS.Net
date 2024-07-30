@@ -32,6 +32,11 @@ namespace IMS.Services.AuthAPI.Controllers
                 responseDto.Message = message;
                 return BadRequest(responseDto);
             }
+            else
+            {
+                responseDto.IsSuccess = true;
+                responseDto.Message = "Registered Successfully";
+            }
             return Ok(responseDto);
         }
 
