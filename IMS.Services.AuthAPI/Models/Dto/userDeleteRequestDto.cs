@@ -2,10 +2,11 @@
 
 namespace IMS.Services.AuthAPI.Models.Dto
 {
-    public class UserLoginRequestDto
+    public class userDeleteRequestDto
     {
+
         [Required]
-        public string UserName {  get; set; }
+        public string UserName { get; set; }
 
 
         [Required]
