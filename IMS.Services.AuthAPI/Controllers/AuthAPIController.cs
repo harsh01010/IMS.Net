@@ -2,6 +2,7 @@
 using IMS.Services.AuthAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IMS.Services.AuthAPI.Controllers
 {
@@ -41,6 +42,7 @@ namespace IMS.Services.AuthAPI.Controllers
         }
 
         [HttpPost("Login")]
+       
 
         public async Task<IActionResult> Login([FromBody]UserLoginRequestDto requestDto)
         {
@@ -66,6 +68,39 @@ namespace IMS.Services.AuthAPI.Controllers
             
         }
 
+        [HttpGet]
+        [Route("{role}")]
+        public async Task<IActionResult> GetAllByRole([FromRoute]string role)
+        {
+            List<UserDto> usersByRole = await authRepository.GetByRoleAsync(role);
+
+            if(!usersByRole.IsNullOrEmpty())
+            {
+                responseDto.IsSuccess = true;
+                responseDto.Message = "Success";
+                responseDto.Result = usersByRole;
+
+                return Ok(responseDto);
+            }
+            else
+            {
+                responseDto.IsSuccess =false;
+                responseDto.Message = $"No Users With {role} Role";
+
+                return NotFound(responseDto);
+            }
+        }
+
+
+        /*
+        [HttpDelete("DeleteUser")]
+       
+        public async Task<IActionResult> DeleteUser([FromBody] userDeleteRequestDto requestDto)
+        {
+            return Ok();
+        }
+        */
+        
 
     }
 }

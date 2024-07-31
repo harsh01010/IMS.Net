@@ -145,7 +145,38 @@ namespace IMS.Services.AuthAPI.Repository
 
         }
 
-   
+        //Get users by Role
+        public async Task<List<UserDto>> GetByRoleAsync(string role)
+        {
+
+            //check if role is valid or not
+            var roles = await roleManager.Roles.ToListAsync();
+            var roleExists = roles.Any(r => r.Name.ToUpperInvariant() == role.ToUpperInvariant());
+
+            try
+            {
+                if (roleExists)
+                {
+                    var users = await userManager.GetUsersInRoleAsync(role);
+
+                    var userDtos = users.Select(x =>
+                                    new UserDto
+                                    {
+                                        Name = x.Name,
+                                        Email = x.Email,
+                                        PhoneNumber = x.PhoneNumber,
+                                        Id = Guid.Parse(x.Id),
+                                    }).ToList();
+
+                    return userDtos;
+                }
+            }
+            catch (Exception ex)
+            { }
+
+            return new List<UserDto>();
+
+        }
     }
 
 }
