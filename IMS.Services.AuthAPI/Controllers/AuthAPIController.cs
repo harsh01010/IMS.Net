@@ -38,8 +38,12 @@ namespace IMS.Services.AuthAPI.Controllers
             else
             {
                 responseDto.IsSuccess = true;
+                bool status = await  emailSender.EmailSendAsync(requestDto.Email, "Account Created at IMS Portal", $"Congratulations {requestDto.Name} your account is successfully Registered");
+               
                 responseDto.Message = "Registered Successfully";
             }
+
+
             return Ok(responseDto);
         }
 
@@ -94,15 +98,25 @@ namespace IMS.Services.AuthAPI.Controllers
         }
 
 
-        /*
+        
         [HttpDelete("DeleteUser")]
        
         public async Task<IActionResult> DeleteUser([FromBody] userDeleteRequestDto requestDto)
         {
             return Ok();
         }
+<<<<<<< HEAD
         */
         
+=======
+
+        
+        
+        
+
+        
+
+>>>>>>> 57c08ca (Email and api integration)
 
     }
 }
