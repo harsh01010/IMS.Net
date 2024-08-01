@@ -1,3 +1,8 @@
+using IMS.Services.ShoppingCartAPI.Data;
+using IMS.Services.ShoppingCartAPI.Repository;
+using IMS.Services.ShoppingCartAPI.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +12,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<CartDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+});
+
+
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+
+builder.Services.AddHttpClient<IProductRepository, ProductRepository>();
+
+
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
