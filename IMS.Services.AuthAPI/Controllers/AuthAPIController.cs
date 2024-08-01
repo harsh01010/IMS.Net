@@ -13,11 +13,13 @@ namespace IMS.Services.AuthAPI.Controllers
     public class AuthAPIController : ControllerBase
     {
         private readonly IAuthRepository authRepository;
+        private readonly IEmailSender emailSender;
         protected ResponseDto responseDto;
 
-        public AuthAPIController(IAuthRepository authRepository)
+        public AuthAPIController(IAuthRepository authRepository, IEmailSender emailSender)
         {
             this.authRepository = authRepository;
+            this.emailSender = emailSender;
             responseDto = new ResponseDto();
         }
 

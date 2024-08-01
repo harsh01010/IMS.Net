@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 //builder.Services.Configure<JwtBearerOptions>(builder.Configuration.GetSection("Jwt"));
 

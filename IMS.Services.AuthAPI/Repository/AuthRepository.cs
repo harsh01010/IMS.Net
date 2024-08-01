@@ -99,7 +99,7 @@ namespace IMS.Services.AuthAPI.Repository
                 Name = requestDto.Name,
                 UserName = requestDto.Email,
                 Email = requestDto.Email,
-                PhoneNumber = requestDto.PhoneNumber,
+                PhoneNumber =  requestDto.PhoneNumber,
 
             };
 
