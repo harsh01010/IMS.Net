@@ -2,7 +2,7 @@
 
 namespace IMS.Services.AuthAPI.Models.Domain
 {
-    public class ApplicationUser:IdentityUser
+    public class ApplicationUser: IdentityUser
     {
         public string Name {  get; set; }
         

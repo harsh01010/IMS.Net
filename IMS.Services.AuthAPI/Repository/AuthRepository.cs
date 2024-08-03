@@ -18,7 +18,7 @@ namespace IMS.Services.AuthAPI.Repository
         public AuthRepository(AppDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
             ITokenRepository tokenRepository)
         {
-            this.dbContext = dbContext;
+            this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.tokenRepository = tokenRepository;
@@ -112,8 +112,8 @@ namespace IMS.Services.AuthAPI.Repository
                              identityResult = await userManager.AddToRoleAsync(applicationUser, requestDto.Role);
                             if (identityResult.Succeeded)
                             {
-                                /*
-                                var userToReturn = await dbContext.ApplicationUsers.FirstAsync(u => u.UserName == requestDto.Email);
+                        
+                                /*var userToReturn = await dbContext.ApplicationUsers.FirstAsync(u => u.UserName == requestDto.Email);
 
                                 UserDto userDto = new UserDto()
                                 {
@@ -121,8 +121,8 @@ namespace IMS.Services.AuthAPI.Repository
                                     Id = Guid.Parse(userToReturn.Id),
                                     Name = userToReturn.Name,
                                     PhoneNumber = userToReturn.PhoneNumber
-                                };
-                                */
+                                };*/
+                               
                                 return "";
                             }
                             else

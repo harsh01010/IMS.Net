@@ -106,6 +106,5 @@ namespace IMS.Services.AuthAPI.Controllers
             return Ok();
         }
 
-
     }
 }

@@ -1,7 +1,31 @@
+using IMS.Web.Services.IServices;
+using IMS.Web.Services;
+using IMS.Web.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient<IAuthService, AuthService>();
+
+StaticDetails.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+
+
+builder.Services.AddScoped<IBaseservice,BaseService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromHours(10);
+        options.LoginPath = "/AuthAPI/Login";
+        options.AccessDeniedPath = "/AuthAPI/AccessDenied";
+    });
 
 var app = builder.Build();
 
@@ -17,6 +41,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
