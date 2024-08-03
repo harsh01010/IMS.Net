@@ -105,18 +105,6 @@ namespace IMS.Services.AuthAPI.Controllers
         {
             return Ok();
         }
-<<<<<<< HEAD
-        */
-        
-=======
-
-        
-        
-        
-
-        
-
->>>>>>> 57c08ca (Email and api integration)
 
     }
 }
