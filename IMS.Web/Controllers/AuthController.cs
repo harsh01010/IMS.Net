@@ -17,7 +17,7 @@ namespace IMS.Web.Controllers
         private readonly IAuthService authService;
         private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(IAuthService authService,ITokenProvider tokenProvider)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
         {
             this.authService = authService;
             _tokenProvider = tokenProvider;
@@ -41,6 +41,7 @@ namespace IMS.Web.Controllers
 
                 await SignInUser(loginResponseDto);
                 _tokenProvider.SetToken(loginResponseDto.JwtToken);
+                TempData["success"] = "Loggedin Successfully";
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -67,9 +68,22 @@ namespace IMS.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegistrationRequestDto obj)
         {
-            ResponseDto result = await authService.RegisterAsync(obj);
-        
-            return RedirectToAction("Index", "Home");
+              
+                ResponseDto result = await authService.RegisterAsync(obj);
+            if (result.IsSuccess)
+            {
+                TempData["success"] = "You are Registered Successfully";
+                return RedirectToAction("Index", "Home");
+
+            }
+            else
+            {
+                TempData["error"] = result.Message;
+                return View(obj);
+            
+            }
+            
+            
         }
 
 
