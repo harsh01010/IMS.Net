@@ -58,7 +58,7 @@ namespace IMS.Web.Services
             {
                 ApiType = StaticDetails.ApiType.PUT,
                 Data = productDto,
-                Url = StaticDetails.ProductAPIBase + "/api/product",
+                Url = StaticDetails.ProductAPIBase + "/api/product/"+productDto.ProductId,
                 ContentType = StaticDetails.ContentType.MultipartFormData
             });
         }
