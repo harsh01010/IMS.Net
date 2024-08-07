@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace IMS.Services.ProductAPI.Controllers
 {
 	[Route("api/product")]
-	//[Authorize]
+	
 	public class ProductAPIController : ControllerBase
 	{
 		private readonly IProductRepository productRepository;
@@ -24,6 +24,7 @@ namespace IMS.Services.ProductAPI.Controllers
 		}
 
 		[HttpGet]
+
 		public async Task<ResponseDto> GetAll()
 		{
 			try
@@ -43,6 +44,7 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpGet]
 		[Route("{id:Guid}")]
+
 		public async Task<ResponseDto> GetById(Guid id)
 		{
 			try
@@ -69,7 +71,7 @@ namespace IMS.Services.ProductAPI.Controllers
 		}
 
 		[HttpPost]
-		//[Authorize(Roles ="ADMIN")]
+		[Authorize(Roles = "Admin")]
 		public async Task<ResponseDto> Create([FromBody] CreateRequestDto createRequestDto)
 		{
 			try
@@ -99,7 +101,7 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpPut]
 		[Route("{id:Guid}")]
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<ResponseDto> Update(Guid id, [FromBody] UpdateRequestDto updateRequestDto)
 		{
 			try
@@ -130,7 +132,7 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpDelete]
 		[Route("{id:Guid}")]
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "Admin")]
         public async Task<ResponseDto> Delete(Guid id)
 		{
 			try
