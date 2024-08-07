@@ -4,11 +4,12 @@ using IMS.Services.ProductAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IMS.Services.ProductAPI.Controllers
 {
 	[Route("api/product")]
-	[ApiController]
+	
 	public class ProductAPIController : ControllerBase
 	{
 		private readonly IProductRepository productRepository;
@@ -23,6 +24,7 @@ namespace IMS.Services.ProductAPI.Controllers
 		}
 
 		[HttpGet]
+
 		public async Task<ResponseDto> GetAll()
 		{
 			try
@@ -42,6 +44,7 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpGet]
 		[Route("{id:Guid}")]
+
 		public async Task<ResponseDto> GetById(Guid id)
 		{
 			try
@@ -68,6 +71,7 @@ namespace IMS.Services.ProductAPI.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "Admin")]
 		public async Task<ResponseDto> Create([FromBody] CreateRequestDto createRequestDto)
 		{
 			try
@@ -97,7 +101,8 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpPut]
 		[Route("{id:Guid}")]
-		public async Task<ResponseDto> Update(Guid id, [FromBody] UpdateRequestDto updateRequestDto)
+        [Authorize(Roles = "Admin")]
+        public async Task<ResponseDto> Update(Guid id, [FromBody] UpdateRequestDto updateRequestDto)
 		{
 			try
 			{
@@ -127,7 +132,8 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpDelete]
 		[Route("{id:Guid}")]
-		public async Task<ResponseDto> Delete(Guid id)
+        [Authorize(Roles = "Admin")]
+        public async Task<ResponseDto> Delete(Guid id)
 		{
 			try
 			{
