@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace IMS.Services.ProductAPI.Controllers
 {
 	[Route("api/product")]
+	//[Authorize]
 	
 	public class ProductAPIController : ControllerBase
 	{
@@ -24,7 +25,7 @@ namespace IMS.Services.ProductAPI.Controllers
 		}
 
 		[HttpGet]
-
+		[Authorize(Roles ="Admin,Customer")]
 		public async Task<ResponseDto> GetAll()
 		{
 			try
@@ -44,8 +45,8 @@ namespace IMS.Services.ProductAPI.Controllers
 
 		[HttpGet]
 		[Route("{id:Guid}")]
-
-		public async Task<ResponseDto> GetById(Guid id)
+        [Authorize(Roles = "Admin,Customer")]
+        public async Task<ResponseDto> GetById(Guid id)
 		{
 			try
 			{

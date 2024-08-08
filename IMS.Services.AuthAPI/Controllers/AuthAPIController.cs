@@ -1,5 +1,6 @@
 ﻿using IMS.Services.AuthAPI.Models.Dto;
 using IMS.Services.AuthAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -75,7 +76,8 @@ namespace IMS.Services.AuthAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{role}")]
+        [Route("getByRole/{role}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllByRole([FromRoute]string role)
         {
             List<UserDto> usersByRole = await authRepository.GetByRoleAsync(role);
@@ -99,11 +101,11 @@ namespace IMS.Services.AuthAPI.Controllers
 
 
         
-        [HttpDelete("DeleteUser")]
+        [HttpGet("GetTemp")]
        
-        public async Task<IActionResult> DeleteUser([FromBody] userDeleteRequestDto requestDto)
+        public async Task<IActionResult> GetTemp()
         {
-            return Ok();
+            return Ok("ABCDEFG");
         }
 
     }

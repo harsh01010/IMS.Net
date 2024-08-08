@@ -26,9 +26,12 @@ namespace IMS.Services.AuthAPI.Repository
     };
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-            claims.AddRange(roles.Select(role => new Claim("role", role)));
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
             var token = new JwtSecurityToken(
                     configuration["Jwt:Issuer"],
                     configuration["Jwt:Audience"],

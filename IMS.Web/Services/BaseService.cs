@@ -10,10 +10,12 @@ namespace IMS.Web.Services
     public class BaseService : IBaseservice
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly ITokenProvider tokenProvider;
 
-        public BaseService(IHttpClientFactory httpClientFactory)
+        public BaseService(IHttpClientFactory httpClientFactory,ITokenProvider tokenProvider)
         {
             this.httpClientFactory = httpClientFactory;
+            this.tokenProvider = tokenProvider;
         }
         public async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool withBearer = true)
         {
@@ -24,7 +26,24 @@ namespace IMS.Web.Services
                 message.Headers.Add("Accept", "application/json");
                 //token making
 
+                // include token if available
+                if(withBearer)
+                {
+                    var token = tokenProvider.GetToken();
+                    if(!string.IsNullOrEmpty(token))
+                    {
+                        message.Headers.Authorization = new System.Net.Http.Headers
+                            .AuthenticationHeaderValue("Bearer", token);
+                    }
+
+                }
+
+
+
                 message.RequestUri = new Uri(requestDto.Url);
+
+
+
 
                 if (requestDto.Data != null)
                 {
