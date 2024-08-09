@@ -24,10 +24,24 @@ namespace IMS.Web.Services
             bool? hasToken = _contextAccessor.HttpContext?.Request.Cookies.TryGetValue(StaticDetails.TokenCookie, out token);
             return hasToken is true ? token : null;
         }
+        public string? GetId()
+        {
+            string? id = null;
+            bool? hasId = _contextAccessor.HttpContext?.Request.Cookies.TryGetValue(StaticDetails.UserId, out id);
+
+            return hasId is true ? id : null;
+        }
 
         public void SetToken(string token)
         {
             _contextAccessor.HttpContext?.Response.Cookies.Append(StaticDetails.TokenCookie, token);
+
         }
+
+        public void SetId(string id)
+        {
+            _contextAccessor.HttpContext?.Response.Cookies.Append("userId", id);
+        }
+            
     }
 }

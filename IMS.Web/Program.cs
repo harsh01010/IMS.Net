@@ -12,15 +12,19 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IProductService,ProductService>();
+builder.Services.AddHttpClient<ICartService,CartService>();
+
 
 StaticDetails.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
 StaticDetails.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
+StaticDetails.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:CartAPI"];
 
 
 builder.Services.AddScoped<IBaseservice,BaseService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IProductService, ProductService>();  
+builder.Services.AddScoped<ICartService,CartService>(); 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
