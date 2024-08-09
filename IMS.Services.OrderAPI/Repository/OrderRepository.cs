@@ -18,13 +18,13 @@ namespace IMS.Services.OrderAPI.Repository
             this.orderDb = orderDb;
             this.shippingAddressDb = shippingAddressDb;
         }
-        public async Task<string> PlaceOrderAsync(Guid cartId, Guid shippingAddressId)
+        public async Task<string> PlaceOrderAsync(Guid cartId, Guid shippingAddressId,string token=null)
         {
             try
             {
 
                 //fetch the cart
-                var cart = await cartService.GetCartById(cartId);
+                var cart = await cartService.GetCartById(cartId,token);
 
                 //fetch the address
                 var shippingAddress = await shippingAddressDb.ShippingAddresses.FirstOrDefaultAsync(x => x.shippingAddressId == shippingAddressId);

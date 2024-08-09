@@ -3,11 +3,13 @@ using IMS.Services.ShoppingCartAPI.Data;
 using IMS.Services.ShoppingCartAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IMS.Services.ShoppingCartAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartRepository cartRepository;
@@ -19,11 +21,16 @@ namespace IMS.Services.ShoppingCartAPI.Controllers
         }
 
 
+
         [HttpPost]
         [Route("upsert/{cartId:Guid}")]
+        [Authorize(Roles ="Admin,Customer")]
         public async Task<IActionResult> Upsert([FromRoute] Guid cartId, [FromBody] RequestDto requestDto)
         {
-            var responseString = await cartRepository.UpsertAsync(cartId,  requestDto.ProductId);
+
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            var responseString = await cartRepository.UpsertAsync(cartId,  requestDto.ProductId,token);
 
             if (!String.IsNullOrEmpty(responseString))
             {
@@ -46,9 +53,11 @@ namespace IMS.Services.ShoppingCartAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{cartId:Guid}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> DeleteProductFromCart([FromRoute]Guid cartId, [FromBody] RequestDto requestDto)
         {
-            var responseMessage = await cartRepository.DeleteProductFromCartAsync(cartId, requestDto.ProductId);
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var responseMessage = await cartRepository.DeleteProductFromCartAsync(cartId, requestDto.ProductId,token);
 
             if(String.IsNullOrEmpty(responseMessage))
             {
@@ -66,9 +75,12 @@ namespace IMS.Services.ShoppingCartAPI.Controllers
 
         [HttpGet]
         [Route("get/{cartId:Guid}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetAllPrductsInCart([FromRoute]Guid cartId)
         {
-            var res = await cartRepository.GetCartAsync(cartId);
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+       
+            var res = await cartRepository.GetCartAsync(cartId,token);
             if(res.Products!=null)
             {
                 responseDto.IsSuccess = true;

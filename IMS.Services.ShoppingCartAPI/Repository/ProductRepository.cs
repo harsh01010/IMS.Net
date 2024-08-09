@@ -1,6 +1,7 @@
 ﻿using IMS.Services.ShoppingCartAPI.Models.Dto;
 using IMS.Services.ShoppingCartAPI.Models.Dto;
 using IMS.Services.ShoppingCartAPI.Repository.IRepository;
+using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace IMS.Services.ShoppingCartAPI.Repository
@@ -14,12 +15,19 @@ namespace IMS.Services.ShoppingCartAPI.Repository
             this.httpClient = httpClient;
             responseDto = new ProductResponseDto();
         }
-        public async Task<ProductResponseDto> GetProductById(Guid id)
+        public async Task<ProductResponseDto> GetProductById(Guid id,string token=null)
         {
 
+           
+            
+            if (!string.IsNullOrEmpty(token))
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             var response = await httpClient.GetAsync($"https://localhost:7193/api/product/{id}");
 
-            if(response.IsSuccessStatusCode)
+
+            if (response.IsSuccessStatusCode)
             {
                 var jsonString= await response.Content.ReadAsStringAsync();
 

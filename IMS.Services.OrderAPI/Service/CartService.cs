@@ -1,6 +1,7 @@
 ﻿using IMS.Services.OrderAPI.Models.DTO;
 using IMS.Services.OrderAPI.Service.IService;
 using IMS.Services.ShoppingCartAPI.Models.Dto;
+using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace IMS.Services.OrderAPI.Service
@@ -13,8 +14,12 @@ namespace IMS.Services.OrderAPI.Service
         {
             this.httpClient = httpClient;
         }
-        public async Task<ReturnCartDto> GetCartById(Guid id)
+        public async Task<ReturnCartDto> GetCartById(Guid id,string token=null)
         {
+            if (!String.IsNullOrEmpty(token))
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             var response = await httpClient.GetAsync($"https://localhost:7209/api/Cart/get/{id}");
             if(response.IsSuccessStatusCode)
             {

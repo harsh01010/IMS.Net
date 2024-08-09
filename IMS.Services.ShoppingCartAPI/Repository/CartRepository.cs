@@ -24,10 +24,10 @@ namespace IMS.Services.ShoppingCartAPI.Repository
         }
 
 
-        public async Task<string> UpsertAsync(Guid CartId,Guid productId)
+        public async Task<string> UpsertAsync(Guid CartId,Guid productId,string token=null)
         {
             //check if product is valid or not
-            var response = await productRepository.GetProductById(productId);
+            var response = await productRepository.GetProductById(productId,token);
 
             try
             {
@@ -81,9 +81,9 @@ namespace IMS.Services.ShoppingCartAPI.Repository
             return "";
 
         }
-        public async Task<string> DeleteProductFromCartAsync(Guid cartId, Guid productId)
+        public async Task<string> DeleteProductFromCartAsync(Guid cartId, Guid productId,string token=null)
         {
-            var product = await productRepository.GetProductById(productId);
+            var product = await productRepository.GetProductById(productId,token);
 
             try
             {
@@ -111,7 +111,7 @@ namespace IMS.Services.ShoppingCartAPI.Repository
             return "";
         }
 
-        public async Task<ReturnCartDto> GetCartAsync(Guid cartId)
+        public async Task<ReturnCartDto> GetCartAsync(Guid cartId,string token=null)
         {
             var cart = await cartDbContext.Carts.Include(x=>x.CartProducts).FirstOrDefaultAsync(x=>x.Id==cartId);
 
@@ -127,7 +127,7 @@ namespace IMS.Services.ShoppingCartAPI.Repository
                 var products = new List<ReturnProductFromCartDto>();
                 foreach(var product in cartProducts)
                 {
-                    var response = await productRepository.GetProductById(product.productId);
+                    var response = await productRepository.GetProductById(product.productId,token);
 
                     if (response.IsSuccess)
                     {

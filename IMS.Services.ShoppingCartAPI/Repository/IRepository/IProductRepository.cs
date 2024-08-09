@@ -6,6 +6,6 @@ namespace IMS.Services.ShoppingCartAPI.Repository.IRepository
 {
     public interface IProductRepository
     {
-        public Task<ProductResponseDto> GetProductById(Guid id);
+        public Task<ProductResponseDto> GetProductById(Guid id,string token=null);
     }
 }

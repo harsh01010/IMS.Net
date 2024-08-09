@@ -4,6 +4,6 @@ namespace IMS.Services.OrderAPI.Service.IService
 {
     public interface ICartService
     {
-        public Task<ReturnCartDto> GetCartById(Guid id);
+        public Task<ReturnCartDto> GetCartById(Guid id,string token=null);
     }
 }

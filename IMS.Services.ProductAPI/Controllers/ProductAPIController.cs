@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace IMS.Services.ProductAPI.Controllers
 {
 	[Route("api/product")]
-	//[Authorize]
+	[Authorize]
 	
 	public class ProductAPIController : ControllerBase
 	{

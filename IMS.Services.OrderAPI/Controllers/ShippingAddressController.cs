@@ -1,5 +1,6 @@
 ﻿using IMS.Services.OrderAPI.Models.DTO;
 using IMS.Services.OrderAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace IMS.Services.OrderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ShippingAddressController : ControllerBase
     {
 
@@ -22,6 +24,7 @@ namespace IMS.Services.OrderAPI.Controllers
 
         [HttpPost]
         [Route("{userId:Guid}")]
+        [Authorize(Roles ="Admin,Customer")]
         public async Task<IActionResult> AddAddress([FromRoute] Guid userId, [FromBody] AddAddressRequestDto addAddressRequestDto)
         {
             var responseString = await shippingAddressRepository.AddAddressAsync(userId, addAddressRequestDto);
@@ -39,6 +42,7 @@ namespace IMS.Services.OrderAPI.Controllers
         }
         [HttpDelete]
         [Route("{shippingAddressId:Guid}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> DeleteAddress([FromRoute] Guid shippingAddressId)
         {
             var responseString = await shippingAddressRepository.DeleteAddressAsync(shippingAddressId);
@@ -55,6 +59,7 @@ namespace IMS.Services.OrderAPI.Controllers
 
         [HttpGet]
         [Route("{userId:Guid}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetAllAddress([FromRoute]Guid userId)
         {
             var listOfAddressesForUser = await shippingAddressRepository.GetAllAddressAsync(userId);

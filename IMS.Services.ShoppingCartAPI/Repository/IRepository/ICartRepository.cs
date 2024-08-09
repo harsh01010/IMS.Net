@@ -6,9 +6,9 @@ namespace IMS.Services.ShoppingCartAPI.Repository.IRepository
     {
         //public Task<ReturnCartDto> GetAsync(Guid id);
 
-        public Task<String> UpsertAsync(Guid cartId,Guid productId);
-        public Task<String> DeleteProductFromCartAsync(Guid cartId,Guid productId);
+        public Task<String> UpsertAsync(Guid cartId,Guid productId,string token=null);
+        public Task<String> DeleteProductFromCartAsync(Guid cartId,Guid productId,string token=null);
 
-        public Task<ReturnCartDto> GetCartAsync(Guid cartId);
+        public Task<ReturnCartDto> GetCartAsync(Guid cartId,string token=null);
     }
 }
