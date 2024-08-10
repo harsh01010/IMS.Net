@@ -44,14 +44,20 @@
 						<td>
 							@((item.Price).ToString("c"))
 						</td>
-						<td>
+						<td class="text-center">
 							<a class="btn btn-success" asp-action="ProductEdit" asp-route-productId="@item.ProductId">
-								<i class="bi bi-pencil-square"></i>
+								<i class="bi bi-pencil-square"></i> Edit
 							</a>
 							<a class="btn btn-danger" asp-action="ProductDelete" asp-route-productId="@item.ProductId">
-								<i class="bi bi-trash"></i>
+								<i class="bi bi-trash"></i> Delete
 							</a>
+							<a class="btn btn-primary" asp-action="ProductDetails" asp-route-productId="@item.ProductId">
+								<i class="bi bi-info-circle"></i> Details
+							</a>
+
 						</td>
+						
+						
 					</tr>
 				}
 			</tbody>

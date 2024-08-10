@@ -1,5 +1,6 @@
 ﻿using IMS.Web.Models;
 using IMS.Web.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -8,9 +9,12 @@ namespace IMS.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly ITokenProvider tokenProvider;
+
+        public ProductController(IProductService productService,ITokenProvider tokenProvider)
         {
             _productService = productService;
+            this.tokenProvider = tokenProvider;
         }
 
 
@@ -125,5 +129,29 @@ namespace IMS.Web.Controllers
             }
             return View(productDto);
         }
-    }
+		public async Task<IActionResult> ProductDetails(Guid productId)
+		{
+			ProductDto? model = new();
+            var id = tokenProvider.GetId();
+
+			ResponseDto? response = await _productService.GetProductByIdAsync(productId);
+
+			if (response != null && response.IsSuccess)
+			{
+				model = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
+			}
+			else
+			{
+				TempData["error"] = response?.Message;
+			}
+            var viewModel = new ProductViewModel
+            {
+                product = model,
+                id = id
+            };
+
+            return View(viewModel);
+        }
+
+	}
 }

@@ -41,8 +41,13 @@ namespace IMS.Web.Controllers
 
                 await SignInUser(loginResponseDto);
                 _tokenProvider.SetToken(loginResponseDto.JwtToken);
+
+                
+
+
+				_tokenProvider.SetId(loginResponseDto.User.Id.ToString());
                 TempData["success"] = "Loggedin Successfully";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("ProductIndex", "Product");
             }
             else
             {
@@ -97,17 +102,27 @@ namespace IMS.Web.Controllers
 
         private async Task SignInUser(LoginResponseDto model)
         {
+            
             var handler = new JwtSecurityTokenHandler();
 
             var jwt = handler.ReadJwtToken(model.JwtToken);
 
+
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
                 jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+
+
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
                 jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
+
+
+
+
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
                 jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+
 
 
             identity.AddClaim(new Claim(ClaimTypes.Name,

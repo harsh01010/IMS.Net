@@ -1,0 +1,47 @@
+﻿@using IMS.Web.Models.Order
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model IEnumerable<ReturnShippingAddressDto>
+
+<div class="container mt-4">
+    <h2 class="text-success">All Shipping Addresses</h2>
+    <a asp-controller="Order" asp-action="Details" class="btn btn-success">Add New Address</a>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var address in Model)
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Address ID: @address.shippingAddressId</h5>
+                            <p class="card-text">
+                                <strong>House No:</strong> @address.houseNo <br />
+                                <strong>Street:</strong> @address.street <br />
+                                <strong>Pin Code:</strong> @address.pinCode <br />
+                                <strong>City:</strong> @address.city <br />
+                                <strong>State:</strong> @address.state
+                            </p>
+                            <a asp-controller="Order" asp-action="Confirm"  class="btn btn-primary">Confirm</a>
+                            <a asp-controller="Order" asp-action="Remove" asp-route-shippingAddressId="@address.shippingAddressId" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            No addresses found. Please add an address.
+        </div>
+    }
+</div>
+
+

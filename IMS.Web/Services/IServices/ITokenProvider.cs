@@ -4,6 +4,12 @@
     {
         void SetToken(string token);
         string? GetToken();
-        void ClearToken();
+
+        public string? GetId();
+        public void SetId(string id);
+
+		void ClearToken();
+
+
     }
 }
