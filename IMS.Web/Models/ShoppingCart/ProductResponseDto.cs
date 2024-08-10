@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace IMS.Services.ShoppingCartAPI.Models.Dto
+namespace IMS.Web.Models.ShoppingCart
 {
     public class ProductResponseDto
     {
         [JsonPropertyName("result")]
-        public ProductDto Result { get; set; }
+        public CartProductDto Result { get; set; }
 
         [JsonPropertyName("isSuccess")]
         public bool IsSuccess { get; set; } = true;

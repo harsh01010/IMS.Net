@@ -1,4 +1,5 @@
-﻿namespace IMS.Web.Models.ShoppingCart
+﻿namespace IMS.Web.Models.Order
+
 {
     public class ReturnCartDto
     {

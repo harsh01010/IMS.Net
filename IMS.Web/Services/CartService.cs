@@ -1,5 +1,4 @@
-﻿using IMS.Services.ShoppingCartAPI.Models.Dto;
-using IMS.Web.Models;
+﻿using IMS.Web.Models;
 using IMS.Web.Models.ShoppingCart;
 using IMS.Web.Services.IServices;
 using IMS.Web.Utility;
@@ -13,17 +12,23 @@ namespace IMS.Web.Services
 		{
 			_baseService = baseService;
 		}
-		public Task<ResponseDto> DeleteProductFromCartAsync(Guid cartId, Guid productId, string token = null)
+		public async Task<ResponseDto> DeleteProductFromCartAsync(Guid cartId, Guid productId)
 		{
-			throw new NotImplementedException();
-		}
+            var req = new CartRequestDto { ProductId = productId };
+            return await _baseService.SendAsync(new RequestDto()
+			{
+				ApiType = StaticDetails.ApiType.DELETE,
+                Data = req,
+                Url = StaticDetails.ShoppingCartAPIBase + "/api/Cart/delete/" + cartId
+			});
+        }
 
 		public  async Task<ResponseDto> GetCartAsync(Guid cartId, string token = null)
 		{
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.GET,
-                Url = StaticDetails.ShoppingCartAPIBase + "/api/Cart/get" + cartId
+                Url = StaticDetails.ShoppingCartAPIBase + "/api/Cart/get/" + cartId
             });
         }
 

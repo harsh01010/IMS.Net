@@ -1,5 +1,4 @@
 ﻿using IMS.Web.Models;
-using IMS.Web.Models.ShoppingCart;
 using IMS.Web.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -130,14 +129,6 @@ namespace IMS.Web.Controllers
             }
             return View(productDto);
         }
-		//[HttpPost]
-		//public async Task<IActionResult> CartUpsert(Guid cartId,CartRequestDto cartRequestDto)
-		//{
-		//    return Ok(cartRequestDto);
-		//}
-
-
-		//[Authorize]
 		public async Task<IActionResult> ProductDetails(Guid productId)
 		{
 			ProductDto? model = new();

@@ -1,0 +1,85 @@
+﻿@using IMS.Web.Models.ShoppingCart
+@model ReturnCartDto
+
+
+@if (Model != null && Model.Products?.Count > 0)
+{
+    <form method="post" asp-action="EmailCart">
+        <br />
+        <input asp-for="Id" hidden />
+        
+        <div class="">
+            <div class="card border mt-4 container">
+                <div class="card-header bg-dark text-light ml-0 row">
+                    <div class="col-6">
+                        <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
+                    </div>
+                    <div class="col-6 text-end">
+                        <a asp-action="ProductIndex" asp-controller="Product" class="btn btn-outline-warning mt-2 btn-sm">Continue Shopping</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-none d-lg-block">
+                        <div class="row text-info">
+                            
+                            <div class="col-lg-2">Price</div>
+                            <div class="col-lg-2">Count</div>
+                            
+                        </div>
+                    </div>
+                    <hr />
+
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="row h-100">
+                            <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                                <span style="font-size:17px;">@string.Format("{0:c}", product.Price)</span>
+                            </div>
+                            <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                                <span style="font-size:17px;">@product.ProductCount</span>
+                            </div>
+                            <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
+
+                                <input type="hidden" name="productId" value="@product.ProductId" />
+
+                                <button asp-controller="Cart" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    <hr />
+                    <div class="row">
+                        <div class="col-6">
+                            <span>Total Quantity:</span> @Model.TotalProductQty
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="text-danger" style="font-size:21px;">Order Total: @string.Format("{0:c}", Model.TotalValue) <br /></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer row">
+                    <div class="col-6 col-md-3">
+                        <button type="submit" class="btn btn-outline-danger form-control">Email Cart</button>
+                    </div>
+                    <div class="col-6 col-md-3 offset-md-6">
+                        <a asp-action="GetAddress" asp-controller="Order" class="btn btn-success form-control">Looks Good?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <div class="container text-center mt-5">
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Your cart is empty!</h4>
+            <p>It looks like you haven't added anything to your cart yet. Start shopping to fill it up!</p>
+            <hr>
+            <a asp-action="ProductIndex" asp-controller="Product" class="btn btn-primary btn-lg">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+}

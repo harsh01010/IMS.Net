@@ -1,6 +1,6 @@
-﻿namespace IMS.Services.ShoppingCartAPI.Models.Dto
+﻿namespace IMS.Web.Models.ShoppingCart
 {
-    public class ProductDto
+    public class CartProductDto
     {
         
         public Guid ProductId { get; set; }
