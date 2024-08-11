@@ -177,6 +177,18 @@ namespace IMS.Services.AuthAPI.Repository
             return new List<UserDto>();
 
         }
+
+        //Get User details by id
+        public async Task<UserDto> GetById(Guid id)
+        {
+            var user = await userManager.FindByIdAsync(id.ToString());
+
+            if (user != null)
+            {
+                return new UserDto { Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber, Id = id };
+            }
+            return new UserDto();
+        }
     }
 
 }

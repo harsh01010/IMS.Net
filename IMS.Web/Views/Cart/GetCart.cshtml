@@ -1,69 +1,78 @@
 ﻿@using IMS.Web.Models.ShoppingCart
 @model ReturnCartDto
 
-
 @if (Model != null && Model.Products?.Count > 0)
 {
     <form method="post" asp-action="EmailCart">
         <br />
         <input asp-for="Id" hidden />
-        
-        <div class="">
-            <div class="card border mt-4 container">
-                <div class="card-header bg-dark text-light ml-0 row">
-                    <div class="col-6">
-                        <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
-                    </div>
-                    <div class="col-6 text-end">
-                        <a asp-action="ProductIndex" asp-controller="Product" class="btn btn-outline-warning mt-2 btn-sm">Continue Shopping</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-none d-lg-block">
-                        <div class="row text-info">
-                            
-                            <div class="col-lg-2">Price</div>
-                            <div class="col-lg-2">Count</div>
-                            
+
+        <div class="container mt-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-light">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3 class="text-light"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a asp-action="ProductIndex" asp-controller="Product" class="btn btn-outline-secondary mt-2 btn-sm">Continue Shopping</a>
                         </div>
                     </div>
-                    <hr />
+                </div>
+                <div class="card-body bg-secondary">
+                    <div class="d-none d-lg-block">
+                        <div class="row text-light">
+                            <div class="col-lg-4">Product</div>
+                            <div class="col-lg-2 text-center">Price</div>
+                            <div class="col-lg-2 text-center">Count</div>
+                            
+                        </div>
+                        <hr />
+                    </div>
 
                     @foreach (var product in Model.Products)
                     {
-                        <div class="row h-100">
-                            <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                                <span style="font-size:17px;">@string.Format("{0:c}", product.Price)</span>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-12 col-lg-4 d-flex align-items-center">
+                                <span class="ms-3">@product.Name</span>
                             </div>
-                            <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                                <span style="font-size:17px;">@product.ProductCount</span>
+                            <div class="col-4 col-lg-2 text-center">
+                                <span>@string.Format("{0:c}", product.Price)</span>
                             </div>
-                            <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
-
+                            <div class="col-4 col-lg-2 text-center">
+                                <span>@product.ProductCount</span>
+                            </div>
+                            <div class="col-4 col-lg-2 text-center">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
-
-                                <button asp-controller="Cart" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-sm btn-danger">
+                                <button asp-controller="Cart" asp-action="Remove"  class="btn btn-sm btn-danger">
                                     <i class="bi bi-trash-fill"></i>
                                 </button>
                             </div>
                         </div>
                     }
                     <hr />
-                    <div class="row">
-                        <div class="col-6">
-                            <span>Total Quantity:</span> @Model.TotalProductQty
+                    <div class="row text-light">
+                        <div class="col-12 col-md-6">
+                            <strong class="text-warning">Total Quantity:  @Model.TotalProductQty</strong>
                         </div>
-                        <div class="col-6 text-end">
-                            <span class="text-danger" style="font-size:21px;">Order Total: @string.Format("{0:c}", Model.TotalValue) <br /></span>
+                        <div class="col-12 col-md-6 text-end">
+                            <span class="text-warning fs-4">Order Total: @string.Format("{0:c}", Model.TotalValue)</span>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer row">
+                <div class="card-footer bg-secondary text-light d-flex justify-content-between">
                     <div class="col-6 col-md-3">
-                        <button type="submit" class="btn btn-outline-danger form-control">Email Cart</button>
+                        @* <button type="submit" class="btn btn-light btn-lg w-100">Email Cart</button> *@
+                       @*  <a class="btn btn-light btn-lg w-100" asp-action="MailCart" asp-controller="Cart">Email Cart</a> 
+                           achor tag send get request by defult
+                       *@
+
+
+                        <button class="btn btn-light btn-lg w-100" asp-controller="Cart" asp-action="MailCart">Email Cart</button>
+
                     </div>
-                    <div class="col-6 col-md-3 offset-md-6">
-                        <a asp-action="GetAddress" asp-controller="Order" class="btn btn-success form-control">Looks Good?</a>
+                    <div class="col-6 col-md-3">
+                        <a asp-action="GetAddress" asp-controller="Order" class="btn btn-success btn-lg w-100">Looks Good?</a>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using IMS.Services.ShoppingCartAPI.Models.Domain;
+using System.Text;
+using Microsoft.OpenApi.Validations;
 
 namespace IMS.Services.ShoppingCartAPI.Repository
 {
@@ -15,12 +17,14 @@ namespace IMS.Services.ShoppingCartAPI.Repository
         private readonly HttpClient httpClient;
         private readonly CartDbContext cartDbContext;
         private readonly IProductRepository productRepository;
+        private readonly IAuthRepository authRepository;
 
-        public CartRepository(HttpClient httpClient,CartDbContext cartDbContext,IProductRepository productRepository)
+        public CartRepository(HttpClient httpClient,CartDbContext cartDbContext,IProductRepository productRepository,IAuthRepository authRepository)
         {
             this.httpClient = httpClient;
             this.cartDbContext = cartDbContext;
             this.productRepository = productRepository;
+            this.authRepository = authRepository;
         }
 
 
@@ -148,6 +152,62 @@ namespace IMS.Services.ShoppingCartAPI.Repository
                 
             }
             return new ReturnCartDto();
+        }
+
+        public async Task<string> SendCartByEmailAsync(ReturnCartDto cart,string token=null)
+        {
+
+            //generate the email
+            var sb = new StringBuilder();
+
+            sb.AppendLine("<h1>Shopping Cart Details</h1>");
+            sb.AppendLine("<p><strong>Cart ID:</strong> " + cart.Id + "</p>");
+            sb.AppendLine("<p><strong>Total Quantity:</strong> " + cart.TotalProductQty + "</p>");
+            sb.AppendLine("<p><strong>Total Value:</strong> " + string.Format("{0:C}", cart.TotalValue) + "</p>");
+            sb.AppendLine("<hr/>");
+
+            sb.AppendLine("<h2>Product Details</h2>");
+            sb.AppendLine("<table border='1' style='width:100%; border-collapse:collapse;'>");
+            sb.AppendLine("<thead>");
+            sb.AppendLine("<tr>");
+            sb.AppendLine("<th style='padding:8px; text-align:left;'>Product Name</th>");
+            sb.AppendLine("<th style='padding:8px; text-align:left;'>Category</th>");
+            sb.AppendLine("<th style='padding:8px; text-align:right;'>Price</th>");
+            sb.AppendLine("<th style='padding:8px; text-align:right;'>Quantity</th>");
+            sb.AppendLine("</tr>");
+            sb.AppendLine("</thead>");
+            sb.AppendLine("<tbody>");
+
+            foreach (var product in cart.Products)
+            {
+                sb.AppendLine("<tr>");
+                sb.AppendLine("<td style='padding:8px;'>" + product.Name + "</td>");
+                sb.AppendLine("<td style='padding:8px;'>" + product.CategoryName + "</td>");
+                sb.AppendLine("<td style='padding:8px; text-align:right;'>" + string.Format("{0:C}", product.Price) + "</td>");
+                sb.AppendLine("<td style='padding:8px; text-align:right;'>" + product.ProductCount + "</td>");
+                sb.AppendLine("</tr>");
+            }
+
+            sb.AppendLine("</tbody>");
+            sb.AppendLine("</table>");
+
+            var emailString = sb.ToString();
+            var subject = $"Cart :{cart.Id}";
+
+            //get the user's Email id
+            var user= await authRepository.GetUserByIdAsync(cart.Id,token);
+
+            if(user.IsSuccess)
+            {
+                //send the mail
+                var res = await authRepository.SendMailAsync(new SendMailRequestDto { Email = user.Result.Email, Subject = subject, Body = emailString },token);
+                if(res.IsSuccess)
+                    {
+                    return "Sent Successfully";
+                    }
+            }
+
+            return "";
         }
     }
 }

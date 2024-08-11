@@ -7,7 +7,7 @@ namespace IMS.Web.Services.IServices
         Task<ResponseDto?> LoginAsync(UserLoginRequestDto loginRequestDto);
         Task<ResponseDto?> RegisterAsync(UserRegistrationRequestDto registrationRequestDto);
         Task<ResponseDto?> AssignRoleAsync(UserRegistrationRequestDto registrationRequestDto);
-        Task<ResponseDto?> DeleteAsync(userDeleteRequestDto userDeleteRequestDto);
+      //  Task<ResponseDto?> DeleteAsync(userDeleteRequestDto userDeleteRequestDto);
 
 
     }

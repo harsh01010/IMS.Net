@@ -10,5 +10,7 @@ namespace IMS.Services.ShoppingCartAPI.Repository.IRepository
         public Task<String> DeleteProductFromCartAsync(Guid cartId,Guid productId,string token=null);
 
         public Task<ReturnCartDto> GetCartAsync(Guid cartId,string token=null);
+
+        public Task<string> SendCartByEmailAsync(ReturnCartDto cartDto,string token=null);
     }
 }

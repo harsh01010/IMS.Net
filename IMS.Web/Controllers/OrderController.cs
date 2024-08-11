@@ -34,7 +34,7 @@ namespace IMS.Web.Controllers
             if (ModelState.IsValid)
             {
                 var id = Guid.Parse(tokenProvider.GetId());
-                ResponseDto? response = await orderService.AddAddressAsync(id,addAddressRequestDto);
+                ResponseDto? response = await orderService.AddAddressAsync(id, addAddressRequestDto);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -84,6 +84,27 @@ namespace IMS.Web.Controllers
                 }
             }
 
+            return RedirectToAction("GetAddress", "Order");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Confirm(PlaceOrderRequestDto placeOrderRequestDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var id = Guid.Parse(tokenProvider.GetId());
+                var response = await orderService.ConfirmAsync(id, placeOrderRequestDto);
+
+                if (response != null && response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction("ProductIndex", "Product");
+                }
+                else
+                {
+                    TempData["error"] = "Failed to place Order";
+                }
+            }
             return RedirectToAction("GetAddress", "Order");
         }
     }

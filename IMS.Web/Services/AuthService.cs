@@ -23,15 +23,15 @@ namespace IMS.Web.Services
             });
         }
 
-        public async Task<ResponseDto?> DeleteAsync(userDeleteRequestDto userDeleteRequestDto)
-        {
-            return await baseservice.SendAsync(new RequestDto()
-            {
-                ApiType = StaticDetails.ApiType.DELETE,
-                Data = userDeleteRequestDto,
-                Url = StaticDetails.AuthAPIBase + "/api/AuthAPI/DeleteUser"
-            });
-        }
+        //public async Task<ResponseDto?> DeleteAsync(UserDeleteRequestDto userDeleteRequestDto)
+        //{
+        //    return await baseservice.SendAsync(new RequestDto()
+        //    {
+        //        ApiType = StaticDetails.ApiType.DELETE,
+        //        Data = userDeleteRequestDto,
+        //        Url = StaticDetails.AuthAPIBase + "/api/AuthAPI/DeleteUser"
+        //    });
+        //}
 
         public async Task<ResponseDto?> LoginAsync(UserLoginRequestDto loginRequestDto)
         {

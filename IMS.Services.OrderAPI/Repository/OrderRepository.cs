@@ -1,5 +1,6 @@
 ﻿using IMS.Services.OrderAPI.Data;
 using IMS.Services.OrderAPI.Models.Domain;
+using IMS.Services.OrderAPI.Models.DTO;
 using IMS.Services.OrderAPI.Repository.IRepository;
 using IMS.Services.OrderAPI.Service.IService;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,14 @@ namespace IMS.Services.OrderAPI.Repository
         private readonly ICartService cartService;
         private readonly OrderDbContext orderDb;
         private readonly ShippingAddressDbContext shippingAddressDb;
+        private readonly IAuthService authService;
 
-        public OrderRepository(ICartService cartService,OrderDbContext orderDb,ShippingAddressDbContext shippingAddressDb)
+        public OrderRepository(ICartService cartService,OrderDbContext orderDb,ShippingAddressDbContext shippingAddressDb,IAuthService authService)
         {
             this.cartService = cartService;
             this.orderDb = orderDb;
             this.shippingAddressDb = shippingAddressDb;
+            this.authService = authService;
         }
         public async Task<string> PlaceOrderAsync(Guid cartId, Guid shippingAddressId,string token=null)
         {
@@ -34,7 +37,7 @@ namespace IMS.Services.OrderAPI.Repository
 
                 //update the orders table
                 var order = new Order { CustomerId = cartId, OrderTime = DateTime.Now, OrderValue = cart.TotalValue };
-                if (cart.TotalValue == 0 && shippingAddress != null && payment)
+                if (cart.TotalValue != 0 && shippingAddress != null && payment)
                 {
                     order.Status = true;
                 }
@@ -59,8 +62,22 @@ namespace IMS.Services.OrderAPI.Repository
                 await orderDb.SaveChangesAsync();
 
                 //make the cart empty
+
+
+                //send confirmation to user via emial
+                var user = await authService.GetUserByIdAsync(cartId,token);
+                if(user.IsSuccess)
+                {
+                    var emailBody = $"Congratulations {user.Result.Name} , your order with amount {cart.TotalValue} has been placed!";
+                    var emailSub = "Order Confirmation";
+                    var res = await authService.SendMailAsync(new SendMailRequestDto { Email = user.Result.Email, Subject = emailSub, Body = emailBody },token);
+                   
+                }
+
                
                 var statusMessage = order.Status ? "placed Sucessfully" : "failed";
+
+
                 return $"Order with id {order.OrderId} and value {order.OrderValue}, is  {statusMessage}";
             }
             catch (Exception ex)

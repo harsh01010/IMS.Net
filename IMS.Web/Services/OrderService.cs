@@ -3,6 +3,7 @@ using IMS.Web.Models.Order;
 using IMS.Web.Models.ShoppingCart;
 using IMS.Web.Services.IServices;
 using IMS.Web.Utility;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IMS.Web.Services
 {
@@ -27,6 +28,8 @@ namespace IMS.Web.Services
 
         }
 
+      
+
         public async  Task<ResponseDto> DeleteAddressAsync(Guid shippingAddressId)
         {
             return await baseservice.SendAsync(new RequestDto()
@@ -43,6 +46,19 @@ namespace IMS.Web.Services
                 ApiType = StaticDetails.ApiType.GET,
                 Url = StaticDetails.OrderAPIBase + "/api/ShippingAddress/" + userId
             });
+        }
+
+      
+        public async Task<ResponseDto> ConfirmAsync(Guid cartId,PlaceOrderRequestDto placeOrderRequestDto)
+        {
+            return await baseservice.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.POST,
+                Data=placeOrderRequestDto,
+                Url = StaticDetails.OrderAPIBase + "/api/orders/placeOrder/" + cartId
+            });
+
+            throw new NotImplementedException();
         }
     }
 }

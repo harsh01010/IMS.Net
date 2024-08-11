@@ -32,7 +32,9 @@ namespace IMS.Web.Services
             });
         }
 
-		public async Task<ResponseDto> UpsertAsync(Guid cartId, Guid productId)
+       
+
+        public async Task<ResponseDto> UpsertAsync(Guid cartId, Guid productId)
 		{
 			var req = new CartRequestDto { ProductId = productId };
 			return await _baseService.SendAsync(new RequestDto()
@@ -43,5 +45,15 @@ namespace IMS.Web.Services
 				ContentType = StaticDetails.ContentType.MultipartFormData
 			});
 		}
-	}
+
+        public async Task<ResponseDto> MailCartAsync(Guid cartId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.POST,
+                Url = StaticDetails.ShoppingCartAPIBase + "/api/Cart/emailCart/" + cartId
+            });
+
+        }
+    }
 }

@@ -1,69 +1,65 @@
 ﻿@model ProductDto
 
 <form asp-action="ProductEdit" enctype="multipart/form-data">
-    <br />
-    <div class="container border p-3">
-        <h1 class="text-white text-center">Edit Product</h1>
-        <input hidden asp-for="ProductId" />
-        <hr />
+    <div class="container mt-4 p-4 bg-dark text-light rounded">
+        <h1 class="text-center mb-4 bg-primary text-white rounded p-2">Edit Product</h1>
+
+        <input type="hidden" asp-for="ProductId" />
+
         <div class="row">
-            <div class="col-10">
-                <div class="row">
-                    <div class="col-2">
-                        <label class="control-label pt-2" style="font-size:20px;"> Name</label>
-                    </div>
-                    <div class="col-10 pb-3">
-                        <input asp-for="Name" class="form-control" />
+            <!-- Image Column -->
+            <div class="col-lg-4 col-md-12 d-flex justify-content-center align-items-start">
+                <img src="@Model.ImageUrl" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;" alt="Product Image" />
+            </div>
+
+            <!-- Form Column -->
+            <div class="col-lg-8 col-md-12">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fs-4">Name</label>
+                        <input asp-for="Name" class="form-control bg-secondary text-light border-0 rounded" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    <div class="col-2">
-                        <label class="control-label pt-2" style="font-size:20px;">Category Name</label>
-                    </div>
-                    <div class="col-10 pb-3">
-                        <input asp-for="CategoryName" class="form-control" />
+
+                    <div class="col-12">
+                        <label class="form-label fs-4">Category Name</label>
+                        <input asp-for="CategoryName" class="form-control bg-secondary text-light border-0 rounded" />
                         <span asp-validation-for="CategoryName" class="text-danger"></span>
                     </div>
-                    <div class="col-2">
-                        <label class="control-label pt-2" style="font-size:20px;">Description</label>
-                    </div>
-                    <div class="col-10 pb-3">
-                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+
+                    <div class="col-12">
+                        <label class="form-label fs-4">Description</label>
+                        <textarea asp-for="Description" class="form-control bg-secondary text-light border-0 rounded" rows="2"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-                    <div class="col-2">
-                        <label class="control-label pt-2" style="font-size:20px;">Price</label>
-                    </div>
-                    <div class="col-10 pb-3">
-                        <input asp-for="Price" class="form-control" />
+
+                    <div class="col-12">
+                        <label class="form-label fs-4">Price</label>
+                        <input asp-for="Price" class="form-control bg-secondary text-light border-0 rounded" />
                         <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
-                    <div class="col-2">
-                        <label class="control-label pt-2" style="font-size:20px;">ImageUrl</label>
-                    </div>
-                    <div class="col-10 pb-3">
-                        @* <input asp-for="Image" class="form-control" /> *@
-                        <input asp-for="ImageUrl" class="form-control" />
-                        @* <input asp-for="ImageLocalPath" hidden class="form-control" /> *@
-                        <span asp-validation-for="Image" class="text-danger"></span>
+
+                    <div class="col-12">
+                        <label class="form-label fs-4">Image URL</label>
+                        <input asp-for="ImageUrl" class="form-control bg-secondary text-light border-0 rounded" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
                     </div>
 
-                    <div class="col-5 offset-2">
-
-                        <a asp-action="ProductIndex" class="btn-primary btn form-control ">Back to List</a>
+                    <div class="row mt-3">
+                        <div class="col-12 col-md-6">
+                            <a asp-action="ProductIndex" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <input type="submit" value="Update" class="btn btn-success w-100" />
+                        </div>
                     </div>
-                    <div class="col-5">
-                        <input type="submit" value="Update" class="btn btn-success form-control" />
-                    </div>
-
                 </div>
-            </div>
-            <div class="col-2">
-                <img src="@Model.ImageUrl" class="w-100" alt="" />
             </div>
         </div>
     </div>
 </form>
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

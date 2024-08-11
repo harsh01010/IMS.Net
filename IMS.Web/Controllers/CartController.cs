@@ -13,9 +13,9 @@ namespace IMS.Web.Controllers
 		private readonly ICartService cartService;
 		private readonly ITokenProvider tokenProvider;
 
-		public CartController(ICartService cartService,ITokenProvider tokenProvider)
+		public CartController(ICartService cartService, ITokenProvider tokenProvider)
 
-        {
+		{
 			this.cartService = cartService;
 			this.tokenProvider = tokenProvider;
 		}
@@ -44,47 +44,66 @@ namespace IMS.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetCart()
 		{
-			
-				return View(await LoadCartDtoBasedOnLoggedInUser());
-			
+
+			return View(await LoadCartDtoBasedOnLoggedInUser());
+
 		}
 		public IActionResult Index()
 		{
 			return View();
 		}
 
-        private async Task<ReturnCartDto> LoadCartDtoBasedOnLoggedInUser()
-        {
-            var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            ResponseDto? response = await cartService.GetCartAsync(Guid.Parse(userId));
-            if (response != null & response.IsSuccess)
-            {
-                ReturnCartDto cartDto = JsonConvert.DeserializeObject<ReturnCartDto>(Convert.ToString(response.Result));
-                return cartDto;
-            }
-            return new ReturnCartDto();
-        }
+		private async Task<ReturnCartDto> LoadCartDtoBasedOnLoggedInUser()
+		{
+			var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+			ResponseDto? response = await cartService.GetCartAsync(Guid.Parse(userId));
+			if (response != null & response.IsSuccess)
+			{
+				ReturnCartDto cartDto = JsonConvert.DeserializeObject<ReturnCartDto>(Convert.ToString(response.Result));
+				return cartDto;
+			}
+			return new ReturnCartDto();
+		}
 
 		[HttpPost]
-        public async Task<IActionResult> Remove(Guid productId)
-        {
-            if (ModelState.IsValid)
-            {
-                var id = Guid.Parse(tokenProvider.GetId());
-                ResponseDto? response = await cartService.DeleteProductFromCartAsync(id,productId);
+		public async Task<IActionResult> Remove(Guid productId)
+		{
+			if (ModelState.IsValid)
+			{
+				var id = Guid.Parse(tokenProvider.GetId());
+				ResponseDto? response = await cartService.DeleteProductFromCartAsync(id, productId);
 
-                if (response != null && response.IsSuccess)
-                {
-                    TempData["success"] = "Deleted Succesfully";
-                }
-                else
-                {
-                    TempData["error"] = response?.Message;
-                }
-            }
+				if (response != null && response.IsSuccess)
+				{
+					TempData["success"] = "Deleted Succesfully";
+				}
+				else
+				{
+					TempData["error"] = response?.Message;
+				}
+			}
 
-            return RedirectToAction("GetCart", "Cart"); ;
-        }
-		
-    }
+			return RedirectToAction("GetCart", "Cart"); ;
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> MailCart()
+		{
+			var id = Guid.Parse(tokenProvider.GetId());
+			var res = await cartService.MailCartAsync(id);
+			if (res != null && res.IsSuccess)
+			{
+				TempData["success"] = "Email Sent";
+			}
+			else
+			{
+				TempData["error"] = res?.Message;
+			}
+
+			return RedirectToAction("GetCart", "Cart");
+
+
+		}
+	}
+
 }

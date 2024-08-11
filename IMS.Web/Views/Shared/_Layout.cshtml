@@ -4,47 +4,36 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - IMS.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IMS.Web.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body>
+<body class="bg-dark text-light">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm rounded px-5">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">IMS.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">IMS</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Content Management
-                            </a> 
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-controller="Product" asp-action="ProductIndex">Product</a></li>
-                            </ul>
-                        </li>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                @* <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">
-                                Manage Order
-                            </a> *@
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Go To
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item text-light" asp-controller="Product" asp-action="ProductIndex">Product</a></li>
+                                </ul>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link " asp-area="" asp-controller="Cart" asp-action="GetCart">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Cart" asp-action="GetCart">
                                     &nbsp; <i class="bi bi-cart"></i>&nbsp;
                                 </a>
                             </li>
@@ -54,42 +43,42 @@
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
-
+                                <a class="nav-link text-light" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
-
+                                <a class="nav-link text-light" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" >Hello @User.Identity.Name</a>
-
+                                <a class="nav-link text-light">Hello @User.Identity.Name</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
-
+                                <a class="nav-link text-light" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
                             </li>
                         }
-                    </u>
+                    </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container mt-4">
         <main role="main" class="pb-3">
             @RenderBody()
             <partial name="_Notifications" />
         </main>
     </div>
 
-    <footer class="footer text-muted">
-        <div class="text-center">
-            <i class="bi bi-code-slash"></i>   Made by Team.NET <i class="bi bi-code-slash"></i>
+    <footer class="footer text-center text-muted py-3 bg-dark">
+        <div class="container">
+            <span>
+                <i class="bi bi-code-slash"></i> Made by Team.NET <i class="bi bi-code-slash"></i>
+            </span>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

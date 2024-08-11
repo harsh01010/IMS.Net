@@ -9,5 +9,7 @@ namespace IMS.Web.Services.IServices
 
 		Task<ResponseDto> GetCartAsync(Guid cartId, string token = null);
 
+		Task<ResponseDto> MailCartAsync(Guid cartId);
+
 	}
 }

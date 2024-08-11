@@ -100,12 +100,27 @@ namespace IMS.Services.AuthAPI.Controllers
         }
 
 
-        
-        [HttpGet("GetTemp")]
-       
-        public async Task<IActionResult> GetTemp()
+
+        [HttpGet]
+        [Route("getById/{id:guid}")]
+        [Authorize(Roles ="Admin,Customer")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            return Ok("ABCDEFG");
+            var user = await authRepository.GetById(id);
+            if (user != null)
+            {
+                responseDto.IsSuccess = true;
+                responseDto.Result= user;
+                responseDto.Message = "Fetched successfully";
+                return Ok(responseDto); 
+            }
+            else
+            {
+                responseDto.IsSuccess=false;
+                responseDto.Message = "Something Went Wrong";
+                return BadRequest(responseDto);
+            }
+           
         }
 
     }

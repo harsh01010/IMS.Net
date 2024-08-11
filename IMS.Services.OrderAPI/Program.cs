@@ -84,6 +84,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
 
 builder.Services.AddHttpClient<ICartService, CartService>();
+builder.Services.AddHttpClient<IAuthService, AuthService>();
 
 var app = builder.Build();
 

@@ -69,6 +69,8 @@ builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 builder.Services.AddHttpClient<IProductRepository, ProductRepository>();
 
+builder.Services.AddHttpClient<IAuthRepository, AuthReposiroty>();
+
 
 
 var app = builder.Build();

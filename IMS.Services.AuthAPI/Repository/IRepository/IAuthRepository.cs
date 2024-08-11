@@ -8,5 +8,7 @@ namespace IMS.Services.AuthAPI.Repository.IRepository
         public Task<LoginResponseDto> LoginAsync(UserLoginRequestDto requestDto);
 
         public Task<List<UserDto>> GetByRoleAsync(string role);
+
+        public Task<UserDto> GetById(Guid id);
     }
 }

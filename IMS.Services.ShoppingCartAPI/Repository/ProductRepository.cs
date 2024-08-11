@@ -1,5 +1,4 @@
 ﻿using IMS.Services.ShoppingCartAPI.Models.Dto;
-using IMS.Services.ShoppingCartAPI.Models.Dto;
 using IMS.Services.ShoppingCartAPI.Repository.IRepository;
 using System.Net.Http.Headers;
 using System.Text.Json;

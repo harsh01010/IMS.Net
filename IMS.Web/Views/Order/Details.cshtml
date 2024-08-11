@@ -3,41 +3,44 @@
 
 
 <div class="container mt-4">
-    <h2 class="text-success">Add New Address</h2>
+
+    <div class="bg-primary my-3 p-3">
+        <h2 class="text-light-emphasis "><i class="bi bi-geo-alt-fill"></i> Add New Address</h2>
+    </div>
 
     <form asp-action="SaveAddress" method="post">
         <div class="mb-3">
             <label asp-for="houseNo" class="form-label">House No</label>
-            <input asp-for="houseNo" class="form-control" />
+            <input asp-for="houseNo" class="form-control bg-secondary text-light border-0" />
             <span asp-validation-for="houseNo" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="street" class="form-label">Street</label>
-            <input asp-for="street" class="form-control" />
+            <input asp-for="street" class="form-control bg-secondary text-light border-0" />
             <span asp-validation-for="street" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="pinCode" class="form-label">Pin Code</label>
-            <input asp-for="pinCode" class="form-control" />
+            <input asp-for="pinCode" class="form-control bg-secondary text-light border-0" />
             <span asp-validation-for="pinCode" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="city" class="form-label">City</label>
-            <input asp-for="city" class="form-control" />
+            <input asp-for="city" class="form-control bg-secondary text-light border-0" />
             <span asp-validation-for="city" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="state" class="form-label">State</label>
-            <input asp-for="state" class="form-control" />
+            <input asp-for="state" class="form-control bg-secondary text-light border-0" />
             <span asp-validation-for="state" class="text-danger"></span>
         </div>
 
-        <button type="submit" asp-controller="Order" asp-action="AddAddress" class="btn btn-success">Save Address</button>
-        <a asp-action="GetAddress" class="btn btn-secondary">Cancel</a>
+        <button type="submit" asp-controller="Order" asp-action="AddAddress" class="btn btn-outline-primary">Save Address</button>
+        <a asp-action="GetAddress" class="btn btn-outline-secondary">Cancel</a>
     </form>
 </div>
 

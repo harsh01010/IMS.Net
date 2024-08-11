@@ -37,6 +37,7 @@ namespace IMS.Services.AuthAPI.Repository
                     mailMessage.Subject = subject;
                     mailMessage.Body = message;
                     mailMessage.To.Add(email);
+                    mailMessage.IsBodyHtml = true;
 
                     using (SmtpClient smtpClient = new SmtpClient(emailSettings.SmtpServer))
                     {
@@ -47,6 +48,8 @@ namespace IMS.Services.AuthAPI.Repository
                         await smtpClient.SendMailAsync(mailMessage);
                         status = true;
                     }
+
+                    
                 }
             }
             catch (Exception ex)

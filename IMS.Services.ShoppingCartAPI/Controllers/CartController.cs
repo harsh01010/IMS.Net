@@ -97,5 +97,32 @@ namespace IMS.Services.ShoppingCartAPI.Controllers
             
         }
 
+        [HttpPost("emailCart/{cartId:Guid}")]
+        [Authorize(Roles ="Admin,Customer")]
+        public async Task<IActionResult> EmailCart([FromRoute]Guid cartId)
+        {
+            //fetch the cart
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            var res = await cartRepository.GetCartAsync(cartId, token);
+            if (res.Products != null)
+            {
+                var resString = await cartRepository.SendCartByEmailAsync(res, token);
+                if (!String.IsNullOrEmpty(resString))
+                {
+                    responseDto.IsSuccess = true;
+                    responseDto.Message = resString;
+                    return Ok(responseDto);
+                }
+               
+               
+            }
+          
+                responseDto.IsSuccess = false;
+                responseDto.Message = "Something Went Wrong";
+                return BadRequest(responseDto);
+
+
+        }
     }
 }
