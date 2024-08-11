@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ProductDto>
+
+<div class="container mt-4">
+    <!-- Row to position the "Create New Product" button -->
+    <div class="row mb-4">
+        <div class="col text-end">
+            <a asp-action="ProductCreate" class="btn btn-outline-primary">
+                <i class="bi bi-plus-square"></i> Create New Product
+            </a>
+        </div>
+    </div>
+
+    <!-- Table to display the products -->
+    <div class="row">
+        <div class="col">
+            <table class="table table-dark table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" style="width: 8%;">#</th>
+                        <th scope="col" style="width: 28%;">Product Name</th>
+                        <th scope="col" style="width: 18%;">Price</th>                  
+                        <th scope="col" style="width: 18%;">Category</th>
+                        <th scope="col" style="width: 28%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row">@item.ProductId</th>
+                            <td>@item.Name</td>
+                            <td>@item.Price.ToString("c")</td>
+                           
+                            <td>@item.CategoryName</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a class="btn btn-success btn-sm" asp-action="ProductEdit" asp-route-productId="@item.ProductId">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a class="btn btn-danger btn-sm" asp-action="ProductDelete" asp-route-productId="@item.ProductId">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                    <a class="btn btn-info btn-sm" asp-action="ProductDetails" asp-route-productId="@item.ProductId">
+                                        <i class="bi bi-info-circle"></i> Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

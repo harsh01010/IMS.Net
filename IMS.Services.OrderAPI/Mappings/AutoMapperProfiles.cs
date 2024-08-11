@@ -11,6 +11,7 @@ namespace IMS.Services.OrderAPI.Mappings
         public AutoMapperProfiles() {
             CreateMap<ShippingAddress, ReturnShippingAddressDto>().ReverseMap();
             CreateMap<ShippingAddress,AddAddressRequestDto>().ReverseMap();
+            CreateMap<Order,OrderDetailsDto>().ReverseMap();    
         }
     }
 }

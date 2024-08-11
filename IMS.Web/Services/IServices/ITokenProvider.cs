@@ -10,6 +10,10 @@
 
 		void ClearToken();
 
+        public void SetRole(string role);
+
+        public string GetRole();
+
 
     }
 }

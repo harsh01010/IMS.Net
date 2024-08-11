@@ -1,4 +1,5 @@
-﻿using IMS.Services.OrderAPI.Data;
+﻿using AutoMapper;
+using IMS.Services.OrderAPI.Data;
 using IMS.Services.OrderAPI.Models.Domain;
 using IMS.Services.OrderAPI.Models.DTO;
 using IMS.Services.OrderAPI.Repository.IRepository;
@@ -13,14 +14,20 @@ namespace IMS.Services.OrderAPI.Repository
         private readonly OrderDbContext orderDb;
         private readonly ShippingAddressDbContext shippingAddressDb;
         private readonly IAuthService authService;
+        private readonly IMapper mapper;
 
-        public OrderRepository(ICartService cartService,OrderDbContext orderDb,ShippingAddressDbContext shippingAddressDb,IAuthService authService)
+        public OrderRepository(ICartService cartService,OrderDbContext orderDb,ShippingAddressDbContext shippingAddressDb,IAuthService authService,IMapper mapper
+            )
         {
             this.cartService = cartService;
             this.orderDb = orderDb;
             this.shippingAddressDb = shippingAddressDb;
             this.authService = authService;
+            this.mapper = mapper;
         }
+
+   
+
         public async Task<string> PlaceOrderAsync(Guid cartId, Guid shippingAddressId,string token=null)
         {
             try
@@ -85,5 +92,16 @@ namespace IMS.Services.OrderAPI.Repository
             }
             return "";
         }
+        public async Task<List<OrderDetailsDto>> GetAllOrdersAsync()
+        {
+            var orders = await orderDb.Orders.ToListAsync();
+
+            if(orders.Any())
+            {
+                return mapper.Map<List<OrderDetailsDto>>(orders);
+            }
+            return new List<OrderDetailsDto>();
+        }
+
     }
 }

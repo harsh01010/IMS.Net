@@ -1,0 +1,24 @@
+﻿@model IEnumerable<IMS.Web.Models.Order.OrderDetailsDto>
+
+<div class="container mt-4">
+    <h1 class="mb-4">Order Dashboard</h1>
+    <div class="row g-4">
+        @foreach (var order in Model)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card bg-secondary text-light shadow-sm">
+                    <div class="card-header">
+                        <h5 class="card-title">Order @order.OrderId</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Customer ID: @order.CustomerId</h6>
+                        <p class="card-text"><strong>Order Time:</strong> @order.OrderTime.ToString("f")</p>
+                        <p class="card-text"><strong>Status:</strong> @(order.Status ? "Completed" : "Pending")</p>
+                        <p class="card-text"><strong>Order Value:</strong> @order.OrderValue.ToString("C")</p>
+                    </div>
+                   
+                </div>
+            </div>
+        }
+    </div>
+</div>

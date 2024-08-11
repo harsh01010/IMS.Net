@@ -60,5 +60,14 @@ namespace IMS.Web.Services
 
             throw new NotImplementedException();
         }
+
+        public async Task<ResponseDto> GetAllOrdersAsync()
+        {
+            return await baseservice.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                Url = StaticDetails.OrderAPIBase + "/api/orders/getAllOrders"
+            });
+        }
     }
 }

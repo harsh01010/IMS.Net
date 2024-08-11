@@ -36,6 +36,27 @@ namespace IMS.Web.Controllers
             return View(list);
         }
 
+        public async Task<IActionResult> AdminProductDashIndex()
+        {
+            List<ProductDto>? list = new();
+
+            ResponseDto? response = await _productService.GetAllProductsAsync();
+
+            if (response != null && response.IsSuccess)
+            {
+                list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+
+            return View(list);
+
+        }
+
+
+
         public async Task<IActionResult> ProductCreate()
         {
             return View();
@@ -152,6 +173,13 @@ namespace IMS.Web.Controllers
 
             return View(viewModel);
         }
+
+
+        public async Task<IActionResult> AdminIndex()
+        {
+            return View();
+        }
+
 
 	}
 }

@@ -41,5 +41,20 @@ namespace IMS.Services.OrderAPI.Controllers
                 return Ok(response);
             }
         }
+
+        [HttpGet]
+        [Route("getAllOrders")]
+        [Authorize(Roles="Admin")]
+
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await orderRepository.GetAllOrdersAsync();
+
+            response.IsSuccess = true;
+            response.Result = orders;
+            response.Message = "fetched successfully";
+            return Ok(response);
+        }
+        
     }
 }

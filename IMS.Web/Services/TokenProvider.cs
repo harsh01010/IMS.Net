@@ -42,6 +42,17 @@ namespace IMS.Web.Services
         {
             _contextAccessor.HttpContext?.Response.Cookies.Append("userId", id);
         }
+        public void SetRole(string role)
+        {
+            _contextAccessor.HttpContext?.Response.Cookies.Append("role", role);
+        }
+        public string GetRole()
+        {
+            string? role = null;
+            bool? hasRole = _contextAccessor.HttpContext?.Request.Cookies.TryGetValue("role", out role);
+
+            return role;
+        }
             
     }
 }

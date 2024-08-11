@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using IMS.Web.Services.IServices;
+using System.Reflection;
 
 namespace IMS.Web.Controllers
 {
@@ -42,12 +43,33 @@ namespace IMS.Web.Controllers
                 await SignInUser(loginResponseDto);
                 _tokenProvider.SetToken(loginResponseDto.JwtToken);
 
-                
+                _tokenProvider.SetId(loginResponseDto.User.Id.ToString());
 
+               
 
-				_tokenProvider.SetId(loginResponseDto.User.Id.ToString());
-                TempData["success"] = "Loggedin Successfully";
-                return RedirectToAction("ProductIndex", "Product");
+                var handler = new JwtSecurityTokenHandler();
+
+                var jwt = handler.ReadJwtToken(loginResponseDto.JwtToken);
+
+                var role = jwt.Claims.FirstOrDefault(u => u.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+                _tokenProvider.SetRole(role);
+
+                if (role == "Customer")
+                {
+                    TempData["success"] = "Loggedin Successfully As Customer";
+                    return RedirectToAction("ProductIndex", "Product");
+                }
+                else if(role == "Admin")
+                {
+                    TempData["success"] = "Loggedin Successfully As Admin";
+
+                    return RedirectToAction("AdminIndex", "Product");
+                }
+                else
+                {
+                    TempData["error"] = responseDto.Message;
+                    return View(obj);
+                }
             }
             else
             {
@@ -130,6 +152,10 @@ namespace IMS.Web.Controllers
             identity.AddClaim(new Claim(ClaimTypes.Role,
                 jwt.Claims.FirstOrDefault(u => u.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value));
 
+
+           // var role = jwt.Claims.FirstOrDefault(u => u.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+
+           // _tokenProvider.SetRole(role);
 
 
             var principal = new ClaimsPrincipal(identity);

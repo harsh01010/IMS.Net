@@ -107,5 +107,27 @@ namespace IMS.Web.Controllers
             }
             return RedirectToAction("GetAddress", "Order");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var response = await orderService.GetAllOrdersAsync();
+            if (ModelState.IsValid)
+            {
+               
+
+                if (response != null && response.IsSuccess)
+                {
+                    var orders = JsonConvert.DeserializeObject<List<OrderDetailsDto>>(Convert.ToString(response.Result));
+                    return View(orders);
+
+                }
+            }
+            
+                TempData["error"] = response.Message;
+            return RedirectToAction("AdminIndex", "Product");
+            
+
+        }
     }
 }
