@@ -141,7 +141,7 @@ namespace IMS.Web.Controllers
                 if (response != null && response.IsSuccess)
                 {
                     TempData["success"] = "Product updated successfully";
-                    return RedirectToAction(nameof(ProductIndex));
+                    return RedirectToAction("AdminProductDashIndex", "Product");
                 }
                 else
                 {

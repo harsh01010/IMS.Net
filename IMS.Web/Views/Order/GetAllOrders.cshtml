@@ -3,6 +3,12 @@
 <div class="container mt-4">
     <h1 class="mb-4">Order Dashboard</h1>
     <div class="row g-4">
+
+        <!-- Chart.js -->
+        <div class="mt-4 p-5">
+            <canvas id="ordersChart"></canvas>
+        </div>
+
         @foreach (var order in Model)
         {
             <div class="col-md-6 col-lg-4">
@@ -16,9 +22,79 @@
                         <p class="card-text"><strong>Status:</strong> @(order.Status ? "Completed" : "Pending")</p>
                         <p class="card-text"><strong>Order Value:</strong> @order.OrderValue.ToString("C")</p>
                     </div>
-                   
                 </div>
             </div>
         }
     </div>
+
+    
+    
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Extract orders data from the model
+            var orders = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+            var dateLabels = [];
+            var orderCounts = {};
+
+            orders.forEach(function (order) {
+                var date = new Date(order.OrderTime).toISOString().split('T')[0]; // Only date part
+                if (!orderCounts[date]) {
+                    orderCounts[date] = 0;
+                }
+                orderCounts[date]++;
+            });
+
+            // Convert orderCounts object to arrays for Chart.js
+            dateLabels = Object.keys(orderCounts);
+            var dataCounts = Object.values(orderCounts);
+
+            var ctx = document.getElementById('ordersChart').getContext('2d');
+            var ordersChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dateLabels,
+                    datasets: [{
+                        label: 'Number of Orders',
+                        data: dataCounts,
+                        backgroundColor: 'rgb(91, 153, 194)',
+                        borderColor: 'rgb(31, 49, 111)',
+                        borderWidth: 2
+                       
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                color:"white"
+                            },
+                          ticks: {
+                              color:"white"
+                          }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 5,
+                                color:"white"
+                            },
+                           grid:{
+                               color:"white"
+                           }
+                            
+                            
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
