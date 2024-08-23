@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Vi0CVCaFjlzniWOZM15fHkDqsp9hcZvhHSpUGrqHx90=",
+  "Source": "IMS.Services.AuthAPI",
+  "BasePath": "_content/IMS.Services.AuthAPI",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
