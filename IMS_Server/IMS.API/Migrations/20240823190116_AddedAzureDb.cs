@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IMS.API.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class AddedAzureDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

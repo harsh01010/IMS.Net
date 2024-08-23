@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMS.API.Migrations.IMSDb
 {
     [DbContext(typeof(IMSDbContext))]
-    [Migration("20240823163328_initial")]
-    partial class initial
+    [Migration("20240823190137_AddedAzureDb")]
+    partial class AddedAzureDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,7 @@ namespace IMS.API.Migrations.IMSDb
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("54f29095-73b2-4fac-9271-27d3aacd386c"),
+                            ProductId = new Guid("524ec934-5b2b-45c4-b1ba-83a753023299"),
                             CategoryName = "Appetizer",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/603x403",
@@ -107,7 +107,7 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("c9cc211f-a823-4086-ac01-5a16db69b1ef"),
+                            ProductId = new Guid("dc2b3de6-0fa1-40a3-8095-d66729c98385"),
                             CategoryName = "Appetizer",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/602x402",
@@ -116,7 +116,7 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("7d16549f-e3eb-4f27-83f8-d32126663ac9"),
+                            ProductId = new Guid("e091b5c5-eb24-4c8f-9297-479eec040499"),
                             CategoryName = "Dessert",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/601x401",
@@ -125,7 +125,7 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("2d1c2b7d-cf3a-4925-8652-3e38e8c390e0"),
+                            ProductId = new Guid("0b52efcd-9427-4721-a194-f0efb1b7a82e"),
                             CategoryName = "Entree",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/600x400",

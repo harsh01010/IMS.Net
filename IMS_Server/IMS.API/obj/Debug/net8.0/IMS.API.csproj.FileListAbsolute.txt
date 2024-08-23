@@ -579,3 +579,4 @@ C:\Users\glaxoo\Desktop\IMS_New\IMS_Server\IMS.API\obj\Debug\net8.0\refint\IMS.A
 C:\Users\glaxoo\Desktop\IMS_New\IMS_Server\IMS.API\obj\Debug\net8.0\IMS.API.pdb
 C:\Users\glaxoo\Desktop\IMS_New\IMS_Server\IMS.API\obj\Debug\net8.0\IMS.API.genruntimeconfig.cache
 C:\Users\glaxoo\Desktop\IMS_New\IMS_Server\IMS.API\obj\Debug\net8.0\ref\IMS.API.dll
+C:\Users\glaxoo\Desktop\IMS_New\IMS_Server\IMS.API\obj\Debug\net8.0\IMS.API.sourcelink.json

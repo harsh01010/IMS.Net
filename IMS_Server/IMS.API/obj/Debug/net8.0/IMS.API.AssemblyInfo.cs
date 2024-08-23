@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IMS.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4515648c0ccd842ac5f26dda3bf7cefbd46808be")]
 [assembly: System.Reflection.AssemblyProductAttribute("IMS.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IMS.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

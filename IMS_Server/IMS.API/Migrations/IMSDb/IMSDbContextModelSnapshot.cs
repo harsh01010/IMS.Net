@@ -95,7 +95,7 @@ namespace IMS.API.Migrations.IMSDb
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("9acb19a0-fe1d-4120-9ed3-7e5b02f51d4f"),
+                            ProductId = new Guid("524ec934-5b2b-45c4-b1ba-83a753023299"),
                             CategoryName = "Appetizer",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/603x403",
@@ -104,7 +104,7 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("32d71680-825d-4e59-8441-ebf870236659"),
+                            ProductId = new Guid("dc2b3de6-0fa1-40a3-8095-d66729c98385"),
                             CategoryName = "Appetizer",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/602x402",
@@ -113,7 +113,7 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("aac05f5f-ddb5-4847-b439-8052780126c1"),
+                            ProductId = new Guid("e091b5c5-eb24-4c8f-9297-479eec040499"),
                             CategoryName = "Dessert",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/601x401",
@@ -122,7 +122,7 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("35b032c3-5d19-40bb-aa17-b708fa001db9"),
+                            ProductId = new Guid("0b52efcd-9427-4721-a194-f0efb1b7a82e"),
                             CategoryName = "Entree",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/600x400",

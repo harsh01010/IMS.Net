@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMS.API.Migrations
 {
     [DbContext(typeof(IMSAuthDbContext))]
-    [Migration("20240823164932_initialMigration")]
-    partial class initialMigration
+    [Migration("20240823190116_AddedAzureDb")]
+    partial class AddedAzureDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
