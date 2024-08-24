@@ -4,7 +4,6 @@ namespace IMS.API.Models.Domain.ShoppingCart
 {
     public class CartProductModel
     {
-        public Guid Id { get; }
         public Guid CartId { get; set; }
 
         public Guid ProductId { get; set; }
