@@ -1,51 +1,98 @@
 ﻿using IMS.API.Repository.IRepository;
 using IMS.API.Repository.IRepository.IProduct;
 using IMS.API.Data;
+using Dapper;
 using IMS.API.Models.Domain.Product;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 namespace IMS.API.Repository.Implementations.Product
 {
     public class ProductRepository:IProductRepository
     {
-        private readonly IMSDbContext db;
-		public ProductRepository(IMSDbContext db)
-		{
-			this.db = db;
-		}
+        private readonly string _connectionString;
 
-		public async Task<List<ProductModel>> GetAllAsync()
-		{
-			return await db.Products.ToListAsync();
-		}
+        public ProductRepository(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnectionString");
+        }
 
-		public async Task<ProductModel?> GetByIdAsync(Guid id)
-		{
-			return await db.Products.FindAsync(id);
-		}
+        public async Task<List<ProductModel>> GetAllAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = "SELECT * FROM Products";
+                var products = await connection.QueryAsync<ProductModel>(sqlQuery);
+                return products.ToList();
+            }
+        }
 
-		public async Task<ProductModel> CreateAsync(ProductModel Product)
-		{
-			await db.Products.AddAsync(Product);
-			await db.SaveChangesAsync();
-			return Product;
-		}
+        public async Task<ProductModel?> GetByIdAsync(Guid id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = "SELECT * FROM Products WHERE ProductId = @ProductId";
+                var product = await connection.QuerySingleOrDefaultAsync<ProductModel>(sqlQuery, new { ProductId = id });
+                return product;
+            }
+        }
 
-		public async Task<ProductModel> UpdateAsync(ProductModel Product)
-		{
-			db.Products.Update(Product);
-			await db.SaveChangesAsync();
-			return Product;
-		}
+        public async Task<ProductModel> CreateAsync(ProductModel product)
+        {
+            // Generate a new GUID for the ProductId
+            product.ProductId = Guid.NewGuid();
 
-		public async Task<ProductModel?> DeleteAsync(Guid id)
-		{
-			var Product = await db.Products.FindAsync(id);
-			if (Product != null)
-			{
-				db.Products.Remove(Product);
-				await db.SaveChangesAsync();
-			}
-			return Product;
-		}
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                // SQL query to insert the new product
+                string sqlQuery = @"
+            INSERT INTO Products (ProductId, Name, Description, Price, CategoryName, ImageUrl, ImageLocalPath) 
+            VALUES (@ProductId, @Name, @Description, @Price, @CategoryName, @ImageUrl, @ImageLocalPath);
+            
+       
+            SELECT * FROM Products WHERE ProductId = @ProductId;";
+
+                // Execute the insert query and return the created product
+                var createdProduct = await connection.QuerySingleOrDefaultAsync<ProductModel>(sqlQuery, product);
+                return createdProduct;
+            }
+        }
+
+
+        public async Task<ProductModel> UpdateAsync(ProductModel product)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sqlQuery = @"
+            UPDATE Products SET 
+                Name = @Name, 
+                Description = @Description, 
+                Price = @Price,
+                CategoryName = @CategoryName,
+                ImageUrl = @ImageUrl,
+                ImageLocalPath = @ImageLocalPath
+            WHERE ProductId = @ProductId;";
+
+                // Execute the update query
+                await connection.ExecuteAsync(sqlQuery, product);
+
+                // Return the updated product
+                return product;
+            }
+        }
+
+
+        public async Task<ProductModel?> DeleteAsync(Guid id)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var product = await GetByIdAsync(id);
+                if (product != null)
+                {
+                    string sqlQuery = "DELETE FROM Products WHERE ProductId = @ProductId";
+                    await connection.ExecuteAsync(sqlQuery, new { ProductId = id });
+                }
+                return product;
+            }
+        }
     }
 }
