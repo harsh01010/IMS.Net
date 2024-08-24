@@ -3,6 +3,8 @@ using IMS.API.Models.Dto.Product;
 using IMS.API.Models.Dto.ShippingAddress;
 using IMS.API.Models.Domain.Product;
 using IMS.API.Models.Domain.ShippingAddress;
+using IMS.API.Models.Dto.Order;
+using IMS.API.Models.Domain.Order;
 
 namespace IMS.API.Mappings
 {
@@ -16,6 +18,7 @@ namespace IMS.API.Mappings
                 CreateMap<ProductModel, UpdateRequestDto>().ReverseMap();
                 CreateMap<AddAddressRequestDto, ShippingAddressModel>().ReverseMap();
                 CreateMap<ShippingAddressModel,ReturnShippingAddressDto>();
+                CreateMap<OrderModel,OrderDetailsDto>().ReverseMap();
             }
 
           

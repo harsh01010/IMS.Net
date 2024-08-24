@@ -29,6 +29,7 @@ namespace IMS.Services.OrderAPI.Repository
         {
             var addressDomainModel = mapper.Map<ShippingAddressModel>(addAddressRequestDto);
             addressDomainModel.userId = userId;
+            addressDomainModel.shippingAddressId = Guid.NewGuid();
 
             if (userId != Guid.Empty)
             {

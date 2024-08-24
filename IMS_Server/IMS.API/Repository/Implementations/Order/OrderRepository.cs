@@ -3,16 +3,12 @@ using Dapper;
 using IMS.API.Models.Dto.Order;
 using IMS.API.Models.Dto;
 using IMS.API.Repository.IRepository.IOrder;
-
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 using IMS.API.Models.Domain.ShippingAddress;
 using IMS.API.Data;
 using IMS.API.Models.Domain.Order;
 using IMS.API.Repository.IRepository.IAuth;
-using IMS.API.Models.Dto.Auth;
 using IMS.API.Repository.IRepository.IShoppingCart;
 
 namespace IMS.Services.OrderAPI.Repository
@@ -65,7 +61,8 @@ namespace IMS.Services.OrderAPI.Repository
                 bool payment = true;
 
                 // insert into the orders table
-                var order = new OrderModel { CustomerId = cartId, OrderTime = DateTime.Now, OrderValue = cart.TotalValue };
+                var order = new OrderModel {OrderId=Guid.NewGuid(), CustomerId = cartId, OrderTime = DateTime.Now, OrderValue = cart.TotalValue };
+
                 if (cart.TotalValue != 0 && shippingAddress != null && payment)
                 {
                     order.Status = true;
@@ -78,7 +75,7 @@ namespace IMS.Services.OrderAPI.Repository
                 using (var connection = new SqlConnection(orderDbConnectionString))
                 {
                     var orderId = await connection.QuerySingleAsync<Guid>(
-                        "INSERT INTO Orders (CustomerId, OrderTime, OrderValue, Status) OUTPUT INSERTED.OrderId VALUES (@CustomerId, @OrderTime, @OrderValue, @Status)",
+                        "INSERT INTO Orders (OrderID,CustomerId, OrderTime, OrderValue, Status) OUTPUT INSERTED.OrderId VALUES (@OrderId,@CustomerId, @OrderTime, @OrderValue, @Status)",
                         order
                     );
                     order.OrderId = orderId;
