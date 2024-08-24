@@ -1,7 +1,7 @@
 using IMS.API.Mappings;
 using IMS.API.Repository.Implementations.Auth;
 using IMS.API.Repository.Implementations.Product;
-using IMS.API.Repository.Implementations.ShippingAddress;
+
 using IMS.API.Repository.Implementations.ShoppingCart;
 using IMS.API.Repository.IRepository.IAuth;
 using IMS.API.Repository.IRepository.IProduct;
@@ -16,7 +16,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using IMS.API.Repository.IRepository.IOrder;
-using IMS.API.Repository.Implementations.Order;
+using IMS.Services.OrderAPI.Repository;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

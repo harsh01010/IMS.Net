@@ -1,54 +1,70 @@
 ﻿using AutoMapper;
+using Dapper;
+using IMS.API.Models.Dto.Order;
+using IMS.API.Models.Dto;
+using IMS.API.Repository.IRepository.IOrder;
+
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
+using IMS.API.Models.Domain.ShippingAddress;
 using IMS.API.Data;
 using IMS.API.Models.Domain.Order;
-using IMS.API.Models.Dto;
-using IMS.API.Models.Dto.Order;
 using IMS.API.Repository.IRepository.IAuth;
-using IMS.API.Repository.IRepository.IOrder;
-using IMS.API.Repository.IRepository.IShippingAddress;
+using IMS.API.Models.Dto.Auth;
 using IMS.API.Repository.IRepository.IShoppingCart;
-using Microsoft.EntityFrameworkCore;
 
-namespace IMS.API.Repository.Implementations.Order
+namespace IMS.Services.OrderAPI.Repository
 {
-    public class OrderRepository:IOrderRepository
+    public class OrderRepository : IOrderRepository
     {
-
-       
+        
+        private readonly string orderDbConnectionString;
+        private readonly string shippingAddressDbConnectionString;
+        private readonly IMSAuthDbContext authDbContext;
+        private readonly IMSDbContext dbContext;
         private readonly IMapper mapper;
-        private readonly IMSDbContext db;
-        private readonly ICartRepository cartRepository;
-        private readonly IShippingAddressRepository shippingAddressRepository;
         private readonly IAuthRepository authRepository;
         private readonly IEmailSender emailSender;
+        private readonly ICartRepository cartRepository;
 
-        public OrderRepository( IMapper mapper,IMSDbContext db,ICartRepository cartRepository,IShippingAddressRepository shippingAddressRepository,IAuthRepository authRepository,IEmailSender emailSender)
+        public OrderRepository(IMSAuthDbContext authDbContext,IMSDbContext dbContext, IMapper mapper, IAuthRepository authRepository, IEmailSender emailSender, ICartRepository 
+            cartRepository)
         {
+       
+            this.orderDbConnectionString = dbContext.Database.GetDbConnection().ConnectionString;
+            this.shippingAddressDbConnectionString = dbContext.Database.GetDbConnection().ConnectionString;
+          
+            this.authDbContext = authDbContext;
+            this.dbContext = dbContext;
             this.mapper = mapper;
-            this.db = db;
-            this.cartRepository = cartRepository;
-            this.shippingAddressRepository = shippingAddressRepository;
             this.authRepository = authRepository;
             this.emailSender = emailSender;
+            this.cartRepository = cartRepository;
         }
-
-
 
         public async Task<string> PlaceOrderAsync(Guid cartId, Guid shippingAddressId, string token = null)
         {
             try
             {
+                // fetch the cart
+                var cart = await cartRepository.GetCartAsync(cartId, token);
 
-                //fetch the cart
-                var cart = await cartRepository.GetCartAsync(cartId);
+                // fetch the address
+                ShippingAddressModel shippingAddress;
+                using (var connection = new SqlConnection(shippingAddressDbConnectionString))
+                {
+                    shippingAddress = await connection.QueryFirstOrDefaultAsync<ShippingAddressModel>(
+                        "SELECT * FROM ShippingAddresses WHERE shippingAddressId = @shippingAddressId",
+                        new { shippingAddressId }
+                    );
+                }
 
-                //fetch the address
-                var shippingAddress = await shippingAddressRepository.GetShippingAddressAsync(shippingAddressId);
-
-                //payment
+                // payment
                 bool payment = true;
 
-                //update the orders table
+                // insert into the orders table
                 var order = new OrderModel { CustomerId = cartId, OrderTime = DateTime.Now, OrderValue = cart.TotalValue };
                 if (cart.TotalValue != 0 && shippingAddress != null && payment)
                 {
@@ -58,27 +74,30 @@ namespace IMS.API.Repository.Implementations.Order
                 {
                     order.Status = false;
                 }
-                await db.Orders.AddAsync(order);
 
-
-                //update the orderitem table
-                var products = cart.Products;
-
-                if (products.Any())
+                using (var connection = new SqlConnection(orderDbConnectionString))
                 {
-                    foreach (var product in products)
+                    var orderId = await connection.QuerySingleAsync<Guid>(
+                        "INSERT INTO Orders (CustomerId, OrderTime, OrderValue, Status) OUTPUT INSERTED.OrderId VALUES (@CustomerId, @OrderTime, @OrderValue, @Status)",
+                        order
+                    );
+                    order.OrderId = orderId;
+
+                    // insert into the order items table
+                    var products = cart.Products;
+                    if (products.Any())
                     {
-                        var orderItem = new OrderItemModel { OrderId = order.OrderId, ProductId = product.ProductId, ProductCount = product.ProductCount };
-                        await db.OrderItems.AddAsync(orderItem);
+                        foreach (var product in products)
+                        {
+                            await connection.ExecuteAsync(
+                                "INSERT INTO OrderItems (OrderId, ProductId, ProductCount) VALUES (@OrderId, @ProductId, @ProductCount)",
+                                new { OrderId = order.OrderId, ProductId = product.ProductId, ProductCount = product.ProductCount }
+                            );
+                        }
                     }
                 }
-                await db.SaveChangesAsync();
 
-                //make the cart empty
-
-
-                //send confirmation to user via emial
-                var user = await authRepository.GetById(cartId);
+                 var user = await authRepository.GetById(cartId);
                 if (user != null)
                 {
                     var emailBody = $"Congratulations {user.Name} , your order with amount {cart.TotalValue} has been placed!";
@@ -100,14 +119,18 @@ namespace IMS.API.Repository.Implementations.Order
         }
         public async Task<List<OrderDetailsDto>> GetAllOrdersAsync()
         {
-            var orders = await db.Orders.ToListAsync();
-
-            if (orders.Any())
+            using (var connection = new SqlConnection(orderDbConnectionString))
             {
-                return mapper.Map<List<OrderDetailsDto>>(orders);
-            }
-            return new List<OrderDetailsDto>();
-        }
+                var orders = await connection.QueryAsync<OrderModel>(
+                    "SELECT * FROM Orders"
+                );
 
+                if (orders.Any())
+                {
+                    return mapper.Map<List<OrderDetailsDto>>(orders);
+                }
+                return new List<OrderDetailsDto>();
+            }
+        }
     }
 }
