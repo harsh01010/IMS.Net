@@ -7,7 +7,7 @@ using IMS.API.Repository.IRepository.IShippingAddress;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace IMS.Services.OrderAPI.Repository
+namespace IMS.API.Repository.Implementations.ShippingAddress
 {
     public class ShippingAddressRepository : IShippingAddressRepository
     {

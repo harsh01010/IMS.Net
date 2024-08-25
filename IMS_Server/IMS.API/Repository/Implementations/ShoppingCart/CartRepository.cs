@@ -28,7 +28,8 @@ namespace IMS.API.Repository.Implementations.ShoppingCart
         {
             using (var connection = new SqlConnection(connectionString))
             {
-                var fetchProductQuery = "SELECT * FROM Products WHERE ProductId = @Id";
+                var fetchProductQuery = @"SELECT * FROM Products p INNER JOIN 
+                                          Categories c ON p.CategoryID = c.CategoryId WHERE ProductId = @Id";
                 var product = await connection.QueryFirstOrDefaultAsync<ProductModel>(fetchProductQuery, new { Id = productId });
 
                 if (product == null)
@@ -116,10 +117,11 @@ namespace IMS.API.Repository.Implementations.ShoppingCart
                     return new ReturnCartDto();
 
                 var cartProductsQuery = @"
-                    SELECT p.Name, p.ProductId, p.Price, p.CategoryName, cp.ProductCount 
-                    FROM CartProducts cp 
-                    JOIN Products p ON cp.ProductId = p.ProductId 
-                    WHERE cp.CartId = @CartId";
+                                 SELECT p.Name, p.ProductId, p.Price, c.CategoryName, cp.ProductCount 
+                                 FROM CartProducts cp 
+                                 JOIN Products p ON cp.ProductId = p.ProductId 
+                                 JOIN Categories c ON p.CategoryId = c.CategoryId 
+                                 WHERE cp.CartId = @CartId";
 
                 var products = await connection.QueryAsync<ReturnProductFromCartDto>(cartProductsQuery, new { CartId = cartId });
 

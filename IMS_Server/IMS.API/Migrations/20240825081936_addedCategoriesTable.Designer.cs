@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.API.Migrations.IMSDb
+namespace IMS.API.Migrations
 {
     [DbContext(typeof(IMSDbContext))]
-    [Migration("20240823190137_AddedAzureDb")]
-    partial class AddedAzureDb
+    [Migration("20240825081936_addedCategoriesTable")]
+    partial class addedCategoriesTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,15 +64,39 @@ namespace IMS.API.Migrations.IMSDb
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("IMS.API.Models.Domain.Product.ProductModel", b =>
+            modelBuilder.Entity("IMS.API.Models.Domain.Product.CategoryModel", b =>
                 {
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = new Guid("e2693675-9acd-4556-b1e2-b0dae65658a6"),
+                            CategoryName = "Appetizer"
+                        });
+                });
+
+            modelBuilder.Entity("IMS.API.Models.Domain.Product.ProductModel", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -98,8 +122,9 @@ namespace IMS.API.Migrations.IMSDb
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("524ec934-5b2b-45c4-b1ba-83a753023299"),
-                            CategoryName = "Appetizer",
+                            ProductId = new Guid("0abee973-8514-4ba1-abc0-829a65e9ad26"),
+                            AvailableQuantity = 10,
+                            CategoryId = new Guid("e2693675-9acd-4556-b1e2-b0dae65658a6"),
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/603x403",
                             Name = "Samosa",
@@ -107,8 +132,9 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("dc2b3de6-0fa1-40a3-8095-d66729c98385"),
-                            CategoryName = "Appetizer",
+                            ProductId = new Guid("461bce40-afcf-4235-aa76-7a1a9bf24fb3"),
+                            AvailableQuantity = 10,
+                            CategoryId = new Guid("e2693675-9acd-4556-b1e2-b0dae65658a6"),
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/602x402",
                             Name = "Paneer Tikka",
@@ -116,8 +142,9 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("e091b5c5-eb24-4c8f-9297-479eec040499"),
-                            CategoryName = "Dessert",
+                            ProductId = new Guid("94e85b9a-3a94-4b93-bf08-62b340101915"),
+                            AvailableQuantity = 10,
+                            CategoryId = new Guid("e2693675-9acd-4556-b1e2-b0dae65658a6"),
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/601x401",
                             Name = "Sweet Pie",
@@ -125,8 +152,9 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("0b52efcd-9427-4721-a194-f0efb1b7a82e"),
-                            CategoryName = "Entree",
+                            ProductId = new Guid("b09b6361-c345-4041-a61c-5e2e057bbbb2"),
+                            AvailableQuantity = 10,
+                            CategoryId = new Guid("e2693675-9acd-4556-b1e2-b0dae65658a6"),
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/600x400",
                             Name = "Pav Bhaji",

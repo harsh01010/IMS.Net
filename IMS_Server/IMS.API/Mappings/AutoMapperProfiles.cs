@@ -19,6 +19,8 @@ namespace IMS.API.Mappings
                 CreateMap<AddAddressRequestDto, ShippingAddressModel>().ReverseMap();
                 CreateMap<ShippingAddressModel,ReturnShippingAddressDto>();
                 CreateMap<OrderModel,OrderDetailsDto>().ReverseMap();
+                CreateMap<CategoryModel,ReturnCategoryDto>().ReverseMap();
+                CreateMap<CategoryModel,AddCategoryDto>().ReverseMap();
             }
 
           

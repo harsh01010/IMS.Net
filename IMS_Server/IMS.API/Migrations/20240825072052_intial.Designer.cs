@@ -4,16 +4,19 @@ using IMS.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.API.Migrations.IMSDb
+namespace IMS.API.Migrations
 {
     [DbContext(typeof(IMSDbContext))]
-    partial class IMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240825072052_intial")]
+    partial class intial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,6 +70,9 @@ namespace IMS.API.Migrations.IMSDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -95,7 +101,8 @@ namespace IMS.API.Migrations.IMSDb
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("524ec934-5b2b-45c4-b1ba-83a753023299"),
+                            ProductId = new Guid("da0eb0c7-df49-446d-a0f5-74e00da148c0"),
+                            AvailableQuantity = 10,
                             CategoryName = "Appetizer",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/603x403",
@@ -104,7 +111,8 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("dc2b3de6-0fa1-40a3-8095-d66729c98385"),
+                            ProductId = new Guid("468aa00d-12dd-423b-bae2-1d76ac141d2a"),
+                            AvailableQuantity = 10,
                             CategoryName = "Appetizer",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/602x402",
@@ -113,7 +121,8 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("e091b5c5-eb24-4c8f-9297-479eec040499"),
+                            ProductId = new Guid("499b52f3-1092-4d9e-936b-84c9a2d0aa20"),
+                            AvailableQuantity = 10,
                             CategoryName = "Dessert",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/601x401",
@@ -122,7 +131,8 @@ namespace IMS.API.Migrations.IMSDb
                         },
                         new
                         {
-                            ProductId = new Guid("0b52efcd-9427-4721-a194-f0efb1b7a82e"),
+                            ProductId = new Guid("b1db29ae-e228-442e-98f8-18bfe977d2da"),
+                            AvailableQuantity = 10,
                             CategoryName = "Entree",
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/600x400",

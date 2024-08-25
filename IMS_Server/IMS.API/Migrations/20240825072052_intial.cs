@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace IMS.API.Migrations.IMSDb
+namespace IMS.API.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedAzureDb : Migration
+    public partial class intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,7 @@ namespace IMS.API.Migrations.IMSDb
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    AvailableQuantity = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -121,13 +122,13 @@ namespace IMS.API.Migrations.IMSDb
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "ProductId", "CategoryName", "Description", "ImageLocalPath", "ImageUrl", "Name", "Price" },
+                columns: new[] { "ProductId", "AvailableQuantity", "CategoryName", "Description", "ImageLocalPath", "ImageUrl", "Name", "Price" },
                 values: new object[,]
                 {
-                    { new Guid("0b52efcd-9427-4721-a194-f0efb1b7a82e"), "Entree", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/600x400", "Pav Bhaji", 15.0 },
-                    { new Guid("524ec934-5b2b-45c4-b1ba-83a753023299"), "Appetizer", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/603x403", "Samosa", 15.0 },
-                    { new Guid("dc2b3de6-0fa1-40a3-8095-d66729c98385"), "Appetizer", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/602x402", "Paneer Tikka", 13.99 },
-                    { new Guid("e091b5c5-eb24-4c8f-9297-479eec040499"), "Dessert", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/601x401", "Sweet Pie", 10.99 }
+                    { new Guid("468aa00d-12dd-423b-bae2-1d76ac141d2a"), 10, "Appetizer", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/602x402", "Paneer Tikka", 13.99 },
+                    { new Guid("499b52f3-1092-4d9e-936b-84c9a2d0aa20"), 10, "Dessert", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/601x401", "Sweet Pie", 10.99 },
+                    { new Guid("b1db29ae-e228-442e-98f8-18bfe977d2da"), 10, "Entree", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/600x400", "Pav Bhaji", 15.0 },
+                    { new Guid("da0eb0c7-df49-446d-a0f5-74e00da148c0"), 10, "Appetizer", " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.", null, "https://placehold.co/603x403", "Samosa", 15.0 }
                 });
 
             migrationBuilder.CreateIndex(

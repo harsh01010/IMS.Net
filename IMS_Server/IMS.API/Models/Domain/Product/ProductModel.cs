@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMS.API.Models.Domain.Product
 {
@@ -11,9 +12,12 @@ namespace IMS.API.Models.Domain.Product
         [Range(1, 1000)]
         public double Price { get; set; }
 
-        public int AvailableQuantity;
+        public int AvailableQuantity { get; set; }
         public string Description { get; set; } = string.Empty;
-        public string CategoryName { get; set; } = string.Empty;
+        public Guid CategoryId { get; set; }
+
+        [NotMapped]
+        public string CategoryName { get; set; }
         public string? ImageUrl { get; set; }
         public string? ImageLocalPath { get; set; }
        
