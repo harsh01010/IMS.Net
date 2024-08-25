@@ -158,5 +158,46 @@ namespace IMS.API.Controllers
             }
             return response;
         }
+
+        [HttpGet]
+        [Route("getAllCategories")]
+        public async Task<ResponseDto> GetAllCategories()
+        {
+            try
+            {
+                var categories = await productRepository.GetAllCategoriesAsync();
+
+                response.IsSuccess = true;
+                response.Result = mapper.Map<List<ReturnCategoryDto>>(categories);
+                response.Message = "Fetched categories successfully";
+                
+            }
+            catch
+            {
+                response.IsSuccess = false;
+                response.Message = "something went wrong";
+            }
+            return response;
+
+        }
+
+        [HttpGet]
+        [Route("getPruductsByCategoryId/{categoryId:Guid}")]
+        public async Task<ResponseDto> GetPruductsByCategoryId([FromRoute] Guid categoryId)
+        {
+            try
+            {
+                var products = await productRepository.GetAllProductsByCategoryId(categoryId);
+                response.IsSuccess = true;
+                response.Result = mapper.Map<List<ProductDto>>(products);
+                response.Message = "Fetched Products successfully";
+            }
+            catch
+            {
+                response.IsSuccess = false;
+                response.Message = "Something went wrong";
+            }
+            return response;
+        }
     }
 }

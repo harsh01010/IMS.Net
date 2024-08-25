@@ -3,161 +3,140 @@ using IMS.API.Models.Dto.ShoppingCart;
 using IMS.API.Repository.IRepository.IAuth;
 using IMS.API.Repository.IRepository.IProduct;
 using IMS.API.Repository.IRepository.IShoppingCart;
-using IMS.API.Data;
 using IMS.API.Models.Domain.ShoppingCart;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using Dapper;
 using System.Text;
+using IMS.API.Models.Domain.Product;
 
 namespace IMS.API.Repository.Implementations.ShoppingCart
 {
-    public class CartRepository:ICartRepository
+    public class CartRepository : ICartRepository
     {
-
-        
-        private readonly IMSDbContext db;
         private readonly IEmailSender emailSender;
-        private readonly IProductRepository productRepository;
         private readonly IAuthRepository authRepository;
+        private readonly string connectionString;
 
-        public CartRepository( IMSDbContext db,IEmailSender emailSender,IAuthRepository authRepository)
+        public CartRepository(IEmailSender emailSender, IAuthRepository authRepository, IConfiguration configuration)
         {
-            this.db = db;
             this.emailSender = emailSender;
             this.authRepository = authRepository;
+            connectionString = configuration.GetConnectionString("DefaultConnectionString");
         }
-
 
         public async Task<string> UpsertAsync(Guid CartId, Guid productId, string token = null)
         {
-            //check if product is valid or not
-            var response = await db.Products.FirstOrDefaultAsync(x=>x.ProductId==productId);
-
-            try
+            using (var connection = new SqlConnection(connectionString))
             {
+                var fetchProductQuery = @"SELECT * FROM Products p INNER JOIN 
+                                          Categories c ON p.CategoryID = c.CategoryId WHERE ProductId = @Id";
+                var product = await connection.QueryFirstOrDefaultAsync<ProductModel>(fetchProductQuery, new { Id = productId });
 
-                if (response != null)
+                if (product == null)
+                    return ""; // Product not found
+
+                var fetchIfCartExistQuery = "SELECT * FROM Carts WHERE Id = @Id";
+                var cart = await connection.QueryFirstOrDefaultAsync<CartModel>(fetchIfCartExistQuery, new { Id = CartId });
+
+                if (cart != null)
                 {
-
-                    var existingCart = await db.Carts.FirstOrDefaultAsync(x => x.Id == CartId);
-
-                    if (existingCart != null)
-                    {
-                        existingCart.TotalValue += response.Price;
-                        existingCart.TotalProductQty += 1;
-                    }
-                    else
-                    {
-                        var cart = new CartModel { Id = CartId, TotalProductQty = 1, TotalValue = response.Price };
-                        await db.Carts.AddAsync(cart);
-                    }
-
-                    // insert data into cartProducts table
-
-                    //if the product is already inserted into the cart , increase the count
-                    var cartProducts = await db.CartProducts.FirstOrDefaultAsync(x => x.CartId == CartId && x.ProductId == response.ProductId);
-                    if (cartProducts != null)
-                    {
-                        cartProducts.ProductCount += 1;
-                    }
-                    //else create new entry in cartProducts table
-                    else
-                    {
-                        var cartProduct = new CartProductModel { CartId = CartId, ProductId = response.ProductId, ProductCount = 1 };
-                        await db.CartProducts.AddAsync(cartProduct);
-
-                    }
-
-                    await db.SaveChangesAsync();
-
-                    return $"Added {response.Name} to the Cart";
-
-
+                    var updateExistingCartQuery = @"
+                        UPDATE Carts 
+                        SET TotalProductQty = TotalProductQty + 1, 
+                            TotalValue = TotalValue + @Price 
+                        WHERE Id = @Id";
+                    await connection.ExecuteAsync(updateExistingCartQuery, new { Id = cart.Id, Price = product.Price });
+                }
+                else
+                {
+                    var insertIntoCartQuery = @"
+                        INSERT INTO Carts (Id, TotalProductQty, TotalValue) 
+                        VALUES (@Id, @TotalProductQty, @TotalValue)";
+                    await connection.ExecuteAsync(insertIntoCartQuery, new { Id = CartId, TotalProductQty = 1, TotalValue = product.Price });
                 }
 
+                // Insert or update CartProducts table
+                var fetchCartProductQuery = "SELECT * FROM CartProducts WHERE CartId = @CartId AND ProductId = @ProductId";
+                var cartProduct = await connection.QueryFirstOrDefaultAsync<CartProductModel>(fetchCartProductQuery, new { CartId, ProductId = productId });
+
+                if (cartProduct != null)
+                {
+                    var updateCartProductQuery = @"
+                        UPDATE CartProducts 
+                        SET ProductCount = ProductCount + 1 
+                        WHERE CartId = @CartId AND ProductId = @ProductId";
+                    await connection.ExecuteAsync(updateCartProductQuery, new { CartId, ProductId = productId });
+                }
+                else
+                {
+                    var insertCartProductQuery = @"
+                        INSERT INTO CartProducts (CartId, ProductId, ProductCount) 
+                        VALUES (@CartId, @ProductId, @ProductCount)";
+                    await connection.ExecuteAsync(insertCartProductQuery, new {Id=Guid.NewGuid(), CartId, ProductId = productId, ProductCount = 1 });
+                }
+
+                return $"Added {product.Name} to the Cart";
             }
-            catch (Exception ex)
-            {
-                return "";
-            }
-
-
-            return "";
-
         }
+
         public async Task<string> DeleteProductFromCartAsync(Guid cartId, Guid productId, string token = null)
         {
-            var product = await db.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
-
-            try
+            using (var connection = new SqlConnection(connectionString))
             {
-                if (product != null)
-                {
-                    var cart = await db.Carts.FirstOrDefaultAsync(x => x.Id == cartId);
-                    var qty = await db.CartProducts.FirstOrDefaultAsync(x => x.CartId == cartId && x.ProductId == productId);
-                    cart.TotalProductQty -= qty.ProductCount;
-                    cart.TotalValue -= (product.Price * qty.ProductCount);
+                var product = await connection.QueryFirstOrDefaultAsync<ProductModel>("SELECT * FROM Products WHERE ProductId = @Id", new { Id = productId });
 
-                    var cartProduct = await db.CartProducts.FirstOrDefaultAsync(x => x.CartId == cartId && x.ProductId == product.ProductId);
-                    db.CartProducts.Remove(cartProduct);
+                if (product == null)
+                    return "";
 
-                    await db.SaveChangesAsync();
+                var cartProduct = await connection.QueryFirstOrDefaultAsync<CartProductModel>("SELECT * FROM CartProducts WHERE CartId = @CartId AND ProductId = @ProductId", new { CartId = cartId, ProductId = productId });
 
-                    return $"{product.Name} has been deleted from the Cart";
+                if (cartProduct == null)
+                    return "";
 
-                }
+                var updateCartQuery = @"
+                    UPDATE Carts 
+                    SET TotalProductQty = TotalProductQty - @ProductCount, 
+                        TotalValue = TotalValue - (@Price * @ProductCount) 
+                    WHERE Id = @CartId";
+                await connection.ExecuteAsync(updateCartQuery, new { CartId = cartId, ProductCount = cartProduct.ProductCount, Price = product.Price });
 
+                var deleteCartProductQuery = "DELETE FROM CartProducts WHERE CartId = @CId AND ProductId = @PId";
+                await connection.ExecuteAsync(deleteCartProductQuery, new { CId=cartId,PId = productId });
+
+                return $"{product.Name} has been deleted from the Cart";
             }
-            catch (Exception ex)
-            {
-            }
-
-            return "";
         }
 
         public async Task<ReturnCartDto> GetCartAsync(Guid cartId, string token = null)
         {
-            var cart = await db.Carts.Include(x => x.CartProducts).FirstOrDefaultAsync(x => x.Id == cartId);
-
-            if (cart != null)
+            using (var connection = new SqlConnection(connectionString))
             {
-                var cartProducts = (from prod in cart.CartProducts
-                                    select new
-                                    {
-                                        productId = prod.ProductId,
-                                        productCount = prod.ProductCount
-                                    }).ToList();
-                // fetch all the products in the cart
-                var products = new List<ReturnProductFromCartDto>();
-                foreach (var product in cartProducts)
+                var cart = await connection.QueryFirstOrDefaultAsync<CartModel>("SELECT * FROM Carts WHERE Id = @Id", new { Id = cartId });
+
+                if (cart == null)
+                    return new ReturnCartDto();
+
+                var cartProductsQuery = @"
+                                 SELECT p.Name, p.ProductId, p.Price, c.CategoryName, cp.ProductCount 
+                                 FROM CartProducts cp 
+                                 JOIN Products p ON cp.ProductId = p.ProductId 
+                                 JOIN Categories c ON p.CategoryId = c.CategoryId 
+                                 WHERE cp.CartId = @CartId";
+
+                var products = await connection.QueryAsync<ReturnProductFromCartDto>(cartProductsQuery, new { CartId = cartId });
+
+                return new ReturnCartDto
                 {
-                    var response = await db.Products.FirstOrDefaultAsync(x => x.ProductId == product.productId);
-
-                    if (response != null)
-                    {
-
-                        products.Add(new ReturnProductFromCartDto
-                        {
-                            Name = response.Name,
-                            ProductId = response.ProductId,
-                            Price = response.Price,
-                            CategoryName = response.CategoryName,
-                            ProductCount = product.productCount
-                        });
-                    }
-
-                }
-                var result = new ReturnCartDto() { Id = cartId, TotalValue = cart.TotalValue, TotalProductQty = cart.TotalProductQty, Products = products };
-                return result;
-
+                    Id = cartId,
+                    TotalValue = cart.TotalValue,
+                    TotalProductQty = cart.TotalProductQty,
+                    Products = products.ToList()
+                };
             }
-            return new ReturnCartDto();
         }
-
 
         public async Task<string> SendCartByEmailAsync(ReturnCartDto cart, string token = null)
         {
-
-            //generate the email
             var sb = new StringBuilder();
 
             sb.AppendLine("<h1>Shopping Cart Details</h1>");
@@ -194,12 +173,10 @@ namespace IMS.API.Repository.Implementations.ShoppingCart
             var emailString = sb.ToString();
             var subject = $"Cart :{cart.Id}";
 
-            //get the user's Email id
             var user = await authRepository.GetById(cart.Id);
 
             if (user != null)
             {
-                //send the mail
                 var res = await emailSender.EmailSendAsync(new SendEmailRequestDto { Email = user.Email, Subject = subject, Body = emailString });
                 if (res)
                 {
@@ -212,21 +189,12 @@ namespace IMS.API.Repository.Implementations.ShoppingCart
 
         public async Task<bool> DeleteCartAsync(Guid cartId)
         {
-            try
+            using (var connection = new SqlConnection(connectionString))
             {
-                var cart = await db.Carts.FirstOrDefaultAsync(curr=>curr.Id == cartId);
-                if (cart != null)
-                {
-                    db.Carts.Remove(cart);
-                    await db.SaveChangesAsync();
-                    return true;
-                }
-                else return false;
+                var deleteCartQuery = "DELETE FROM Carts WHERE Id = @Id";
+                var rowsAffected = await connection.ExecuteAsync(deleteCartQuery, new { Id = cartId });
 
-            }
-            catch
-            {
-                return false;
+                return rowsAffected > 0;
             }
         }
     }
