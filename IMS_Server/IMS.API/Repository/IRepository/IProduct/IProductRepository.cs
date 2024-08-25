@@ -9,5 +9,8 @@ namespace IMS.API.Repository.IRepository.IProduct
         Task<ProductModel> CreateAsync(ProductModel Product);
         Task<ProductModel> UpdateAsync(ProductModel Product);
         Task<ProductModel?> DeleteAsync(Guid id);
+
+        Task<List<CategoryModel>> GetAllCategoriesAsync();
+        Task<List<ProductModel>>GetAllProductsByCategoryId(Guid categoryId);
     }
 }

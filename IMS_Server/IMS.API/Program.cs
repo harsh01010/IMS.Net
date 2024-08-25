@@ -1,12 +1,14 @@
 using IMS.API.Mappings;
 using IMS.API.Repository.Implementations.Auth;
 using IMS.API.Repository.Implementations.Product;
-using IMS.API.Repository.Implementations.ShippingAddress;
 using IMS.API.Repository.Implementations.ShoppingCart;
 using IMS.API.Repository.IRepository.IAuth;
 using IMS.API.Repository.IRepository.IProduct;
 using IMS.API.Repository.IRepository.IShippingAddress;
 using IMS.API.Repository.IRepository.IShoppingCart;
+using IMS.API.Repository.IRepository.IOrder;
+using IMS.API.Repository.Implementations.ShippingAddress;
+using IMS.API.Repository.Implementations.Order;
 using IMS.API.Data;
 using IMS.API.Models.Domain.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,8 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using IMS.API.Repository.IRepository.IOrder;
-using IMS.API.Repository.Implementations.Order;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
