@@ -45,7 +45,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+        //[Authorize(Roles = "Admin,Customer")]
         public async Task<ResponseDto> GetById(Guid id)
         {
             try
