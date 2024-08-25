@@ -21,4 +21,18 @@ export class ProductService {
 
     //${environment.baseAPI}/api/ProductAPI/getProductPage?pageNum=${pageNum}&pageSize=${pageSize}
   }
+  getProductById(id: string): Observable<any>{
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/${id}`)
+  }
+
+  getProductbyCategoryId(id: string): Observable<any>{
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/getPruductsByCategoryId/${id}`)
+  }
+
+  getallCategories(): Observable<any>{
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/getAllCategories`)
+  }
+
+    
+
 }

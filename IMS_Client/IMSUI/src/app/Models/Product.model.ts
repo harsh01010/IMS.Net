@@ -9,3 +9,4 @@ export interface Product {
   imageLocalPath?: string | null;
   image?: File | null; 
 }
+

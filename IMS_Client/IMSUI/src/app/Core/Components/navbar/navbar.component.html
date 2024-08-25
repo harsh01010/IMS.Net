@@ -1,7 +1,38 @@
-<nav class="bg-gray-800 p-4">
-  <div class="container mx-auto flex justify-between items-center">
+<nav class="bg-gray-800 p-4 sticky top-0 z-50">
+  <div class="container mx-auto flex items-center">
     <!-- Logo -->
-    <a href="#" class="text-white text-xl font-bold">IMSUI</a>
+    <a href="#" class="text-white text-xl font-bold mr-4">IMSUI</a>
+
+    <!-- Example split danger button -->
+    <div class="btn-group">
+      <button type="button" class="btn btn-secondary">Management</button>
+      <button
+        type="button"
+        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <span class="visually-hidden">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" [routerLink]="['/api/ProductAPI/']"
+            >Products</a
+          >
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            [routerLink]="['api/ProductAPI/getAllCategories/']"
+            >Categories</a
+          >
+        </li>
+        <li><a class="dropdown-item" href="#">Orders</a></li>
+      </ul>
+    </div>
+
+    <!-- Spacer -->
+    <div class="flex-grow"></div>
 
     <!-- Menu Items -->
     <div class="relative">

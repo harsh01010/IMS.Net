@@ -1,17 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductService } from '../../../Services/Product/product.service';
 import { Product } from '../../../Models/Product.model';
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
 import { LoaderComponent } from "../reuseable/loader/loader.component";
+=======
+import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+>>>>>>> 55e7683be1c057ef622644ddd7347d07984feb71
 
 @Component({
   selector: 'app-productlist',
   standalone: true,
+<<<<<<< HEAD
   imports: [CommonModule, LoaderComponent],
+=======
+  imports: [CommonModule,RouterLink],
+>>>>>>> 55e7683be1c057ef622644ddd7347d07984feb71
   templateUrl: './productlist.component.html',
   styleUrl: './productlist.component.scss'
 })
-export class ProductlistComponent implements OnInit {
+export class ProductlistComponent implements OnInit,OnDestroy {
   constructor(private productService: ProductService){
   }
 
@@ -67,6 +76,11 @@ export class ProductlistComponent implements OnInit {
       }
   })
 
+  }
+    ngOnDestroy(): void {
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
   }
 
 }
