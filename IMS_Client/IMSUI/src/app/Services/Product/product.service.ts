@@ -13,4 +13,18 @@ export class ProductService {
   getallProducts(): Observable<any>{
     return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI`)
   }
+  getProductById(id: string): Observable<any>{
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/${id}`)
+  }
+
+  getProductbyCategoryId(id: string): Observable<any>{
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/getPruductsByCategoryId/${id}`)
+  }
+
+  getallCategories(): Observable<any>{
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/getAllCategories`)
+  }
+
+    
+
 }
