@@ -1,29 +1,54 @@
-<ng-container *ngIf="products">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4" *ngFor="let product of products">
-        <div class="card">
-          <img
-            [src]="product.imageUrl || 'default-image-url.jpg'"
-            class="card-img-top"
-            alt="{{ product.name }}"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">
-              <strong>Category:</strong> {{ product.categoryName }}
-            </p>
-            <p class="card-text">
+<ng-container *ngIf="products;">
+  <div class="container mx-auto  px-20 pb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let product of products" class="bg-white shadow-lg rounded-lg overflow-hidden transform transition-transform duration-500 hover:scale-105 hover:shadow-xl mt-6">
+        <img
+          [src]="product.imageUrl || 'default-image-url.jpg'"
+          class="w-full h-32 object-cover"
+          alt="{{ product.name }}"
+        />
+        <div class="p-4">
+          <h5 class="text-lg font-semibold mb-2">{{ product.name }}</h5>
+          <p class="text-gray-700 mb-2">
+            {{ product.categoryName }}
+          </p>
+          <p class="text-gray-700 mb-2 text-center">
               <strong>Price:</strong> ${{ product.price }}
-            </p>
-            <p class="card-text">
-              <strong>Available Quantity:</strong>
-              {{ product.availableQuantity }}
-            </p>
-            <button class="btn btn-primary">View Details</button>
+          </p>
+          <p class="text-gray-700 mb-4 text-center font-bold">
+            {{ product.availableQuantity>20?"In Stock": ("Only "+product.availableQuantity + " Left!") }}
+          </p>
+          <div class="flex justify-center">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              Details <span class="font-bold">&rarr;</span>
+            </button>
           </div>
         </div>
+      </div>
+      
+      <div *ngIf="loading" class="col-span-full flex justify-center mt-6">
+        <app-loader></app-loader>
+      </div>
+
+      <div *ngIf="!loading && showLoadMore" class="col-span-full flex justify-center mt-6">
+        <button (click)="fetchNextPage()" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
+          Load More &darr;
+        </button>
       </div>
     </div>
   </div>
 </ng-container>
+
+<ng-template  #loading
+>
+ <app-loader></app-loader>
+</ng-template>
+
+<ng-template #noProducts>
+  <div class="container mx-auto px-20 pb-10 text-center">
+    <p class="text-gray-500 text-xl">No products available at the moment.</p>
+    <button (click)="fetchNextPage()" class="mt-4 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
+      Try Again
+    </button>
+  </div>
+</ng-template>
