@@ -25,7 +25,7 @@ namespace IMS.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Customer")]
+        //[Authorize(Roles = "Admin,Customer")]
         public async Task<ResponseDto> GetAll()
         {
             try
