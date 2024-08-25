@@ -16,9 +16,12 @@
             <p class="card-text">
               <strong>Price:</strong> ${{ product.price }}
             </p>
+            <p class="card-text">
+              <strong>Quantity:</strong> {{ product.availableQuantity }}
+            </p>
             <a
               class="btn btn-primary"
-              [routerLink]="['/api/ProductAPI', product.id]"
+              [routerLink]="['/api/ProductAPI/', product.productId]"
               >View Details</a
             >
           </div>

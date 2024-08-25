@@ -45,7 +45,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("getAllOrders")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> GetAllOrders()
         {

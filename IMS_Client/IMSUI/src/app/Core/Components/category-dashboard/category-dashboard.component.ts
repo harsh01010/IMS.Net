@@ -1,27 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { category } from '../../../Models/Category.model';
+import { Subscription } from 'rxjs';
 import { ProductService } from '../../../Services/Product/product.service';
-import { Product } from '../../../Models/Product.model';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-productlist',
+  selector: 'app-category-dashboard',
   standalone: true,
   imports: [CommonModule,RouterLink],
-  templateUrl: './productlist.component.html',
-  styleUrl: './productlist.component.scss'
+  templateUrl: './category-dashboard.component.html',
+  styleUrl: './category-dashboard.component.scss'
 })
-export class ProductlistComponent implements OnInit,OnDestroy {
+export class CategoryDashboardComponent implements OnInit, OnDestroy {
+
   constructor(private productService: ProductService){
   }
 
-  products?: Product[];
+  categories?: any;
   subscription?: Subscription;
   ngOnInit(): void {
-    this.subscription=this.productService.getallProducts().subscribe({
+    this.subscription=this.productService.getallCategories().subscribe({
       next: (response) => {
-        this.products = response.result;  
+        this.categories = response.result;  
+        console.log(this.categories)
       },
       error: (err) => {
         console.error(err);
@@ -34,5 +36,6 @@ export class ProductlistComponent implements OnInit,OnDestroy {
       this.subscription.unsubscribe();
     }
   }
+
 
 }
