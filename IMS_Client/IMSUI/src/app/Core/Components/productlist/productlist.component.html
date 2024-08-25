@@ -1,0 +1,29 @@
+<ng-container *ngIf="products">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4" *ngFor="let product of products">
+        <div class="card">
+          <img
+            [src]="product.imageUrl || 'default-image-url.jpg'"
+            class="card-img-top"
+            alt="{{ product.name }}"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">
+              <strong>Category:</strong> {{ product.categoryName }}
+            </p>
+            <p class="card-text">
+              <strong>Price:</strong> ${{ product.price }}
+            </p>
+            <p class="card-text">
+              <strong>Available Quantity:</strong>
+              {{ product.availableQuantity }}
+            </p>
+            <button class="btn btn-primary">View Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
