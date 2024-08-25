@@ -20,7 +20,8 @@ namespace IMS.API.Repository.Implementations.Product
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = "SELECT * FROM Products";
+                string sqlQuery = @"SELECT * FROM Products p INNER JOIN
+                                    Categories c on p.CategoryId = c.CategoryId";
                 var products = await connection.QueryAsync<ProductModel>(sqlQuery);
                 return products.ToList();
             }
@@ -45,8 +46,8 @@ namespace IMS.API.Repository.Implementations.Product
             {
                 // SQL query to insert the new product
                 string sqlQuery = @"
-            INSERT INTO Products (ProductId, Name, Description, Price, CategoryName, ImageUrl, ImageLocalPath) 
-            VALUES (@ProductId, @Name, @Description, @Price, @CategoryName, @ImageUrl, @ImageLocalPath);
+            INSERT INTO Products (ProductId, Name, Description, Price, CategoryId, ImageUrl, ImageLocalPath) 
+            VALUES (@ProductId, @Name, @Description, @Price, @CategoryID, @ImageUrl, @ImageLocalPath);
             
        
             SELECT * FROM Products WHERE ProductId = @ProductId;";
@@ -67,7 +68,7 @@ namespace IMS.API.Repository.Implementations.Product
                 Name = @Name, 
                 Description = @Description, 
                 Price = @Price,
-                CategoryName = @CategoryName,
+                CategoryId = @CategoryId,
                 ImageUrl = @ImageUrl,
                 ImageLocalPath = @ImageLocalPath
             WHERE ProductId = @ProductId;";
@@ -93,6 +94,34 @@ namespace IMS.API.Repository.Implementations.Product
                 }
                 return product;
             }
+        }
+
+        public async Task<List<CategoryModel>> GetAllCategoriesAsync()
+        {
+
+            using(var connection = new SqlConnection(_connectionString))
+            {
+                var sqlQuery = "SELECT * FROM Categories";
+               var categories =  await connection.QueryAsync<CategoryModel>(sqlQuery);
+                return categories.ToList();
+            }
+            
+        }
+
+        public async Task<List<ProductModel>> GetAllProductsByCategoryId(Guid categoryId)
+        {
+
+            using(var connection = new SqlConnection(_connectionString))
+            {
+                var sqlQuery = @"SELECT * FROM Products p INNER JOIN 
+                                Categories c ON p.CategoryId = c.CategoryId
+                                 WHERE p.CategoryID = @categoryID";
+
+                var products = await connection.QueryAsync<ProductModel>(sqlQuery,new { categoryId=categoryId});
+
+                return products.ToList();
+            }
+            
         }
     }
 }

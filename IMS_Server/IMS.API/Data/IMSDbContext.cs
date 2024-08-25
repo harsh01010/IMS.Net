@@ -14,6 +14,7 @@ namespace IMS.API.Data
         }
         //Produts 
         public DbSet<ProductModel> Products { get; set; }
+        public DbSet<CategoryModel> Categories { get; set; }
 
         //Carts
         public DbSet<CartModel> Carts { get; set; }
@@ -30,42 +31,56 @@ namespace IMS.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            var temp = Guid.NewGuid();
+            modelBuilder.Entity<CategoryModel>().HasData(new CategoryModel
+            {
+                CategoryId = temp,
+                CategoryName = "Appetizer"
+
+            });
+
             modelBuilder.Entity<ProductModel>().HasData(new ProductModel
             {
                 ProductId = Guid.NewGuid(),
                 Name = "Samosa",
                 Price = 15,
+                AvailableQuantity = 10,
                 Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                 ImageUrl = "https://placehold.co/603x403",
-                CategoryName = "Appetizer"
+                CategoryId = temp
             });
             modelBuilder.Entity<ProductModel>().HasData(new ProductModel
             {
                 ProductId = Guid.NewGuid(),
                 Name = "Paneer Tikka",
                 Price = 13.99,
+                AvailableQuantity = 10,
                 Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                 ImageUrl = "https://placehold.co/602x402",
-                CategoryName = "Appetizer"
+                CategoryId = temp
             });
             modelBuilder.Entity<ProductModel>().HasData(new ProductModel
             {
                 ProductId = Guid.NewGuid(),
                 Name = "Sweet Pie",
                 Price = 10.99,
+                AvailableQuantity = 10,
                 Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                 ImageUrl = "https://placehold.co/601x401",
-                CategoryName = "Dessert"
+                CategoryId = temp
             });
             modelBuilder.Entity<ProductModel>().HasData(new ProductModel
             {
                 ProductId = Guid.NewGuid(),
                 Name = "Pav Bhaji",
                 Price = 15,
+                AvailableQuantity = 10,
                 Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                 ImageUrl = "https://placehold.co/600x400",
-                CategoryName = "Entree"
+                CategoryId = temp
             });
+
+
 
 
             modelBuilder.Entity<CartProductModel>()

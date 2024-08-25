@@ -11,7 +11,7 @@ using IMS.API.Models.Domain.Order;
 using IMS.API.Repository.IRepository.IAuth;
 using IMS.API.Repository.IRepository.IShoppingCart;
 
-namespace IMS.Services.OrderAPI.Repository
+namespace IMS.API.Repository.Implementations.Order
 {
     public class OrderRepository : IOrderRepository
     {
