@@ -199,5 +199,64 @@ namespace IMS.API.Controllers
             }
             return response;
         }
+
+        [HttpPost]
+        [Route("addNewCategory")]
+        public async Task<ResponseDto> AddNewCategory([FromBody] AddCategoryDto category)
+        {
+            try
+            {
+                var res = await productRepository.AddNewCategoryAsync(category);
+                if (res)
+                {
+                    response.IsSuccess = true;
+                    response.Message = $"Added {category.CategoryName}";
+                }
+                else
+                {
+                    response.IsSuccess= false;
+                    response.Message = "Failed to add";
+                }
+
+            }
+            catch
+            {
+                response.IsSuccess = false;
+                response.Message = "Failed to add";
+            }
+
+            return response;
+
+        }
+
+        [HttpPost]
+        [Route("getProductPage")]
+        public async Task<ResponseDto> GetProductPage([FromBody]GetPageRequestDto pageRequestDto)
+        {
+            try
+            {
+                var res = await productRepository.GetProductPageAsync(pageRequestDto);
+                if(res.Any())
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Fetched Products Successfully";
+                    response.Result = mapper.Map<List<ProductDto>>(res);
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "No Products available";
+                    response.Result = mapper.Map<List<ProductDto>>(res);
+                }
+
+            }
+            catch
+            {
+                response.IsSuccess = false;
+                response.Message = "Failed to load";
+
+            }
+            return response;
+        }
     }
 }

@@ -5,9 +5,11 @@ using Dapper;
 using IMS.API.Models.Domain.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
+using IMS.API.Models.Dto.Product;
+using IMS.API.Models.Dto;
 namespace IMS.API.Repository.Implementations.Product
 {
-    public class ProductRepository:IProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly string _connectionString;
 
@@ -31,7 +33,7 @@ namespace IMS.API.Repository.Implementations.Product
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = "SELECT * FROM Products WHERE ProductId = @ProductId";
+                string sqlQuery = "SELECT * FROM Products p INNER JOIN Categories c ON p.CategoryId = c.CategoryId WHERE ProductId = @ProductId";
                 var product = await connection.QuerySingleOrDefaultAsync<ProductModel>(sqlQuery, new { ProductId = id });
                 return product;
             }
@@ -97,32 +99,65 @@ namespace IMS.API.Repository.Implementations.Product
             }
         }
 
+
         public async Task<List<CategoryModel>> GetAllCategoriesAsync()
         {
 
-            using(var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 var sqlQuery = "SELECT * FROM Categories";
-               var categories =  await connection.QueryAsync<CategoryModel>(sqlQuery);
+                var categories = await connection.QueryAsync<CategoryModel>(sqlQuery);
                 return categories.ToList();
             }
-            
+
         }
 
         public async Task<List<ProductModel>> GetAllProductsByCategoryId(Guid categoryId)
         {
 
-            using(var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 var sqlQuery = @"SELECT * FROM Products p INNER JOIN 
                                 Categories c ON p.CategoryId = c.CategoryId
                                  WHERE p.CategoryID = @categoryID";
 
-                var products = await connection.QueryAsync<ProductModel>(sqlQuery,new { categoryId=categoryId});
+                var products = await connection.QueryAsync<ProductModel>(sqlQuery, new { categoryId = categoryId });
 
                 return products.ToList();
             }
-            
+
+        }
+        public async Task<bool> AddNewCategoryAsync(AddCategoryDto category)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var sqlQuery = "INSERT INTO Categories(CategoryId,CategoryName) VALUES(@CId,@CName)";
+                var rowsAffected = await connection.ExecuteAsync(sqlQuery, new { CId = Guid.NewGuid(), CName = category.CategoryName });
+                if (rowsAffected > 0)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }
+
+        }
+
+        public async Task<List<ProductModel>> GetProductPageAsync(GetPageRequestDto getPageRequest)
+        {
+
+            using(var connection = new SqlConnection(_connectionString))
+            {
+                var sqlQuery = @"SELECT p.*,c.CategoryName FROM Products p INNER JOIN Categories c ON p.CategoryId=c.CategoryId
+                                ORDER BY p.Name ASC OFFSET @skip ROWS FETCH NEXT @pageSize ROWS ONLY";
+
+                var products = await connection.QueryAsync<ProductModel>(sqlQuery,new {skip = (getPageRequest.PageNum-1)*getPageRequest.PageSize,
+                                                                          pageSize = getPageRequest.PageSize});
+
+                return products.ToList();
+
+            }
+          
         }
     }
 }
