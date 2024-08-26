@@ -1,0 +1,85 @@
+<div class="container mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-4">Edit Product</h1>
+
+  <form #productForm="ngForm" (ngSubmit)="onUpdate()">
+    <div class="mb-4">
+      <label class="block text-gray-700">Product Name:</label>
+      <input
+        type="text"
+        class="border border-gray-300 p-2 w-full"
+        name="name"
+        [(ngModel)]="product.name"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700">Price:</label>
+      <input
+        type="number"
+        class="border border-gray-300 p-2 w-full"
+        name="price"
+        [(ngModel)]="product.price"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700">Description:</label>
+      <textarea
+        class="border border-gray-300 p-2 w-full"
+        name="description"
+        [(ngModel)]="product.description"
+        required
+      ></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700">AvailableQuantity:</label>
+      <input
+        type="number"
+        class="border border-gray-300 p-2 w-full"
+        name="availableQuantity"
+        [(ngModel)]="product.availableQuantity"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700">Category ID:</label>
+      <input
+        type="text"
+        class="border border-gray-300 p-2 w-full"
+        name="categoryID"
+        [(ngModel)]="product.categoryID"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700">Image URL:</label>
+      <input
+        type="text"
+        class="border border-gray-300 p-2 w-full"
+        name="imageUrl"
+        [(ngModel)]="product.imageUrl"
+      />
+    </div>
+
+    <div class="flex justify-left space-x-4 mt-4">
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Update Product
+      </button>
+
+      <button
+        [routerLink]="['/api/ProductAPI']"
+        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+      >
+        Back To List
+      </button>
+    </div>
+  </form>
+</div>
