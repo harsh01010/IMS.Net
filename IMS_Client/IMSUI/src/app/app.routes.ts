@@ -9,6 +9,7 @@ import { HomeComponent } from './Core/Components/home/home.component';
 import { CategoryListComponent } from './Core/Components/category-list/category-list.component';
 import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
+import { AddCategoryComponent } from './Core/Components/add-category/add-category.component';
 
 
 
@@ -30,6 +31,7 @@ export const routes: Routes = [
         path: 'manage/product/getAllCategories',
         component: CategoryDashboardComponent
     },
+
     {
         path: 'manage/product/edit/:productId',
         component: EditProductComponent
@@ -58,7 +60,10 @@ export const routes: Routes = [
         path: 'manage/category',
         component: CategoryDashboardComponent
     },
-
+    {
+        path:'manage/category/addCategory',
+        component: AddCategoryComponent
+    },
     {
         path: 'product/:productId',
         component: ProductDetailsComponent
