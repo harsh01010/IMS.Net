@@ -31,7 +31,18 @@ export class CategoryDashboardComponent implements OnInit, OnDestroy {
 
     })
   }
-    ngOnDestroy(): void {
+ 
+  OnSubmit(id: string){
+    this.productService.deleteCategory(id).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+     ngOnDestroy(): void {
     if(this.subscription){
       this.subscription.unsubscribe();
     }
