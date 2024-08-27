@@ -69,6 +69,7 @@ namespace IMS.API.Repository.Implementations.Product
             UPDATE Products SET 
                 Name = @Name, 
                 Description = @Description, 
+                AvailableQuantity=@AvailableQuantity,
                 Price = @Price,
                 CategoryId = @CategoryId,
                 ImageUrl = @ImageUrl,

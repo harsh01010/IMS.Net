@@ -72,7 +72,7 @@ namespace IMS.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ResponseDto> Create([FromBody] CreateRequestDto createRequestDto)
         {
             try
@@ -102,7 +102,7 @@ namespace IMS.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ResponseDto> Update(Guid id, [FromBody] UpdateRequestDto updateRequestDto)
         {
             try
@@ -133,7 +133,7 @@ namespace IMS.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ResponseDto> Delete(Guid id)
         {
             try
