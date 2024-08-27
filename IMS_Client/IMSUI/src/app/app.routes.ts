@@ -19,16 +19,20 @@ export const routes: Routes = [
 
     { path: '', component: ProductlistComponent },
     {
-        path: 'api/ProductAPI/getAllCategories',
+        path: 'manage/product/getAllCategories',
         component: CategoryDashboardComponent
     },
     {
-        path: 'api/ProductAPI/edit/:productId',
+        path: 'manage/product/edit/:productId',
         component: EditProductComponent
     },
     {
-        path: 'api/ProductAPI/add',
+        path: 'manage/product/add',
         component: AddNewProductComponent
+    },
+    {
+        path: 'manage/product',
+        component: ProductDashboardComponent
     },
     {
         path: 'manage/category',
@@ -38,12 +42,9 @@ export const routes: Routes = [
     {
         path: 'product/:productId',
         component: ProductDetailsComponent
-    },
-    {
-        path: 'manage/product',
-        component: ProductDashboardComponent
     }
 
-]; 4
+
+];
 
 
