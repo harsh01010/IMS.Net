@@ -4,6 +4,7 @@
       <div class="col-md-4" *ngFor="let product of products">
         <div class="card">
           <img
+            [routerLink]="['/api/ProductAPI/', product.productId]"
             [src]="product.imageUrl || 'default-image-url.jpg'"
             class="card-img-top"
             alt="{{ product.name }}"
@@ -19,11 +20,7 @@
             <p class="card-text">
               <strong>Quantity:</strong> {{ product.availableQuantity }}
             </p>
-            <a
-              class="btn btn-primary"
-              [routerLink]="['/api/ProductAPI/', product.productId]"
-              >View Details</a
-            >
+            <button class="btn btn-primary"  routerLink="api/cart">Add To Cart</button>
           </div>
         </div>
       </div>

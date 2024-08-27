@@ -3,6 +3,7 @@ import { ProductDetailsComponent } from './Core/Components/product-details/produ
 import { ProductlistComponent } from './Core/Components/productlist/productlist.component';
 import { ProductDashboardComponent } from './Core/Components/product-dashboard/product-dashboard.component';
 import { CategoryDashboardComponent } from './Core/Components/category-dashboard/category-dashboard.component';
+import { CartComponent } from './Core/Components/cart/cart.component';
 
 export const routes: Routes = [
      
@@ -19,6 +20,10 @@ export const routes: Routes = [
     {
         path:'api/ProductAPI',
         component:ProductDashboardComponent
+    }
+    ,{
+        path:"api/cart",
+        component:CartComponent
     }
    
 ];
