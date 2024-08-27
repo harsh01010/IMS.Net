@@ -5,6 +5,7 @@ import { ProductDashboardComponent } from './Core/Components/product-dashboard/p
 import { CategoryDashboardComponent } from './Core/Components/category-dashboard/category-dashboard.component';
 import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
+import { AddCategoryComponent } from './Core/Components/add-category/add-category.component';
 
 export const routes: Routes = [
      
@@ -12,7 +13,12 @@ export const routes: Routes = [
      {
        path:'api/ProductAPI/getAllCategories',
        component:CategoryDashboardComponent
+    }
+     ,{
+        path:'api/ProductAPI/addCategory',
+        component:AddCategoryComponent
     },
+
     {
         path:'api/ProductAPI/edit/:productId',
         component:EditProductComponent
