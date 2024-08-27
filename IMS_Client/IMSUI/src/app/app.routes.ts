@@ -6,6 +6,8 @@ import { CategoryDashboardComponent } from './Core/Components/category-dashboard
 import { LoginComponent } from './Core/Components/login/login.component';
 import { RegisterComponent } from './Core/Components/register/register.component';
 import { HomeComponent } from './Core/Components/home/home.component';
+import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
+import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
 
 export const routes: Routes = [
      
@@ -14,7 +16,14 @@ export const routes: Routes = [
        path:'api/ProductAPI/getAllCategories',
        component:CategoryDashboardComponent
     },
-   
+    {
+        path:'api/ProductAPI/edit/:productId',
+        component:EditProductComponent
+    },
+    {
+        path:'api/ProductAPI/add',
+        component:AddNewProductComponent
+    },
     {
         path:'api/ProductAPI/:productId',
         component:ProductDetailsComponent
