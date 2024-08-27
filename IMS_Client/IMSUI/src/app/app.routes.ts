@@ -6,27 +6,41 @@ import { CategoryDashboardComponent } from './Core/Components/category-dashboard
 import { LoginComponent } from './Core/Components/login/login.component';
 import { RegisterComponent } from './Core/Components/register/register.component';
 import { HomeComponent } from './Core/Components/home/home.component';
+import { CategoryListComponent } from './Core/Components/category-list/category-list.component';
 import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
+
+
+
+
 
 export const routes: Routes = [
      
     { path: '', component:HomeComponent },
      {
        path:'api/ProductAPI/getAllCategories',
-       component:CategoryDashboardComponent
+       component:CategoryDashboardComponent},
+    { path: '', redirectTo: 'products', pathMatch: 'full' },
+    { path: 'products', component: ProductlistComponent },
+    { path: 'categories', component: CategoryListComponent },
+
+
+    { path: '', component: ProductlistComponent },
+    {
+        path: 'manage/product/getAllCategories',
+        component: CategoryDashboardComponent
     },
     {
-        path:'api/ProductAPI/edit/:productId',
-        component:EditProductComponent
+        path: 'manage/product/edit/:productId',
+        component: EditProductComponent
     },
     {
-        path:'api/ProductAPI/add',
-        component:AddNewProductComponent
+        path: 'manage/product/add',
+        component: AddNewProductComponent
     },
     {
-        path:'api/ProductAPI/:productId',
-        component:ProductDetailsComponent
+        path: 'manage/product',
+        component: ProductDashboardComponent
     },
     {
         path:'api/ProductAPI',
@@ -39,6 +53,18 @@ export const routes: Routes = [
     {
         path:'register',
         component: RegisterComponent
+    },
+    {
+        path: 'manage/category',
+        component: CategoryDashboardComponent
+    },
+
+    {
+        path: 'product/:productId',
+        component: ProductDetailsComponent
     }
-   
+
+
 ];
+
+

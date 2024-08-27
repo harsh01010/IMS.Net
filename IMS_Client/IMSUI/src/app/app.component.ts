@@ -8,6 +8,7 @@ import { RegisterComponent } from './Core/Components/register/register.component
 import { FormsModule } from '@angular/forms';
 
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
