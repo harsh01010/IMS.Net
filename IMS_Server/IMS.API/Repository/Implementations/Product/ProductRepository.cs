@@ -159,5 +159,21 @@ namespace IMS.API.Repository.Implementations.Product
             }
           
         }
+
+        public async Task<bool> DeleteCategoryAsync(Guid id)
+        {
+
+            using(var connection  = new SqlConnection(_connectionString))
+            {
+                var sqlQuery = @"DELETE FROM Categories WHERE CategoryId = @id";
+
+                var rowsAffected = await connection.ExecuteAsync(sqlQuery, new { id = id });
+
+                if (rowsAffected > 0)
+                    return true;
+                else return false;
+            }
+          
+        }
     }
 }

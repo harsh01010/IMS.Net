@@ -181,6 +181,37 @@ namespace IMS.API.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("getProductPage")]
+        public async Task<ResponseDto> GetProductPage([FromQuery] int pageNum, [FromQuery] int pageSize)
+        {
+            GetPageRequestDto pageRequestDto = new GetPageRequestDto { PageNum = pageNum, PageSize = pageSize };
+            try
+            {
+                var res = await productRepository.GetProductPageAsync(pageRequestDto);
+                if (res.Any())
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Fetched Products Successfully";
+                    response.Result = mapper.Map<List<ProductDto>>(res);
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "No Products available";
+                    response.Result = mapper.Map<List<ProductDto>>(res);
+                }
+
+            }
+            catch
+            {
+                response.IsSuccess = false;
+                response.Message = "Failed to load";
+
+            }
+            return response;
+        }
         [HttpGet]
         [Route("getPruductsByCategoryId/{categoryId:Guid}")]
         public async Task<ResponseDto> GetPruductsByCategoryId([FromRoute] Guid categoryId)
@@ -228,35 +259,36 @@ namespace IMS.API.Controllers
             return response;
 
         }
-
-        [HttpPost]
-        [Route("getProductPage")]
-        public async Task<ResponseDto> GetProductPage([FromBody]GetPageRequestDto pageRequestDto)
+        [HttpDelete]
+        [Route("deleteCategory/{id:Guid}")]
+        public async Task<ResponseDto> DeleteCategory([FromRoute]Guid id)
         {
             try
             {
-                var res = await productRepository.GetProductPageAsync(pageRequestDto);
-                if(res.Any())
+
+                var res = await productRepository.DeleteCategoryAsync(id);
+
+                if (res)
                 {
                     response.IsSuccess = true;
-                    response.Message = "Fetched Products Successfully";
-                    response.Result = mapper.Map<List<ProductDto>>(res);
+                    response.Message = "success";
                 }
                 else
                 {
                     response.IsSuccess = false;
-                    response.Message = "No Products available";
-                    response.Result = mapper.Map<List<ProductDto>>(res);
+                    response.Message = "failed";
                 }
-
             }
+
             catch
             {
                 response.IsSuccess = false;
-                response.Message = "Failed to load";
-
+                response.Message = "failed";
             }
+
             return response;
         }
+
+       
     }
 }
