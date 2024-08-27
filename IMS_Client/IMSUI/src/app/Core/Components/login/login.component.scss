@@ -1,0 +1,73 @@
+.page{
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+.login-container {
+    min-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+  h2{
+    margin: auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+  .flex{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin:  0 45px;
+  }
+  
+  label {
+    margin-bottom: -2px;
+    font-weight: bold;
+    align-content: center;
+  }
+  
+  input {
+    margin-left: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 250px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 0;
+  }
+
+  button:hover{
+    box-shadow: 0 0 10px #007bff;
+  }
+  
+  button:disabled {
+    background-color: #aaa;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
