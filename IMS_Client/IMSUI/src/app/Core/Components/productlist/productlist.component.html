@@ -1,32 +1,27 @@
-<ng-container *ngIf="products">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4" *ngFor="let product of products">
-        <div class="card">
-          <img
-            [src]="product.imageUrl || 'default-image-url.jpg'"
-            class="card-img-top"
-            alt="{{ product.name }}"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">
-              <strong>Category:</strong> {{ product.categoryName }}
-            </p>
-            <p class="card-text">
-              <strong>Price:</strong> ${{ product.price }}
-            </p>
-            <p class="card-text">
-              <strong>Quantity:</strong> {{ product.availableQuantity }}
-            </p>
-            <a
-              class="btn btn-primary"
-              [routerLink]="['/api/ProductAPI/', product.productId]"
-              >View Details</a
-            >
-          </div>
-        </div>
+<ng-container *ngIf="products;">
+  <div class="container mx-auto  px-20 pb-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let product of products" class="bg-white shadow-lg rounded-lg overflow-hidden transform transition-transform duration-500 hover:scale-105 hover:shadow-xl mt-6">
+        <app-product-card-big [product]="product"></app-product-card-big>
+      </div>
+      
+      <div *ngIf="loading" class="col-span-full flex justify-center mt-6">
+        <app-loader></app-loader>
+      </div>
+
+      <div *ngIf="!loading && showLoadMore" class="col-span-full flex justify-center mt-6">
+        <button (click)="fetchNextPage()" class="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
+          Load More &darr;
+        </button>
       </div>
     </div>
   </div>
 </ng-container>
+<ng-template #noProducts>
+  <div class="container mx-auto px-20 pb-10 text-center">
+    <p class="text-gray-500 text-xl">No products available at the moment.</p>
+    <button (click)="fetchNextPage()" class="mt-4 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
+      Try Again
+    </button>
+  </div>
+</ng-template>

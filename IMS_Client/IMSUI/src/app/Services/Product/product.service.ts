@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../../Models/Product.model';
 import { Observable } from 'rxjs';
@@ -13,6 +13,14 @@ export class ProductService {
 
   getallProducts(): Observable<any>{
     return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI`)
+  }
+  getProductPage(pageNum:number,pageSize:number):Observable<any>{
+    let params = new HttpParams()
+    .set('pageNum',pageNum)
+    .set('pageSize',pageSize);
+    return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/getProductPage`,{params})
+
+    //${environment.baseAPI}/api/ProductAPI/getProductPage?pageNum=${pageNum}&pageSize=${pageSize}
   }
   getProductById(id: string): Observable<any>{
     return this.http.get<any>(`${environment.baseAPI}/api/ProductAPI/${id}`)
