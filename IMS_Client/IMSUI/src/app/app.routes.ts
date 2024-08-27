@@ -40,7 +40,10 @@ export const routes: Routes = [
         path: 'manage/category',
         component: CategoryDashboardComponent
     },
-
+    {
+        path:'manage/category/addCategory',
+        component: AddCategoryComponent
+    },
     {
         path: 'product/:productId',
         component: ProductDetailsComponent
