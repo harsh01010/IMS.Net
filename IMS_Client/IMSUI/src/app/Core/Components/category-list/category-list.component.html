@@ -1,0 +1,15 @@
+<div *ngIf="categories" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+    <div *ngFor="let cat of categories"
+        class="relative group bg-white p-6 rounded-lg shadow-md transition transform hover:shadow-xl hover:scale-105 cursor-pointer flex justify-around">
+        <p class="text-lg font-semibold text-gray-800">{{ cat.categoryName }}</p>
+
+        <span (click)="productDisplay(cat.categoryId)"><ng-icon name="bootstrapArrowRight"></ng-icon></span>
+
+    </div>
+
+
+
+    <ng-container *ngIf="productDisplayFlag && catId">
+        <app-category-products [catId]="catId" (close)="closeProduct()"></app-category-products>
+    </ng-container>
+</div>

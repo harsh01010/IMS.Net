@@ -17,5 +17,7 @@ namespace IMS.API.Repository.IRepository.IProduct
         Task<List<CategoryModel>> GetAllCategoriesAsync();
         Task<List<ProductModel>>GetAllProductsByCategoryId(Guid categoryId);
         Task<bool> AddNewCategoryAsync(AddCategoryDto category);
+
+        Task<bool> DeleteCategoryAsync(Guid id);
     }
 }

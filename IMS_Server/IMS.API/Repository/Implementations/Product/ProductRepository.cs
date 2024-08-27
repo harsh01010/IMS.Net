@@ -48,8 +48,8 @@ namespace IMS.API.Repository.Implementations.Product
             {
                 // SQL query to insert the new product
                 string sqlQuery = @"
-            INSERT INTO Products (ProductId, Name, Description, Price, CategoryId, ImageUrl, ImageLocalPath) 
-            VALUES (@ProductId, @Name, @Description, @Price, @CategoryID, @ImageUrl, @ImageLocalPath);
+            INSERT INTO Products (ProductId, Name, Description,AvailableQuantity, Price, CategoryId, ImageUrl, ImageLocalPath) 
+            VALUES (@ProductId, @Name, @Description,@AvailableQuantity, @Price, @CategoryID, @ImageUrl, @ImageLocalPath);
             
        
             SELECT * FROM Products WHERE ProductId = @ProductId;";
@@ -155,6 +155,22 @@ namespace IMS.API.Repository.Implementations.Product
 
                 return products.ToList();
 
+            }
+          
+        }
+
+        public async Task<bool> DeleteCategoryAsync(Guid id)
+        {
+
+            using(var connection  = new SqlConnection(_connectionString))
+            {
+                var sqlQuery = @"DELETE FROM Categories WHERE CategoryId = @id";
+
+                var rowsAffected = await connection.ExecuteAsync(sqlQuery, new { id = id });
+
+                if (rowsAffected > 0)
+                    return true;
+                else return false;
             }
           
         }

@@ -259,6 +259,35 @@ namespace IMS.API.Controllers
             return response;
 
         }
+        [HttpDelete]
+        [Route("deleteCategory/{id:Guid}")]
+        public async Task<ResponseDto> DeleteCategory([FromRoute]Guid id)
+        {
+            try
+            {
+
+                var res = await productRepository.DeleteCategoryAsync(id);
+
+                if (res)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "success";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "failed";
+                }
+            }
+
+            catch
+            {
+                response.IsSuccess = false;
+                response.Message = "failed";
+            }
+
+            return response;
+        }
 
        
     }

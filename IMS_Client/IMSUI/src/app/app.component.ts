@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ProductlistComponent } from "./Core/Components/productlist/productlist.component";
 
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
