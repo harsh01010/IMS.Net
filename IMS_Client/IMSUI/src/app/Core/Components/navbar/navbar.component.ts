@@ -6,6 +6,7 @@ import { RouterLink, Router, ActivatedRoute, Event, NavigationEnd } from '@angul
 
 import { Location } from '@angular/common';
 import { NavSearchComponent } from "./nav-search/nav-search.component";
+import { TokenStorageService } from '../../../Services/token/token.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -15,10 +16,13 @@ import { NavSearchComponent } from "./nav-search/nav-search.component";
   viewProviders: [provideIcons({ bootstrapSearch })]
 })
 export class NavbarComponent implements OnInit {
+
+  constructor(private router: Router, private location: Location, private sessionStorageServie: TokenStorageService) { }
   isDropdownOpen = false;
   currentRoute = '';
   showSearchComponent = false;
-  constructor(private router: Router, private location: Location) { }
+  userLogedIn!: Boolean
+
   ngOnInit(): void {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -26,6 +30,7 @@ export class NavbarComponent implements OnInit {
         console.log(this.currentRoute);
       }
     })
+    this.sessionStorageServie.getToken() != null;
   }
 
 
