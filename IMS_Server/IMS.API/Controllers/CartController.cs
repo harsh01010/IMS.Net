@@ -23,7 +23,7 @@ namespace IMS.API.Controllers
 
         [HttpPost]
         [Route("upsert/{cartId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+        //[Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Upsert([FromRoute] Guid cartId, [FromBody] CartRequestDto requestDto)
         {
 
@@ -51,7 +51,7 @@ namespace IMS.API.Controllers
 
         [HttpDelete]
         [Route("delete/{cartId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+      //  [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> DeleteProductFromCart([FromRoute] Guid cartId, [FromBody] CartRequestDto requestDto)
         {
             var responseMessage = await cartRepository.DeleteProductFromCartAsync(cartId, requestDto.ProductId);
@@ -72,7 +72,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("get/{cartId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+     //   [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetAllPrductsInCart([FromRoute] Guid cartId)
         {
             
@@ -95,7 +95,7 @@ namespace IMS.API.Controllers
         }
 
         [HttpPost("emailCart/{cartId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+    //    [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> EmailCart([FromRoute] Guid cartId)
         {
             //fetch the cart
@@ -120,7 +120,7 @@ namespace IMS.API.Controllers
         }
 
         [HttpDelete("deleteCart/{cartId:guid}")]
-        [Authorize(Roles ="Admin,Customer")]
+       // [Authorize(Roles ="Admin,Customer")]
 
         public async Task<IActionResult> DeleteCart([FromRoute] Guid cartId)
         {

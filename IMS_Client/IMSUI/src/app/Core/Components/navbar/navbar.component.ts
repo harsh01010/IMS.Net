@@ -7,10 +7,12 @@ import { RouterLink, Router, ActivatedRoute, Event, NavigationEnd } from '@angul
 import { Location } from '@angular/common';
 import { NavSearchComponent } from "./nav-search/nav-search.component";
 import { TokenStorageService } from '../../../Services/token/token.service';
+import { LoginTempComponent } from "../login-temp/login-temp.component";
+import { RegisterComponent } from "../register/register.component";
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgIconComponent, NavSearchComponent],
+  imports: [CommonModule, RouterLink, NgIconComponent, NavSearchComponent, LoginTempComponent, RegisterComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   viewProviders: [provideIcons({ bootstrapSearch })]
@@ -21,7 +23,11 @@ export class NavbarComponent implements OnInit {
   isDropdownOpen = false;
   currentRoute = '';
   showSearchComponent = false;
-  userLogedIn = false
+  userLogedIn = false;
+
+  showlogin = false;
+  showRegister = false;
+
 
   ngOnInit(): void {
     this.router.events.subscribe((event: Event) => {
@@ -40,5 +46,35 @@ export class NavbarComponent implements OnInit {
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
-  loginSucceded = (inp: boolean) => { this.userLogedIn = inp; }
+
+  /* login/register rendering logic*/
+  toggleShowLogin = () => {
+    this.showlogin = !this.showlogin;
+    this.showRegister = false;
+    console.log(this.showlogin, this.showRegister)
+
+  }
+
+  closeLogin() {
+    this.showlogin = false;
+    //console.log(this.showlogin,this.showRegister)
+  }
+  closeRegister() {
+    this.showRegister = false;
+    //console.log(this.showlogin,this.showRegister)
+  }
+  toggleShowRegister = () => {
+    this.showRegister = !this.showRegister;
+    this.showlogin = false;
+    console.log(this.showlogin, this.showRegister)
+
+  }
+
+  //set user login
+  loginStatus = (status: boolean) => {
+    this.userLogedIn = status;
+  }
+
+
+
 }

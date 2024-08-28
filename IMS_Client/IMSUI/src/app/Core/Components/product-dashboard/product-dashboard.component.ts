@@ -4,11 +4,11 @@ import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../Services/Product/product.service';
 import { Product } from '../../../Models/Product.model';
 import { Subscription } from 'rxjs';
-
+import { LoaderComponent } from '../reuseable/loader/loader.component';
 @Component({
   selector: 'app-product-dashboard',
   standalone: true,
-  imports: [CommonModule,RouterLink],
+  imports: [CommonModule, RouterLink, LoaderComponent],
   templateUrl: './product-dashboard.component.html',
   styleUrl: './product-dashboard.component.scss'
 })
@@ -21,9 +21,12 @@ export class ProductDashboardComponent implements OnInit, OnDestroy {
   
   products?: Product[];
   subscription?: Subscription;
+  loading=false;
   ngOnInit(): void {
+    this.loading=true;
     this.subscription=this.productService.getallProducts().subscribe({
       next: (response) => {
+        this.loading=false;
         this.products = response.result;  
         console.log(this.products);
       },

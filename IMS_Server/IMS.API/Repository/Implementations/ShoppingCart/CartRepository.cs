@@ -108,6 +108,7 @@ namespace IMS.API.Repository.Implementations.ShoppingCart
         }
 
         public async Task<ReturnCartDto> GetCartAsync(Guid cartId, string token = null)
+        
         {
             using (var connection = new SqlConnection(connectionString))
             {

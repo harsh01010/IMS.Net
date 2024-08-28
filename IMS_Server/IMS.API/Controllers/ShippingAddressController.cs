@@ -23,7 +23,7 @@ namespace IMS.API.Controllers
 
         [HttpPost]
         [Route("{userId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+       // [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> AddAddress([FromRoute] Guid userId, [FromBody] AddAddressRequestDto addAddressRequestDto)
         {
             var responseString = await shippingAddressRepository.AddAddressAsync(userId, addAddressRequestDto);
@@ -41,7 +41,7 @@ namespace IMS.API.Controllers
         }
         [HttpDelete]
         [Route("{shippingAddressId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+       // [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> DeleteAddress([FromRoute] Guid shippingAddressId)
         {
             var responseString = await shippingAddressRepository.DeleteAddressAsync(shippingAddressId);
@@ -58,7 +58,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("{userId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+     //   [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetAllAddress([FromRoute] Guid userId)
         {
             var listOfAddressesForUser = await shippingAddressRepository.GetAllAddressAsync(userId);

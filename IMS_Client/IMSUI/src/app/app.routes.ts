@@ -3,9 +3,10 @@ import { ProductDetailsComponent } from './Core/Components/product-details/produ
 import { ProductlistComponent } from './Core/Components/productlist/productlist.component';
 import { ProductDashboardComponent } from './Core/Components/product-dashboard/product-dashboard.component';
 import { CategoryDashboardComponent } from './Core/Components/category-dashboard/category-dashboard.component';
+import { CartComponent } from './Core/Components/cart/cart.component';
+import { OrderComponent } from './Core/Components/order/order.component';
 import { LoginComponent } from './Core/Components/login/login.component';
 import { RegisterComponent } from './Core/Components/register/register.component';
-
 import { CategoryListComponent } from './Core/Components/category-list/category-list.component';
 import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
@@ -70,8 +71,18 @@ export const routes: Routes = [
         path: 'product/:productId',
         component: ProductDetailsComponent
     }
-
-
+    ,{
+        path:"api/cart",
+        component:CartComponent
+    },
+    {
+        path:"api/order",
+        component:OrderComponent
+    }
+   
 ];
+
+
+
 
 

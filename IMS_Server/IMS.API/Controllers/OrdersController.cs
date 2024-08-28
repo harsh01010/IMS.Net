@@ -23,7 +23,7 @@ namespace IMS.API.Controllers
 
         [HttpPost]
         [Route("placeOrder/{cartId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+      //  [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> PlaceOrder([FromRoute] Guid cartId, [FromBody] PlaceOrderRequestDto placeOrderRequestDto)
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
