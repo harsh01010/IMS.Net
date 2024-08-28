@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../../../Services/Cart/cart.service';
 import { CartProduct } from '../../../Models/DeleteProductFromCart.model';
+import { TokenStorageService } from '../../../Services/token/token.service';
 
 @Component({
   selector: 'app-cart',
@@ -17,14 +18,21 @@ export class CartComponent implements OnInit {
   public grandTotal!: number;
   private cartTotal = new BehaviorSubject<number>(0);
   public cartItemList = new BehaviorSubject<ReturnProductFromCartDto[]>([]);
-  userId: string = 'cb48ba81-67fe-4e04-9fcb-8c5411080dee';
+   public cartId!:string ;
+
   cartProduct: CartProduct = { productId: '' };
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService ,private tokenService:TokenStorageService) {}
+  // userId: string = 'cb48ba81-67fe-4e04-9fcb-8c5411080dee';
+ 
+
 
   ngOnInit(): void {
+    this.cartId=this.tokenService.getUser().id;
     // Fetch items from the cart service
-    this.cartService.getProductById(this.userId).subscribe({
+
+    if(this.cartId){
+    this.cartService.getProductById(this.cartId).subscribe({
       next: (response) => {
         const cartItems = response.result.products;
         // console.log(response.result);
@@ -37,6 +45,9 @@ export class CartComponent implements OnInit {
         this.updateCartTotal();
       }
     });
+  } else{
+     console.log("user id not found");
+  }
 
     // Optionally, subscribe to cartItemList to update UI reactively
     this.cartItemList.subscribe(items => {
@@ -49,7 +60,7 @@ export class CartComponent implements OnInit {
     this.cartProduct.productId = cartItemId;
 
     // Call the service to delete the product by ID
-    this.cartService.deleteProductFromCartById(this.userId, this.cartProduct).subscribe({
+    this.cartService.deleteProductFromCartById(this.cartId, this.cartProduct).subscribe({
       next: () => {
         // On success, remove the item from the cart list
         const currentItems = this.cartItemList.value;
@@ -70,7 +81,7 @@ export class CartComponent implements OnInit {
   }
 
   removeAllCart() {
-    this.cartService.deleteCart(this.userId).subscribe({
+    this.cartService.deleteCart(this.cartId).subscribe({
       next: () => {
         this.cartItemList.next([]);
         this.cartTotal.next(0);

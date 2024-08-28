@@ -7,6 +7,9 @@ import { Product } from '../../../Models/Product.model';
 import { CommonModule } from '@angular/common';
 import { ProductCardBigComponent } from "../reuseable/product-card-big/product-card-big.component";
 import { LoaderComponent } from "../reuseable/loader/loader.component";
+import { CartService } from '../../../Services/Cart/cart.service';
+import { Router } from '@angular/router';
+import { TokenStorageService } from '../../../Services/token/token.service';
 
 @Component({
   selector: 'app-product-details',
@@ -16,9 +19,10 @@ import { LoaderComponent } from "../reuseable/loader/loader.component";
   styleUrl: './product-details.component.scss'
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private productService: ProductService) {
+  constructor(private route: ActivatedRoute,private router: Router , private productService: ProductService, private cartService: CartService,  private tokenService: TokenStorageService) {
 
   }
+ cartId !:string
   subsciption?: Subscription
   productId?: string | null
   product?: Product
@@ -26,7 +30,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   loadingDetails = false
   loadingProducts = false
   CategorisedProduct?: Product[]
+  // cart!:string;
   ngOnInit(): void {
+    this.cartId=this.tokenService.getUser().id;
+    console.log(this.cartId)
+
     this.subsciption = this.route.paramMap.subscribe({
       next: (params) => {
         this.productId = params.get('productId');
@@ -68,7 +76,19 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       })
     }
   }
+  addProductToCart(  ){
+    this.cartService.addProductToCart(this.cartId, this.productId).subscribe({
+      next: () => {
+      
+        console.log('Product added to cart successfully');
+        this.router.navigate(['/api/cart']);
+      },
+      error: (err) => {
+        console.error('Error adding product to cart', err);
+      } 
+    }); 
 
+  }
   ngOnDestroy(): void {
     if (this.subsciption) {
       this.subsciption.unsubscribe();

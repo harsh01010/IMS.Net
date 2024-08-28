@@ -6,6 +6,7 @@ import { Address } from '../../../Models/Address.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TokenStorageService } from '../../../Services/token/token.service';
 
 
 
@@ -22,21 +23,26 @@ export class OrderComponent implements OnInit {
   newAddress: Address = {  houseNo : '' ,street: '',pinCode: '', city: '', state:'' };
   showAddAddress = false;
   orderSuccess = false;
-  userId:string="cb48ba81-67fe-4e04-9fcb-8c5411080dee";
+  public cartId!:string ;
+
+  // userId:string="cb48ba81-67fe-4e04-9fcb-8c5411080dee";
 
   constructor(
     private orderService: OrderService,
     private addressService: AddressService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenStorageService
+
   ) {}
 
   ngOnInit(): void {
+    this.cartId=this.tokenService.getUser().id;
     this.fetchAddresses();
   }
 
   fetchAddresses() {
-    this.addressService.getUserAddresses(this.userId).subscribe({
+    this.addressService.getUserAddresses( this.cartId).subscribe({
       next: (addresses) => {
         console.log(addresses.result);
         // Assuming `addresses.result` is an array with `shippingId` in each address object
@@ -78,8 +84,10 @@ export class OrderComponent implements OnInit {
     }
   
     // If not a duplicate, proceed to add the address
-    this.addressService.addAddress(this.newAddress, this.userId).subscribe({
+    this.addressService.addAddress(this.newAddress,  this.cartId).subscribe({
       next: (response) => {
+        alert('Address added successfully:');
+
         console.log(response)
         this.fetchAddresses(); // Refresh the address list after adding a new one
         this.showAddAddress = false; // Hide the add address form
@@ -91,6 +99,8 @@ export class OrderComponent implements OnInit {
     if (address.shippingId) {
       this.addressService.deleteAddress(address.shippingId).subscribe({
         next: (response) => {
+        alert('Address deleted successfully:');
+
           console.log('Address deleted successfully:', response);
           this.fetchAddresses(); // Refresh the address list after deleting
         },
@@ -108,13 +118,27 @@ export class OrderComponent implements OnInit {
       return;
     }
 
-    this.orderService.placeOrder(this.selectedAddress.shippingId).subscribe({
+    this.orderService.placeOrder(this.selectedAddress.shippingId, this.cartId).subscribe({
       next: (response) => {
         this.orderSuccess = true;
-        this.cartService.deleteCart(this.userId) // Clear cart
+     this.deleteCart();
         setTimeout(() => this.router.navigate(['']), 3000); // Redirect to home after 3 seconds
+        
       },
       error: (error) => console.error('Error placing order:', error)
+
+    });
+
+  }
+
+  deleteCart = ()=>{
+    this.cartService.deleteCart( this.cartId).subscribe({
+      next: (res) => {
+        console.log(res);
+      },
+      error: (err) => {
+        console.error('Error deleting cart', err);
+      }
     });
   }
 }

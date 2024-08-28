@@ -2,16 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { CartService } from '../Cart/cart.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private cartservice:CartService ) {}
 
-  placeOrder(address: any): Observable<any> {
-    const userId = 'cb48ba81-67fe-4e04-9fcb-8c5411080dee'; // Replace with actual user ID
-    return this.http.post(`${environment.baseAPI}/api/Orders/placeOrder/${userId}`, {
+
+  deleteCart = async (cartId:string)=>{
+    await this.cartservice.deleteCart(cartId);
+  }
+  placeOrder(address: any,cartId:string): Observable<any> {
+  
+    
+    return this.http.post(`${environment.baseAPI}/api/Orders/placeOrder/${cartId}`, {
      
       address: address
     });

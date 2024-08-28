@@ -23,6 +23,10 @@ export class CartService {
     return this.http.get<any>(`${environment.baseAPI}/api/Cart/get/${id}`);
   
   }
+
+  addProductToCart(cartId:string, productId:any){
+    return this.http.post(`${environment.baseAPI}/api/Cart/upsert/${cartId}`, {productId});
+  }
   deleteProductFromCartById(id: string,productId:CartProduct): Observable<any> {
     //return this.http.delete<any>(`${environment.baseAPI}/api/Cart/delete/${id}`,productId);
 
@@ -41,6 +45,8 @@ export class CartService {
     return this.http.delete<any>(url, options);
    }
      deleteCart(id:string){
+
+      console.log("cart deleted",id)
       return this.http.delete<any>(`${environment.baseAPI}/api/Cart/deleteCart/${id}`);
 
      }

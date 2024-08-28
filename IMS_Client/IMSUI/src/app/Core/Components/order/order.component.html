@@ -17,10 +17,10 @@
           <tr *ngFor="let address of addresses; let i = index">
             <td>
               <input type="radio" [value]="address" name="selectedAddress" [(ngModel)]="selectedAddress">
-               {{address.shippingId}} {{ address.houseNo }}, {{ address.street }}, {{ address.city }}, {{ address.pinCode }}, {{ address.state }}
+                {{ address.houseNo }} {{ address.street }} {{ address.city }} {{ address.pinCode }} {{ address.state }}
             </td>
             <td>
-              <button  class="btn btn-warning">Edit</button>
+              <!-- <button  class="btn btn-warning">Edit</button> -->
               <button  (click)="deleteAddress(address)" class="btn btn-danger">Delete</button>
             </td>
           </tr>
