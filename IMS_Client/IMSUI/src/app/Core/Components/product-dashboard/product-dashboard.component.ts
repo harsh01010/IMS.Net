@@ -39,4 +39,17 @@ export class ProductDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  deleteProduct(productId: string): void {
+    this.productService.deleteproduct(productId).subscribe({
+      next: () => {
+        console.log('Product deleted successfully');
+        this.products = this.products?.filter(p => p.productId!== productId);
+      },
+      error: (err) => {
+        console.error('Error deleting product', err);
+      }
+    });
+  }
+
+
 }
