@@ -13,11 +13,6 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   login(loginCredentials: LoginCredentials): Observable<any> {
-    return this.http.post<any>(`${environment.baseAPI}/api/AuthApi/Login`, loginCredentials).pipe(
-      catchError(error => {
-        console.error('Login error', error);
-        return of({ success: false });
-      })
-    );
+    return this.http.post<any>(`${environment.baseAPI}/api/AuthApi/Login`, loginCredentials)
   }
 }

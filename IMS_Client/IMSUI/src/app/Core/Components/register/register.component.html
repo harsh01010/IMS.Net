@@ -7,7 +7,8 @@
         <div class="inputs">
           <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" [(ngModel)]="register.name" required minlength="3" maxlength="20" />
+            <input type="text" class="form-control" id="username" name="username" [(ngModel)]="register.name" required
+              minlength="3" maxlength="20" />
           </div>
         </div>
 
@@ -21,14 +22,15 @@
         <div class="inputs">
           <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" [(ngModel)]="register.password" required minlength="6" />
+            <input class="form-control" id="password" name="password" [(ngModel)]="register.password" required />
           </div>
         </div>
 
         <div class="inputs">
           <div class="form-group">
             <label for="number">Phone Number:</label>
-            <input type="tel" class="form-control" id="number" name="number" [(ngModel)]="register.phoneNumber" required minlength="10" maxlength="10" />
+            <input type="tel" class="form-control" id="number" name="number" [(ngModel)]="register.phoneNumber"
+              required />
           </div>
         </div>
 
@@ -36,8 +38,8 @@
           <div class="form-group">
             <label for="role">Role:</label>
             <select id="role" name="role" class="form-control wid" [(ngModel)]="register.role">
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option value="Customer">Customer</option>
+              <option value="Admin">Admin</option>
             </select>
           </div>
         </div>
@@ -55,4 +57,3 @@
     </div>
   </div>
 </div>
-
