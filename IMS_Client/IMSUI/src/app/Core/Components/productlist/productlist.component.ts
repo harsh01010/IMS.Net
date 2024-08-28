@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from "../reuseable/loader/loader.component";
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CartService } from '../../../Services/Cart/cart.service';
 import { ProductCardBigComponent } from "../reuseable/product-card-big/product-card-big.component";
 
 @Component({
@@ -12,7 +13,7 @@ import { ProductCardBigComponent } from "../reuseable/product-card-big/product-c
   standalone: true,
   imports: [CommonModule, LoaderComponent, RouterLink, ProductCardBigComponent],
   templateUrl: './productlist.component.html',
-  styleUrl: './productlist.component.scss'
+  styleUrls: ['./productlist.component.scss']
 })
 export class ProductlistComponent implements OnInit {
   constructor(private productService: ProductService) {
