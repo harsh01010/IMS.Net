@@ -41,7 +41,7 @@ namespace IMS.API.Controllers
         }
         [HttpDelete]
         [Route("{shippingAddressId:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+       // [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> DeleteAddress([FromRoute] Guid shippingAddressId)
         {
             var responseString = await shippingAddressRepository.DeleteAddressAsync(shippingAddressId);

@@ -7,7 +7,6 @@ import { CartComponent } from './Core/Components/cart/cart.component';
 import { OrderComponent } from './Core/Components/order/order.component';
 import { LoginComponent } from './Core/Components/login/login.component';
 import { RegisterComponent } from './Core/Components/register/register.component';
-import { HomeComponent } from './Core/Components/home/home.component';
 import { CategoryListComponent } from './Core/Components/category-list/category-list.component';
 import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
@@ -19,7 +18,7 @@ import { AddCategoryComponent } from './Core/Components/add-category/add-categor
 
 export const routes: Routes = [
      
-    { path: '', component:HomeComponent },
+    { path: '', component:ProductlistComponent},
      {
        path:'api/ProductAPI/getAllCategories',
        component:CategoryDashboardComponent},

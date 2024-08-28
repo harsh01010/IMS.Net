@@ -1,4 +1,5 @@
    export interface Address {
+    shippingId?: string;
     houseNo:string;
 
     street :string;

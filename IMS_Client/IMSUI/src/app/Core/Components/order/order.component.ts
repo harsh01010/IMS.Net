@@ -38,13 +38,23 @@ export class OrderComponent implements OnInit {
   fetchAddresses() {
     this.addressService.getUserAddresses(this.userId).subscribe({
       next: (addresses) => {
-        this.addresses = addresses.result;
-        console.log(addresses);
-
+        console.log(addresses.result);
+        // Assuming `addresses.result` is an array with `shippingId` in each address object
+        this.addresses = addresses.result.map((address: any) => ({
+          shippingId: address.shippingAddressId, // Store shippingId
+          houseNo: address.houseNo,
+          street: address.street,
+          pinCode: address.pinCode,
+          city: address.city,
+          state: address.state
+        }));
+        console.log(this.addresses); // You can now see shippingId with each address
+       
       },
       error: (error) => console.error('Error fetching addresses:', error)
     });
   }
+  
 
   toggleAddAddress() {
     this.showAddAddress = !this.showAddAddress;
@@ -70,11 +80,25 @@ export class OrderComponent implements OnInit {
     // If not a duplicate, proceed to add the address
     this.addressService.addAddress(this.newAddress, this.userId).subscribe({
       next: (response) => {
+        console.log(response)
         this.fetchAddresses(); // Refresh the address list after adding a new one
         this.showAddAddress = false; // Hide the add address form
       },
       error: (error) => console.error('Error adding address:', error)
     });
+  }
+  deleteAddress(address: Address) {
+    if (address.shippingId) {
+      this.addressService.deleteAddress(address.shippingId).subscribe({
+        next: (response) => {
+          console.log('Address deleted successfully:', response);
+          this.fetchAddresses(); // Refresh the address list after deleting
+        },
+        error: (error) => console.error('Error deleting address:', error)
+      });
+    } else {
+      console.error('Cannot delete address: Shipping ID is missing.');
+    }
   }
   
 
@@ -84,7 +108,7 @@ export class OrderComponent implements OnInit {
       return;
     }
 
-    this.orderService.placeOrder(this.selectedAddress).subscribe({
+    this.orderService.placeOrder(this.selectedAddress.shippingId).subscribe({
       next: (response) => {
         this.orderSuccess = true;
         this.cartService.deleteCart(this.userId) // Clear cart

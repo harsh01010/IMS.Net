@@ -18,4 +18,7 @@ export class AddressService {
    
     return this.http.post(`${environment.baseAPI}/api/ShippingAddress/${userId}`, address);
   }
+  deleteAddress(address: any,): Observable<any>{
+    return this.http.delete(`${environment.baseAPI}/api/ShippingAddress/${address}`);
+  }
 }
