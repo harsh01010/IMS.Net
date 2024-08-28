@@ -46,7 +46,8 @@ namespace IMS.API.Repository.Implementations.Auth
                     Email = user.Email,
                     Id = Guid.Parse(user.Id),
                     Name = user.Name,
-                    PhoneNumber = user.PhoneNumber
+                    PhoneNumber = user.PhoneNumber,
+                    role = roles[0]
                 };
 
                 var loginResponseDto = new LoginResponseDto()

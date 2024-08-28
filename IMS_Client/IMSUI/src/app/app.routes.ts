@@ -11,17 +11,19 @@ import { CategoryListComponent } from './Core/Components/category-list/category-
 import { AddNewProductComponent } from './Core/Components/add-new-product/add-new-product.component';
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
 import { AddCategoryComponent } from './Core/Components/add-category/add-category.component';
+import { LoginTempComponent } from './Core/Components/login-temp/login-temp.component';
 
 
 
 
 
 export const routes: Routes = [
-     
-    { path: '', component:ProductlistComponent},
-     {
-       path:'api/ProductAPI/getAllCategories',
-       component:CategoryDashboardComponent},
+
+
+    {
+        path: 'api/ProductAPI/getAllCategories',
+        component: CategoryDashboardComponent
+    },
     { path: '', redirectTo: 'products', pathMatch: 'full' },
     { path: 'products', component: ProductlistComponent },
     { path: 'categories', component: CategoryListComponent },
@@ -46,15 +48,15 @@ export const routes: Routes = [
         component: ProductDashboardComponent
     },
     {
-        path:'api/ProductAPI',
-        component:ProductDashboardComponent
+        path: 'api/ProductAPI',
+        component: ProductDashboardComponent
     },
     {
-        path:'login',
-        component:LoginComponent
+        path: 'login',
+        component: LoginTempComponent
     },
     {
-        path:'register',
+        path: 'register',
         component: RegisterComponent
     },
     {
@@ -62,7 +64,7 @@ export const routes: Routes = [
         component: CategoryDashboardComponent
     },
     {
-        path:'manage/category/addCategory',
+        path: 'manage/category/addCategory',
         component: AddCategoryComponent
     },
     {
