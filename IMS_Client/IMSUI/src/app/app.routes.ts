@@ -71,15 +71,15 @@ export const routes: Routes = [
         path: 'product/:productId',
         component: ProductDetailsComponent
     }
-    ,{
-        path:"api/cart",
-        component:CartComponent
+    , {
+        path: "cart",
+        component: CartComponent
     },
     {
-        path:"api/order",
-        component:OrderComponent
+        path: "order",
+        component: OrderComponent
     }
-   
+
 ];
 
 
