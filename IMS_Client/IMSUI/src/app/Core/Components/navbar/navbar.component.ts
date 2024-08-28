@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
   isDropdownOpen = false;
   currentRoute = '';
   showSearchComponent = false;
-  userLogedIn!: Boolean
+  userLogedIn = false
 
   ngOnInit(): void {
     this.router.events.subscribe((event: Event) => {
@@ -40,4 +40,5 @@ export class NavbarComponent implements OnInit {
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
+  loginSucceded = (inp: boolean) => { this.userLogedIn = inp; }
 }
