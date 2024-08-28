@@ -1,0 +1,50 @@
+<!-- src/app/components/order/order.component.html -->
+
+<div class="container">
+    <h2>Place Your Order</h2>
+  
+    <!-- Address Selection -->
+    <div *ngIf="addresses.length > 0">
+      <h4>Select a delivery address</h4>
+      <table class="table table-bordered address-table">
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let address of addresses; let i = index">
+            <td>
+              <input type="radio" [value]="address" name="selectedAddress" [(ngModel)]="selectedAddress">
+              {{ address.houseNo }}, {{ address.street }}, {{ address.city }}, {{ address.pinCode }}, {{ address.state }}
+            </td>
+            <td>
+              <button  class="btn btn-warning">Edit</button>
+              <button  class="btn btn-danger">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Add New Address -->
+    <button (click)="toggleAddAddress()" class="btn btn-primary">Add New Address</button>
+    <div *ngIf="showAddAddress" class="add-address-form">
+      <input type="text" placeholder="Enter your HouseNo" [(ngModel)]="newAddress.houseNo">
+      <input type="text" placeholder="Enter your Street" [(ngModel)]="newAddress.street">
+      <input type="text" placeholder="Enter your PinCode" [(ngModel)]="newAddress.pinCode">
+      <input type="text" placeholder="Enter your City" [(ngModel)]="newAddress.city">
+      <input type="text" placeholder="Enter your State" [(ngModel)]="newAddress.state">
+      <button (click)="addAddress()" class="btn btn-success">Save Address</button>
+    </div>
+  
+    <!-- Confirm Order Button -->
+    <button (click)="confirmOrder()" class="btn btn-success">Confirm Order</button>
+  
+    <!-- Success Message -->
+    <div *ngIf="orderSuccess" class="success-message">
+      <p>Order placed successfully!</p>
+    </div>
+  </div>
+  
