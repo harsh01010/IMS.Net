@@ -48,8 +48,8 @@ namespace IMS.API.Repository.Implementations.Product
             {
                 // SQL query to insert the new product
                 string sqlQuery = @"
-            INSERT INTO Products (ProductId, Name, Description, Price, CategoryId, ImageUrl, ImageLocalPath) 
-            VALUES (@ProductId, @Name, @Description, @Price, @CategoryID, @ImageUrl, @ImageLocalPath);
+            INSERT INTO Products (ProductId, Name, Description,AvailableQuantity, Price, CategoryId, ImageUrl, ImageLocalPath) 
+            VALUES (@ProductId, @Name, @Description,  @AvailableQuantity,@Price, @CategoryID, @ImageUrl, @ImageLocalPath);
             
        
             SELECT * FROM Products WHERE ProductId = @ProductId;";
