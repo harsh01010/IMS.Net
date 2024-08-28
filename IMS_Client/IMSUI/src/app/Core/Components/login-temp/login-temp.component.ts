@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,EventEmitter, Output} from '@angular/core';
 import { LoginService } from '../../../Services/Login/login.service';
 import { LoginCredentials } from '../../../Models/Login.model';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +13,9 @@ import { TokenStorageService } from '../../../Services/token/token.service';
   styleUrl: './login-temp.component.scss'
 })
 export class LoginTempComponent {
+
+  @Output() close = new EventEmitter<void>();
+  @Output() loginStatus = new EventEmitter<boolean>();
 
   cred: LoginCredentials = { userName: '', password: '' }
 
@@ -31,13 +34,19 @@ export class LoginTempComponent {
             this.sessionService.saveUser(res.result.user);
             this.loginSuccess = true;
             console.log(res.result);
+
           }
         },
-        error: (err) => console.log(err)
+        error: (err) => console.log(err),
+        complete: () => this.loginStatus.emit(this.loginSuccess)
       })
     }
   }
 
+
+  closeLogin = ()=>{
+    this.close.emit();
+  }
 
 
 

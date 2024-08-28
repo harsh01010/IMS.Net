@@ -6,11 +6,12 @@ import { LoaderComponent } from "../reuseable/loader/loader.component";
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ProductCardBigComponent } from "../reuseable/product-card-big/product-card-big.component";
+import { CategoryListComponent } from "../category-list/category-list.component";
 
 @Component({
   selector: 'app-productlist',
   standalone: true,
-  imports: [CommonModule, LoaderComponent, RouterLink, ProductCardBigComponent],
+  imports: [CommonModule, LoaderComponent, RouterLink, ProductCardBigComponent, CategoryListComponent],
   templateUrl: './productlist.component.html',
   styleUrl: './productlist.component.scss'
 })
