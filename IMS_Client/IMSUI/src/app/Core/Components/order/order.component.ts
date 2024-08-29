@@ -120,9 +120,10 @@ export class OrderComponent implements OnInit {
 
     this.orderService.placeOrder(this.selectedAddress.shippingId, this.cartId).subscribe({
       next: (response) => {
-        this.orderSuccess = true;
+        // this.orderSuccess = true;
+        alert("Order Placed Succesfully")
      this.deleteCart();
-        setTimeout(() => this.router.navigate(['']), 3000); // Redirect to home after 3 seconds
+        this.router.navigate([''])
         
       },
       error: (error) => console.error('Error placing order:', error)

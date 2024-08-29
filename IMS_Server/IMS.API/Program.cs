@@ -1,62 +1,66 @@
+using IMS.API.Data;
+using IMS.API.Jobs;
 using IMS.API.Mappings;
+using IMS.API.Models.Domain.Auth;
 using IMS.API.Repository.Implementations.Auth;
+using IMS.API.Repository.Implementations.Order;
 using IMS.API.Repository.Implementations.Product;
+using IMS.API.Repository.Implementations.ShippingAddress;
 using IMS.API.Repository.Implementations.ShoppingCart;
 using IMS.API.Repository.IRepository.IAuth;
+using IMS.API.Repository.IRepository.IOrder;
 using IMS.API.Repository.IRepository.IProduct;
 using IMS.API.Repository.IRepository.IShippingAddress;
 using IMS.API.Repository.IRepository.IShoppingCart;
-using IMS.API.Repository.IRepository.IOrder;
-using IMS.API.Repository.Implementations.ShippingAddress;
-using IMS.API.Repository.Implementations.Order;
-using IMS.API.Data;
-using IMS.API.Models.Domain.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz.Impl;
+using Quartz.Spi;
+using Quartz;
 using System.Text;
-
-
+using IMS.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-//Add db context
+// Add DbContext
 builder.Services.AddDbContext<IMSAuthDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
 builder.Services.AddDbContext<IMSDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
-});
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
-
-//add service life time to dependency injection
+// Add services to the container
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-builder.Services.AddScoped<ICartRepository,CartRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IShippingAddressRepository,ShippingAddressRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IOrderRepository,OrderRepository>();
+builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-//Add automapper
- builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+// Register Quartz services
+ builder.Services.AddInfrastructure();
+//builder.Services.AddSingleton<IJobFactory, ScopedJobFactory>();
+//builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+//builder.Services.AddQuartz(q =>
+//{
+//    q.UseMicrosoftDependencyInjectionJobFactory(); // Default job factory
+//    q.UseSimpleTypeLoader();
+//    q.UseInMemoryStore();
+//    q.UseJobFactory<ScopedJobFactory>(); // Use the custom job factory
+//});
+//builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
-//builder.Services.Configure<JwtBearerOptions>(builder.Configuration.GetSection("Jwt"));
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-
-// setup authentication
+// Setup authentication
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<IMSAuthDbContext>()
     .AddDefaultTokenProviders();
-
 
 builder.Services.AddAuthentication(options =>
 {
@@ -78,14 +82,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-
-
-
-// Add controllers and other services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddSwaggerGen(option =>
 {
     option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
@@ -101,30 +99,26 @@ builder.Services.AddSwaggerGen(option =>
         {
             new OpenApiSecurityScheme
             {
-                Reference= new OpenApiReference
+                Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id=JwtBearerDefaults.AuthenticationScheme
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme
                 }
-            }, new string[]{}
+            }, new string[] { }
         }
     });
 });
 
 var app = builder.Build();
 
-
-
-//Middlewares
+// Middlewares
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
-
 app.UseCors(options =>
 {
     options.AllowAnyHeader();
@@ -135,5 +129,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Start Quartz Scheduler
+//var scheduler = await app.Services.GetRequiredService<ISchedulerFactory>().GetScheduler();
+//await scheduler.Start(CancellationToken.None);
 
 app.Run();
