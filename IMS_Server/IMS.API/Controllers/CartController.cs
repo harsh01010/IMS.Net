@@ -83,14 +83,15 @@ namespace IMS.API.Controllers
                 responseDto.IsSuccess = true;
                 responseDto.Message = "cart fetched successfuly";
                 responseDto.Result = res;
-                return Ok(responseDto);
+                
             }
             else
             {
                 responseDto.IsSuccess = false;
                 responseDto.Message = "cart does not exist";
-                return BadRequest(responseDto);
+               
             }
+            return Ok(responseDto);
 
         }
 

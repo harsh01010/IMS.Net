@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using IMS.API.Models.Dto.Product;
 using IMS.API.Models.Dto;
+using System.Data;
 namespace IMS.API.Repository.Implementations.Product
 {
     public class ProductRepository : IProductRepository
@@ -22,9 +23,11 @@ namespace IMS.API.Repository.Implementations.Product
         {
             using (var connection = new SqlConnection(_connectionString))
             {
+                /*
                 string sqlQuery = @"SELECT * FROM Products p INNER JOIN
                                     Categories c on p.CategoryId = c.CategoryId";
-                var products = await connection.QueryAsync<ProductModel>(sqlQuery);
+                */
+                var products = await connection.QueryAsync<ProductModel>("GetAllProducts",commandType:CommandType.StoredProcedure);
                 return products.ToList();
             }
         }
@@ -33,8 +36,8 @@ namespace IMS.API.Repository.Implementations.Product
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                string sqlQuery = "SELECT * FROM Products p INNER JOIN Categories c ON p.CategoryId = c.CategoryId WHERE ProductId = @ProductId";
-                var product = await connection.QuerySingleOrDefaultAsync<ProductModel>(sqlQuery, new { ProductId = id });
+              /*   string sqlQuery = "SELECT * FROM Products p INNER JOIN Categories c ON p.CategoryId = c.CategoryId WHERE ProductId = @ProductId";*/
+                var product = await connection.QuerySingleOrDefaultAsync<ProductModel>("GetProductById", new { ProductId = id },commandType:CommandType.StoredProcedure);
                 return product;
             }
         }
@@ -46,16 +49,28 @@ namespace IMS.API.Repository.Implementations.Product
 
             using (var connection = new SqlConnection(_connectionString))
             {
+                /*
                 // SQL query to insert the new product
                 string sqlQuery = @"
             INSERT INTO Products (ProductId, Name, Description,AvailableQuantity, Price, CategoryId, ImageUrl, ImageLocalPath) 
             VALUES (@ProductId, @Name, @Description,@AvailableQuantity, @Price, @CategoryID, @ImageUrl, @ImageLocalPath);
-            
-       
-            SELECT * FROM Products WHERE ProductId = @ProductId;";
+             SELECT * FROM Products WHERE ProductId = @ProductId;";
+                */
+
+                var parameters = new DynamicParameters(new
+                {
+                    ProductId = product.ProductId,
+                    Name = product.Name,
+                    Description = product.Description,
+                    AvailableQuantity = product.AvailableQuantity,
+                    Price = product.Price,
+                    CategoryID = product.CategoryId,
+                    ImageUrl = product.ImageUrl,
+                    ImageLocalPath = product.ImageLocalPath
+                });
 
                 // Execute the insert query and return the created product
-                var createdProduct = await connection.QuerySingleOrDefaultAsync<ProductModel>(sqlQuery, product);
+                var createdProduct = await connection.QuerySingleOrDefaultAsync<ProductModel>("CreateProduct", parameters, commandType: CommandType.StoredProcedure);
                 return createdProduct;
             }
         }
@@ -65,6 +80,7 @@ namespace IMS.API.Repository.Implementations.Product
         {
             using (var connection = new SqlConnection(_connectionString))
             {
+                /*
                 string sqlQuery = @"
             UPDATE Products SET 
                 Name = @Name, 
@@ -75,9 +91,23 @@ namespace IMS.API.Repository.Implementations.Product
                 ImageUrl = @ImageUrl,
                 ImageLocalPath = @ImageLocalPath
             WHERE ProductId = @ProductId;";
+                */
+
+                var parameters = new DynamicParameters(new
+                {
+                    ProductId = product.ProductId,
+                    Name = product.Name,
+                    Description = product.Description,
+                    AvailableQuantity = product.AvailableQuantity,
+                    Price = product.Price,
+                    CategoryID = product.CategoryId,
+                    ImageUrl = product.ImageUrl,
+                    ImageLocalPath = product.ImageLocalPath
+                });
+
 
                 // Execute the update query
-                await connection.ExecuteAsync(sqlQuery, product);
+                await connection.ExecuteAsync("UpdateProduct", parameters,commandType:CommandType.StoredProcedure);
 
                 // Return the updated product
                 return product;
@@ -92,8 +122,8 @@ namespace IMS.API.Repository.Implementations.Product
                 var product = await GetByIdAsync(id);
                 if (product != null)
                 {
-                    string sqlQuery = "DELETE FROM Products WHERE ProductId = @ProductId";
-                    await connection.ExecuteAsync(sqlQuery, new { ProductId = id });
+                  /*  string sqlQuery = "DELETE FROM Products WHERE ProductId = @ProductId";*/
+                    await connection.ExecuteAsync("DeleteProduct", new { ProductId = id },commandType:CommandType.StoredProcedure);
                 }
                 return product;
             }
@@ -105,8 +135,8 @@ namespace IMS.API.Repository.Implementations.Product
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sqlQuery = "SELECT * FROM Categories";
-                var categories = await connection.QueryAsync<CategoryModel>(sqlQuery);
+                /*var sqlQuery = "SELECT * FROM Categories";*/
+                var categories = await connection.QueryAsync<CategoryModel>("GetCategories",commandType:CommandType.StoredProcedure);
                 return categories.ToList();
             }
 
@@ -117,11 +147,11 @@ namespace IMS.API.Repository.Implementations.Product
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sqlQuery = @"SELECT * FROM Products p INNER JOIN 
+                /*var sqlQuery = @"SELECT * FROM Products p INNER JOIN 
                                 Categories c ON p.CategoryId = c.CategoryId
-                                 WHERE p.CategoryID = @categoryID";
+                                 WHERE p.CategoryID = @categoryID";*/
 
-                var products = await connection.QueryAsync<ProductModel>(sqlQuery, new { categoryId = categoryId });
+                var products = await connection.QueryAsync<ProductModel>("GetAllProductsByCategoryId", new { categoryId = categoryId },commandType:CommandType.StoredProcedure);
 
                 return products.ToList();
             }
@@ -131,8 +161,8 @@ namespace IMS.API.Repository.Implementations.Product
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var sqlQuery = "INSERT INTO Categories(CategoryId,CategoryName) VALUES(@CId,@CName)";
-                var rowsAffected = await connection.ExecuteAsync(sqlQuery, new { CId = Guid.NewGuid(), CName = category.CategoryName });
+                /*var sqlQuery = "INSERT INTO Categories(CategoryId,CategoryName) VALUES(@CId,@CName)";*/
+                var rowsAffected = await connection.ExecuteAsync("AddNewCategory", new { CId = Guid.NewGuid(), CName = category.CategoryName },commandType:CommandType.StoredProcedure);
                 if (rowsAffected > 0)
                 {
                     return true;
@@ -148,11 +178,11 @@ namespace IMS.API.Repository.Implementations.Product
 
             using(var connection = new SqlConnection(_connectionString))
             {
-                var sqlQuery = @"SELECT p.*,c.CategoryName FROM Products p INNER JOIN Categories c ON p.CategoryId=c.CategoryId
-                                ORDER BY p.Name ASC OFFSET @skip ROWS FETCH NEXT @pageSize ROWS ONLY";
+                /*var sqlQuery = @"SELECT p.*,c.CategoryName FROM Products p INNER JOIN Categories c ON p.CategoryId=c.CategoryId
+                                ORDER BY p.Name ASC OFFSET @skip ROWS FETCH NEXT @pageSize ROWS ONLY";*/
 
-                var products = await connection.QueryAsync<ProductModel>(sqlQuery,new {skip = (getPageRequest.PageNum-1)*getPageRequest.PageSize,
-                                                                          pageSize = getPageRequest.PageSize});
+                var products = await connection.QueryAsync<ProductModel>("GetProductPage", new {skip = (getPageRequest.PageNum-1)*getPageRequest.PageSize,
+                                                                          pageSize = getPageRequest.PageSize}, commandType: CommandType.StoredProcedure);
 
                 return products.ToList();
 
@@ -165,9 +195,9 @@ namespace IMS.API.Repository.Implementations.Product
 
             using(var connection  = new SqlConnection(_connectionString))
             {
-                var sqlQuery = @"DELETE FROM Categories WHERE CategoryId = @id";
+                //var sqlQuery = @"DELETE FROM Categories WHERE CategoryId = @id";
 
-                var rowsAffected = await connection.ExecuteAsync(sqlQuery, new { id = id });
+                var rowsAffected = await connection.ExecuteAsync("DeleteCategory", new { id = id }, commandType: CommandType.StoredProcedure);
 
                 if (rowsAffected > 0)
                     return true;
