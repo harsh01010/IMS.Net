@@ -49,7 +49,6 @@ export class LoginTempComponent {
     }
   }
 
-
   closeLogin = () => {
     this.close.emit();
   }

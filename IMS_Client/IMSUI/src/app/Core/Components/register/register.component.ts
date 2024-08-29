@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit {
   errorMessage = '';
 
   @Output() close = new EventEmitter<void>();
+  @Output() openLoginForm = new EventEmitter<boolean>();
 
   constructor(private registerService: RegisterService) { }
 
@@ -54,5 +55,10 @@ export class RegisterComponent implements OnInit {
   }
   closeRegister=()=>{
    this.close.emit();
+  }
+  openLogin=()=>{
+  this.close.emit();
+  //console.log("testing")
+  this.openLoginForm.emit(true);
   }
 }
