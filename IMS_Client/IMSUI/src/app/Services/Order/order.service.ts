@@ -22,4 +22,7 @@ export class OrderService {
       address: address
     });
   }
+  getallOrders(): Observable<any>{
+    return this.http.get(`${environment.baseAPI}/api/Orders/getAllOrders`);
+  }
 }

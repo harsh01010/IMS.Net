@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit {
   userId!: string
 
 
+
   ngOnInit(): void {
     this.userLogedIn = this.sessionStorageServie.getToken() != null;
     this.userId = this.sessionStorageServie.getUser() != null ? this.sessionStorageServie.getUser().id : '';
@@ -58,6 +59,7 @@ export class NavbarComponent implements OnInit {
     console.log(this.showlogin, this.showRegister)
 
   }
+
 
   closeLogin() {
     this.showlogin = false;
@@ -92,6 +94,12 @@ export class NavbarComponent implements OnInit {
     this.userId = '';
     this.isAdmin = false;
   }
+
+  openLoginFromRegister(isopen: boolean) {
+  console.log(this.showlogin)
+  this.showlogin = isopen;
+  //this.showRegister = false;
+}
 
 
 }
