@@ -1,55 +1,66 @@
 <!-- src/app/components/cart/cart.component.html -->
-
 <ng-container *ngIf="cartItemList.value.length !== 0">
   <div class="container">
-    <div class="card-table">
-      <div class="cart-product">
-        <table class="table table-responsive">
-          <thead>
-            <tr>
-              <th>Sr.No</th>
-              <th>Product Name</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of cartItemList.value; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ item.name }}</td>
-              <td style="width: 12%;">{{ item.price }}</td>
-              <td style="width: 12%;">{{ item.productCount }}</td>
-              <td style="width: 12%;">{{ item.price * item.productCount }}</td>
-              <td>
-                <button (click)="removeCartItem(item.productId)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="4"></td>
-              <td><button (click)="removeAllCart()" class="btn btn-danger">Empty Cart</button></td>
-              <td><button [routerLink]="['']" class="btn btn-primary">Shop More</button></td>
-              <td><button    [routerLink]="['/api/order']" class=  "btn btn-success">Checkout</button></td>
-              <td><strong>Grand Total: ${{ grandTotal }}</strong></td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="cart-content">
+      <div class="cart-items">
+        <div class="cart-product">
+          <table class="table table-responsive">
+            <thead>
+              <tr>
+                <th>Sr.No</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cartItemList.value; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ item.name }}</td>
+                <td style="width: 12%;">{{ item.price }}</td>
+                <td style="width: 12%;">{{ item.productCount }}</td>
+                <td style="width: 12%;">{{ item.price * item.productCount }}</td>
+                <td>
+                  <div (click)="removeCartItem(item.productId)" class="delete-icon">
+                    <!-- Icon can be added here -->
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button (click)="removeAllCart()" class="btn btn-danger">Empty Cart</button>
+        <button [routerLink]="['']" class="btn btn-primary">Shop More</button>
+      </div>
+
+      <!-- Cart Summary Section -->
+      <div class="cart-summary">
+        <h4>Price Details</h4>
+        <div class="summary-details">
+          <div class="summary-item">
+            <span>Total Items:</span>
+            <span>{{ cartItemList.value.length }}</span>
+          </div>
+          <div class="summary-item">
+            <span>Grand Total:</span>
+            <span>{{ grandTotal | currency }}</span>
+          </div>
+        </div>
+        <button [routerLink]="['/api/order']" class="btn btn-success place-order-btn">Place Order</button>
       </div>
     </div>
   </div>
 </ng-container>
 
 <ng-container *ngIf="cartItemList.value.length === 0">
-  <div class="container">
-    <div class="card">
-      <h5 class="card-title">My Cart</h5>
-    </div>
-    <div class="center">
-      <img src="https://rukminim1.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90" alt="">
+  <div class="container empty-cart-container">
+    <div class="empty-cart-content">
+      <img src="https://rukminim1.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90" alt="Empty Cart">
       <h4>Your cart is empty!</h4>
       <h6>Add items to it now</h6>
-      <button [routerLink]="['']" class="btn btn-primary">Shop Now</button>
+      <button [routerLink]="['']" class="btn btn-primary shop-now-btn">Shop Now</button>
     </div>
   </div>
 </ng-container>
