@@ -12,6 +12,7 @@ import { AddNewProductComponent } from './Core/Components/add-new-product/add-ne
 import { EditProductComponent } from './Core/Components/edit-product/edit-product.component';
 import { AddCategoryComponent } from './Core/Components/add-category/add-category.component';
 import { LoginTempComponent } from './Core/Components/login-temp/login-temp.component';
+import { OrderDashboardComponent } from './Core/Components/order-dashboard/order-dashboard.component';
 
 
 
@@ -71,15 +72,19 @@ export const routes: Routes = [
         path: 'product/:productId',
         component: ProductDetailsComponent
     }
-    ,{
-        path:"api/cart",
-        component:CartComponent
+    , {
+        path: "cart",
+        component: CartComponent
     },
     {
-        path:"api/order",
-        component:OrderComponent
+        path: "order",
+        component: OrderComponent
+    },
+    {
+        path: 'manage/orders',
+        component: OrderDashboardComponent
     }
-   
+
 ];
 
 

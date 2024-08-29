@@ -7,50 +7,56 @@ import { CartService } from '../../../Services/Cart/cart.service';
 import { CartProduct } from '../../../Models/DeleteProductFromCart.model';
 import { TokenStorageService } from '../../../Services/token/token.service';
 
+import { bootstrapTrash } from "@ng-icons/bootstrap-icons"
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { LoaderComponent } from "../reuseable/loader/loader.component";
+
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [RouterLink,  
-    CommonModule,
-     ],
+  imports: [RouterLink, CommonModule, NgIconComponent, LoaderComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  
+  viewProviders: [provideIcons({ bootstrapTrash })]
 })
 export class CartComponent implements OnInit {
   public grandTotal!: number;
   private cartTotal = new BehaviorSubject<number>(0);
   public cartItemList = new BehaviorSubject<ReturnProductFromCartDto[]>([]);
-   public cartId!:string ;
+  public cartId!: string;
+
 
   cartProduct: CartProduct = { productId: '' };
+  loading = false
 
-  constructor(private cartService: CartService ,private tokenService:TokenStorageService) {}
+  constructor(private cartService: CartService, private tokenService: TokenStorageService) { }
   // userId: string = 'cb48ba81-67fe-4e04-9fcb-8c5411080dee';
- 
+
 
 
   ngOnInit(): void {
-    this.cartId=this.tokenService.getUser().id;
+    this.cartId = this.tokenService.getUser().id;
     // Fetch items from the cart service
 
-    if(this.cartId){
-    this.cartService.getProductById(this.cartId).subscribe({
-      next: (response) => {
-        const cartItems = response.result.products;
-        // console.log(response.result);
-        this.cartItemList.next(cartItems);
-        this.updateCartTotal();
-      },
-      error: (error) => {
-        console.error('Error fetching cart items:', error);
-        this.cartItemList.next([]);
-        this.updateCartTotal();
-      }
-    });
-  } else{
-     console.log("user id not found");
-  }
+    if (this.cartId) {
+      this.loading = true;
+      this.cartService.getProductById(this.cartId).subscribe({
+        next: (response) => {
+          const cartItems = response.result.products;
+          // console.log(response.result);
+          this.cartItemList.next(cartItems);
+          this.updateCartTotal();
+        },
+        error: (error) => {
+          console.error('Error fetching cart items:', error);
+          this.cartItemList.next([]);
+          this.updateCartTotal();
+        }
+        , complete: () => { this.loading = false }
+      });
+    } else {
+      console.log("user id not found");
+    }
 
     // Optionally, subscribe to cartItemList to update UI reactively
     this.cartItemList.subscribe(items => {

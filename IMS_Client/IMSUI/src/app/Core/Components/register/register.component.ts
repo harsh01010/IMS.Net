@@ -1,5 +1,5 @@
 import { RouterModule } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RegisterService } from '../../../Services/Register/register.service';
@@ -25,6 +25,9 @@ export class RegisterComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
 
+  @Output() close = new EventEmitter<void>();
+  @Output() openLoginForm = new EventEmitter<boolean>();
+
   constructor(private registerService: RegisterService) { }
 
   ngOnInit(): void {
@@ -33,7 +36,7 @@ export class RegisterComponent implements OnInit {
   subsciption?: Subscription
 
   onSubmit(form: NgForm) {
-    console.log(form);
+    console.log(this.register);
     if (form.valid) {
       console.log("form valid");
       this.subsciption = this.registerService.register(this.register).subscribe({
@@ -50,5 +53,12 @@ export class RegisterComponent implements OnInit {
       })
     };
   }
-
+  closeRegister = () => {
+    this.close.emit();
+  }
+  openLogin=()=>{
+  this.close.emit();
+  //console.log("testing")
+  this.openLoginForm.emit(true);
+  }
 }

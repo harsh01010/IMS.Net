@@ -4,65 +4,137 @@
     <a href="#" class="text-white text-xl font-bold mr-4">IMSUI</a>
 
     <!-- Example split danger button -->
-    <div class="btn-group">
+    <div class="btn-group" *ngIf="isAdmin">
       <button type="button" class="btn btn-secondary">Management</button>
-      <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
-        aria-expanded="false">
+      <button
+        type="button"
+        class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
         <span class="visually-hidden">Toggle Dropdown</span>
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a class="dropdown-item" [routerLink]="['manage/product/']">Products</a>
+          <a class="dropdown-item" [routerLink]="['manage/product/']"
+            >Products</a
+          >
         </li>
         <li>
-          <a class="dropdown-item" [routerLink]="['manage/category']">Categories</a>
+          <a class="dropdown-item" [routerLink]="['manage/category']"
+            >Categories</a
+          >
         </li>
-        <li><a class="dropdown-item" href="#">Orders</a></li>
+        <li>
+          <a class="dropdown-item" [routerLink]="['manage/orders']">Orders</a>
+        </li>
       </ul>
     </div>
 
-
     <div class="flex-grow"></div>
     <div class="text-white flex gap-5 align-middle justify-between">
-      <p class="cursor-pointer font-bold" [routerLink]="['/products']"
-        [ngClass]="{'text-blue-500 border-b-2 border-blue-500': currentRoute === '/products'||currentRoute===''}">
-        Products</p>
-      <p class="cursor-pointer font-bold" [routerLink]="['/categories']"
-        [ngClass]="{'text-blue-500 border-b-2 border-blue-500': currentRoute === '/categories'}">Categories</p>
-      <span (click)="setShowSearchComponent()"><ng-icon name="bootstrapSearch"
-          class="text-2xl cursor-pointer"></ng-icon></span>
+      <p
+        class="cursor-pointer font-bold"
+        [routerLink]="['/products']"
+        [ngClass]="{
+          'text-blue-500 border-b-2 border-blue-500':
+            currentRoute === '/products' || currentRoute === '/'
+        }"
+      >
+        Products
+      </p>
+      <p
+        class="cursor-pointer font-bold"
+        [routerLink]="['/categories']"
+        [ngClass]="{
+          'text-blue-500 border-b-2 border-blue-500':
+            currentRoute === '/categories'
+        }"
+      >
+        Categories
+      </p>
+      <span (click)="setShowSearchComponent()"
+        ><ng-icon
+          name="bootstrapSearch"
+          class="text-2xl cursor-pointer"
+        ></ng-icon
+      ></span>
 
+      <div
+        class="text-white"
+        *ngIf="userLogedIn"
+        [routerLink]="['/cart']"
+        [ngClass]="{
+          'text-blue-500 border-b-2 border-blue-500': currentRoute === '/cart'
+        }"
+      >
+        <ng-icon
+          name="bootstrapCart2"
+          class="text-2xl cursor-pointer"
+        ></ng-icon>
+      </div>
     </div>
+
     <!-- Spacer -->
     <div class="flex-grow"></div>
-
-
 
     <!-- Menu Items -->
     <div class="relative">
       <button (click)="toggleDropdown()" class="text-white focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-circle"
-          viewBox="0 0 16 16">
-          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-          <path fill-rule="evenodd"
-            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-        </svg>
+        <ng-icon
+          name="bootstrapPersonCircle"
+          class="text-4xl cursor-pointer"
+        ></ng-icon>
       </button>
+
       <!-- Dropdown Menu -->
-      <div
-        *ngIf="isDropdownOpen"
-        class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-50"
-      >
-        <a [routerLink]="['/login/']" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-          >Login</a
+      <div class="flex gap-5">
+        <div
+          *ngIf="isDropdownOpen"
+          class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-50"
         >
-        <a [routerLink]="['/register/']" class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-          >Signup</a
-        >
+          <ng-container *ngIf="!userLogedIn; else loggedin">
+            <button
+              (click)="toggleShowLogin()"
+              class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+            >
+              Login
+            </button>
+            <button
+              (click)="toggleShowRegister()"
+              class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+            >
+              Signup
+            </button>
+          </ng-container>
+
+          <ng-template #loggedin>
+            <button
+              (click)="logout()"
+              class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+            >
+              Logout
+            </button>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>
 </nav>
+
+<ng-container *ngIf="showlogin">
+  <app-login-temp
+    (close)="closeLogin()"
+    (loginStatus)="loginStatus($event)"
+  ></app-login-temp>
+</ng-container>
+
+<ng-container *ngIf="showRegister">
+  <app-register
+    (close)="closeRegister()"
+    (openLoginForm)="openLoginFromRegister($event)"
+  ></app-register>
+</ng-container>
 
 <ng-container *ngIf="showSearchComponent">
   <app-nav-search (close)="unsetShowSearchComponent()"></app-nav-search>

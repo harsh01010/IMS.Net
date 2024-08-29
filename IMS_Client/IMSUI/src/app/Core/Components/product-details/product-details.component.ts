@@ -19,10 +19,10 @@ import { TokenStorageService } from '../../../Services/token/token.service';
   styleUrl: './product-details.component.scss'
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute,private router: Router , private productService: ProductService, private cartService: CartService,  private tokenService: TokenStorageService) {
+  constructor(private route: ActivatedRoute, private router: Router, private productService: ProductService, private cartService: CartService, private tokenService: TokenStorageService) {
 
   }
- cartId !:string
+  cartId !: string
   subsciption?: Subscription
   productId?: string | null
   product?: Product
@@ -32,7 +32,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   CategorisedProduct?: Product[]
   // cart!:string;
   ngOnInit(): void {
-    this.cartId=this.tokenService.getUser().id;
+    this.cartId = this.tokenService.getUser().id;
     console.log(this.cartId)
 
     this.subsciption = this.route.paramMap.subscribe({
@@ -76,17 +76,17 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       })
     }
   }
-  addProductToCart(  ){
+  addProductToCart() {
     this.cartService.addProductToCart(this.cartId, this.productId).subscribe({
       next: () => {
-      
+
         console.log('Product added to cart successfully');
-        this.router.navigate(['/api/cart']);
+        this.router.navigate(['/cart']);
       },
       error: (err) => {
         console.error('Error adding product to cart', err);
-      } 
-    }); 
+      }
+    });
 
   }
   ngOnDestroy(): void {
