@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
   subsciption?: Subscription
 
   onSubmit(form: NgForm) {
-    console.log(form);
+    console.log(this.register);
     if (form.valid) {
       console.log("form valid");
       this.subsciption = this.registerService.register(this.register).subscribe({
@@ -53,8 +53,8 @@ export class RegisterComponent implements OnInit {
       })
     };
   }
-  closeRegister=()=>{
-   this.close.emit();
+  closeRegister = () => {
+    this.close.emit();
   }
   openLogin=()=>{
   this.close.emit();
