@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { AddNewProduct } from '../../Models/Add-Product.model';
 import { category } from '../../Models/Category.model';
 import { AddCategory } from '../../Models/AddCategory.model';
+import { AuthServiceService } from '../Auth/auth-service.service';
 @Injectable({
   providedIn: 'root'
 })
