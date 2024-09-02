@@ -17,7 +17,8 @@ export class AuthServiceService implements HttpInterceptor {
     const clonedReq = req.clone({
       headers: req.headers.set('Authorization', `Bearer ${token}`)
     });
-    console.log("Authorization header added:", clonedReq.headers.get('Authorization')); // Add this line
+    console.log("Authorization header added:", clonedReq.headers.get('Authorization'));
+    console.log(clonedReq); // Add this line
     return next.handle(clonedReq);
   } else {
     console.log("No token found, sending request without Authorization header"); // Add this line

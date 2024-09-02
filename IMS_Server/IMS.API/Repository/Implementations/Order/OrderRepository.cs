@@ -131,8 +131,8 @@ namespace IMS.API.Repository.Implementations.Order
             }
         }
 
-        public async Task<List<OrderDto>> GetOrderHistory(Guid customerId)
-        {
+        public async Task<OrderDto> GetOrderHistory(Guid customerId)
+       {
           
             using (var connection = new SqlConnection(orderDbConnectionString))
             {

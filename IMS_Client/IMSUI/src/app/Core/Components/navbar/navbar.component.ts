@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,HostListener, viewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { bootstrapSearch, bootstrapCart2, bootstrapPersonCircle } from '@ng-icons/bootstrap-icons';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -100,6 +100,8 @@ export class NavbarComponent implements OnInit {
   this.showlogin = isopen;
   //this.showRegister = false;
 }
+
+@viewChild('userOptions') userOptions! : ElementRef
 
 
 }

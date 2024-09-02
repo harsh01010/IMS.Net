@@ -25,7 +25,7 @@ namespace IMS.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Customer")]
+       // [Authorize(Roles = "Admin,Customer")]
         public async Task<ResponseDto> GetAll()
         {
             try
@@ -45,7 +45,7 @@ namespace IMS.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Admin,Customer")]
+        //[Authorize(Roles = "Admin,Customer")]
         public async Task<ResponseDto> GetById(Guid id)
         {
             try
@@ -233,6 +233,7 @@ namespace IMS.API.Controllers
 
         [HttpPost]
         [Route("addNewCategory")]
+        [Authorize(Roles = "Admin")]
         public async Task<ResponseDto> AddNewCategory([FromBody] AddCategoryDto category)
         {
             try
@@ -261,6 +262,7 @@ namespace IMS.API.Controllers
         }
         [HttpDelete]
         [Route("deleteCategory/{id:Guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ResponseDto> DeleteCategory([FromRoute]Guid id)
         {
             try
