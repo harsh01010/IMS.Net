@@ -10,6 +10,7 @@ using IMS.API.Data;
 using IMS.API.Models.Domain.Order;
 using IMS.API.Repository.IRepository.IAuth;
 using IMS.API.Repository.IRepository.IShoppingCart;
+using System.Data;
 
 namespace IMS.API.Repository.Implementations.Order
 {
@@ -128,6 +129,46 @@ namespace IMS.API.Repository.Implementations.Order
                 }
                 return new List<OrderDetailsDto>();
             }
+        }
+
+        public async Task<List<OrderDto>> GetOrderHistory(Guid customerId)
+        {
+          
+            using (var connection = new SqlConnection(orderDbConnectionString))
+            {
+
+                var param = new DynamicParameters(new {
+                    CustomerId = customerId
+                });
+                Dictionary<Guid,OrderDto> Orderdict = new Dictionary<Guid, OrderDto>();
+
+
+
+
+                var res = await connection.QueryAsync<OrderDto, OrderItemDto, OrderDto>(
+                    "GetOrdersByCid",
+                    (o, oi) =>
+                    {
+                        // if not present in the dict
+                        if (!Orderdict.TryGetValue(o.OrderId, out var currentOrder))
+                            {
+                            currentOrder = o;
+                            Orderdict.Add(o.OrderId, currentOrder);
+                        }
+                        Orderdict[o.OrderId].Items.Add(oi);
+                        return currentOrder;
+
+                    },
+                    param,
+                    splitOn: "ProductId",
+                    commandType: CommandType.StoredProcedure
+                    );
+
+                return Orderdict.Values.ToList();
+
+            }
+
+
         }
     }
 }

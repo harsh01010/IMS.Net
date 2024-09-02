@@ -23,7 +23,7 @@ namespace IMS.API.Controllers
 
         [HttpPost]
         [Route("placeOrder/{cartId:Guid}")]
-      //  [Authorize(Roles = "Admin,Customer")]
+        //  [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> PlaceOrder([FromRoute] Guid cartId, [FromBody] PlaceOrderRequestDto placeOrderRequestDto)
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
@@ -57,7 +57,32 @@ namespace IMS.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("getOrderHistory/{customerId:Guid}")]
+
+        public async Task<IActionResult> GetOrderHistory([FromRoute] Guid customerId)
+        {
+            try
+            {
+                var res = await orderRepository.GetOrderHistory(customerId);
+                response.IsSuccess = true;
+                response.Message = "fetched";
+                response.Result = res;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                {
+                    response.IsSuccess = false;
+                    response.Message = "failed";
+                    return NotFound(response);
 
 
+                }
+            }
+
+
+
+        }
     }
 }

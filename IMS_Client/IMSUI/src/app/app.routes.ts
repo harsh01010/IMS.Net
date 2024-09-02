@@ -13,6 +13,8 @@ import { EditProductComponent } from './Core/Components/edit-product/edit-produc
 import { AddCategoryComponent } from './Core/Components/add-category/add-category.component';
 import { LoginTempComponent } from './Core/Components/login-temp/login-temp.component';
 import { OrderDashboardComponent } from './Core/Components/order-dashboard/order-dashboard.component';
+import { userInfo } from 'os';
+import { UserComponent } from './Core/Components/user/user.component';
 
 
 
@@ -79,6 +81,10 @@ export const routes: Routes = [
     {
         path: "order",
         component: OrderComponent
+    },
+    {
+        path: 'userDetails/:id',
+        component: UserComponent
     },
     {
         path: 'manage/orders',

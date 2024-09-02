@@ -8,21 +8,25 @@ import { CartService } from '../Cart/cart.service';
   providedIn: 'root'
 })
 export class OrderService {
-  constructor(private http: HttpClient,private cartservice:CartService ) {}
+  constructor(private http: HttpClient, private cartservice: CartService) { }
 
 
-  deleteCart = async (cartId:string)=>{
+  deleteCart = async (cartId: string) => {
     await this.cartservice.deleteCart(cartId);
   }
-  placeOrder(address: any,cartId:string): Observable<any> {
-  
-    
+  placeOrder(address: any, cartId: string): Observable<any> {
+
+
     return this.http.post(`${environment.baseAPI}/api/Orders/placeOrder/${cartId}`, {
-     
+
       address: address
     });
   }
-  getallOrders(): Observable<any>{
+  getallOrders(): Observable<any> {
     return this.http.get(`${environment.baseAPI}/api/Orders/getAllOrders`);
+  }
+
+  getOrderHistory(id: string): Observable<any> {
+    return this.http.get(`${environment.baseAPI}/api/Orders/getOrderHistory/${id}`);
   }
 }
