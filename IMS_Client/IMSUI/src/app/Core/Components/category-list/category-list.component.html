@@ -1,15 +1,28 @@
-<div *ngIf="categories" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-    <div *ngFor="let cat of categories"
-        class="relative group bg-white p-6 rounded-lg shadow-md transition transform hover:shadow-xl hover:scale-105 cursor-pointer flex justify-around">
-        <p class="text-lg font-semibold text-gray-800">{{ cat.categoryName }}</p>
+<ng-container *ngIf="categories && !loading; else loader">
+  <div
+    *ngIf="categories"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4"
+  >
+    <div
+      *ngFor="let cat of categories"
+      class="relative group bg-white p-6 rounded-lg shadow-md transition transform hover:shadow-xl hover:scale-105 cursor-pointer flex justify-around"
+    >
+      <p class="text-lg font-semibold text-gray-800">{{ cat.categoryName }}</p>
 
-        <span (click)="productDisplay(cat.categoryId)"><ng-icon name="bootstrapArrowRight"></ng-icon></span>
-
+      <span (click)="productDisplay(cat.categoryId)"
+        ><ng-icon name="bootstrapArrowRight"></ng-icon
+      ></span>
     </div>
 
-
-
     <ng-container *ngIf="productDisplayFlag && catId">
-        <app-category-products [catId]="catId" (close)="closeProduct()"></app-category-products>
+      <app-category-products
+        [catId]="catId"
+        (close)="closeProduct()"
+      ></app-category-products>
     </ng-container>
-</div>
+  </div>
+</ng-container>
+
+<ng-template #loader>
+  <div class="flex justify-center mt-10"><app-loader></app-loader></div>
+</ng-template>

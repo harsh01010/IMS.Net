@@ -5,10 +5,11 @@ import { category } from '../../../Models/Category.model';
 import { bootstrapArrowRight } from '@ng-icons/bootstrap-icons';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { CategoryProductsComponent } from "./category-products/category-products.component";
+import { LoaderComponent } from "../reuseable/loader/loader.component";
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [CommonModule, NgIconComponent, CategoryProductsComponent],
+  imports: [CommonModule, NgIconComponent, CategoryProductsComponent, LoaderComponent],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
   viewProviders: [provideIcons({ bootstrapArrowRight })]
